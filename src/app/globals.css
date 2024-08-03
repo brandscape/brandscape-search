@@ -54,6 +54,9 @@ main > div.container {
 
     flex-flow: column nowrap;
   }
+  header .nav-logo {
+    display: block;
+  }
   header .nav:has(> .nav-menu.show-menu) .nav-logo {
     visibility: visible;
     opacity: 1;

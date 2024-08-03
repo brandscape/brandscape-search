@@ -80,7 +80,7 @@ export default function Header() {
             고객센터
           </Link>
         </div>
-        <div className="nav-logo z-10 invisible opacity-0 transition-opacity duration-300">
+        <div className="nav-logo hidden z-10 invisible opacity-0 transition-opacity duration-300">
           <Link href={"/"} className="logo">
             <Image src={LogoDark} alt="logo-image" width={150} />
           </Link>
