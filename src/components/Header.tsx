@@ -7,6 +7,7 @@ import LogoDark from "../../public/images/brandscape-main-logo-dark.png";
 
 export default function Header() {
   const onToggle = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    console.log("toggle");
     e.preventDefault();
     const hamburger = document.querySelector(".hamburger");
     const menu = document.querySelector(".nav-menu");
@@ -42,7 +43,7 @@ export default function Header() {
         <div className="nav-menu transition-right duration-500 flex flex-row flex-nowrap gap-2 px-5 xs:fixed xs:right-[-100%]">
           <Link
             href="/sub"
-            className="px-3 py-[10px] rounded text-[15px] font-medium text-[--color-text-minor] xs:text-[--color-text-normal] leading-[1.125rem] tracking-tighter xs:hover:text-[--color-text-minor] hover:text-[--color-text-inverse] transition-[color] duration-300"
+            className="px-3 xs:px-0 xs:py-3 py-[10px] rounded text-[15px] font-medium text-[--color-text-minor] xs:text-[--color-text-normal] leading-[1.125rem] tracking-tighter xs:hover:text-[--color-text-minor] hover:text-[--color-text-inverse] transition-[color] duration-300"
             onClick={onClearClick}
           >
             상표검색
@@ -50,7 +51,7 @@ export default function Header() {
           <Link
             href="https://naver.com"
             target="_blank"
-            className="px-3 py-[10px] rounded text-[15px] font-medium text-[--color-text-minor] xs:text-[--color-text-normal] leading-[1.125rem] tracking-tighter xs:hover:text-[--color-text-minor] hover:text-[--color-text-inverse] transition-[color] duration-300"
+            className="px-3 xs:px-0 xs:py-3 py-[10px] rounded text-[15px] font-medium text-[--color-text-minor] xs:text-[--color-text-normal] leading-[1.125rem] tracking-tighter xs:hover:text-[--color-text-minor] hover:text-[--color-text-inverse] transition-[color] duration-300"
             onClick={onClearClick}
           >
             상표출원
@@ -58,7 +59,7 @@ export default function Header() {
           <Link
             href="https://google.com"
             target="_blank"
-            className="px-3 py-[10px] rounded text-[15px] font-medium text-[--color-text-minor] xs:text-[--color-text-normal] leading-[1.125rem] tracking-tighter xs:hover:text-[--color-text-minor] hover:text-[--color-text-inverse] transition-[color] duration-300"
+            className="px-3 xs:px-0 xs:py-3 py-[10px] rounded text-[15px] font-medium text-[--color-text-minor] xs:text-[--color-text-normal] leading-[1.125rem] tracking-tighter xs:hover:text-[--color-text-minor] hover:text-[--color-text-inverse] transition-[color] duration-300"
             onClick={onClearClick}
           >
             비용안내
@@ -66,7 +67,7 @@ export default function Header() {
           <Link
             href="https://tailwindcss.com/"
             target="_blank"
-            className="px-3 py-[10px] rounded text-[15px] font-medium text-[--color-text-minor] xs:text-[--color-text-normal] leading-[1.125rem] tracking-tighter xs:hover:text-[--color-text-minor] hover:text-[--color-text-inverse] transition-[color] duration-300"
+            className="px-3 xs:px-0 xs:py-3 py-[10px] rounded text-[15px] font-medium text-[--color-text-minor] xs:text-[--color-text-normal] leading-[1.125rem] tracking-tighter xs:hover:text-[--color-text-minor] hover:text-[--color-text-inverse] transition-[color] duration-300"
             onClick={onClearClick}
           >
             회사소개
@@ -74,14 +75,14 @@ export default function Header() {
           <Link
             href="https://nextjs.org/"
             target="_blank"
-            className="px-3 py-[10px] rounded text-[15px] font-medium text-[--color-text-minor] xs:text-[--color-text-normal] leading-[1.125rem] tracking-tighter xs:hover:text-[--color-text-minor] hover:text-[--color-text-inverse] transition-[color] duration-300"
+            className="px-3 xs:px-0 xs:py-3 py-[10px] rounded text-[15px] font-medium text-[--color-text-minor] xs:text-[--color-text-normal] leading-[1.125rem] tracking-tighter xs:hover:text-[--color-text-minor] hover:text-[--color-text-inverse] transition-[color] duration-300"
             onClick={onClearClick}
           >
             고객센터
           </Link>
         </div>
         <div className="nav-logo hidden z-10 invisible opacity-0 transition-opacity duration-300">
-          <Link href={"/"} className="logo">
+          <Link href={"/"} className="logo" onClick={onClearClick}>
             <Image src={LogoDark} alt="logo-image" width={150} />
           </Link>
         </div>
