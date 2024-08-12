@@ -14,7 +14,7 @@ export default function FilterCheckbox({
   checkedColor = "bg-[--color-primary-normal]",
 }: Props) {
   return (
-    <div className="flex gap-2 items-center me-4">
+    <div className="flex gap-2 items-center me-4 xs:me-0">
       <input
         type="checkbox"
         id={id}
@@ -24,16 +24,19 @@ export default function FilterCheckbox({
         className={`
         relative peer shrink-0 appearance-none w-4 h-4 border 
         border-[#E1E5EB] rounded bg-transparent cursor-pointer
-        checked:bg-[--color-primary-normal] checked:border-0`}
+        checked:bg-[--color-primary-normal] checked:border-0
+        xs:hidden`}
       />
       <label
         htmlFor={id}
-        className="select-none cursor-pointer text-sm tracking-tighter font-medium"
+        className={`
+        select-none cursor-pointer text-sm tracking-tighter font-medium xs:border xs:border-[#E1E5EB] 
+        xs:rounded xs:text-[--color-text-assistive] xs:peer-checked:border-[--color-primary-normal] xs:peer-checked:text-[--color-primary-normal] xs:py-3 xs:px-[1.375rem] xs:w-full xs:text-center xs:text-nowrap`}
       >
         {text}
       </label>
       <svg
-        className="absolute w-4 h-4 hidden peer-checked:block text-white p-0.5 cursor-pointer"
+        className="xs:!hidden absolute w-4 h-4 hidden peer-checked:block text-white p-0.5 cursor-pointer"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
         fill="none"

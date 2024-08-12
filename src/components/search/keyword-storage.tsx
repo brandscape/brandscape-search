@@ -1,8 +1,9 @@
 "use client";
 
+import { keywordStr } from "@/app/search/type";
 import { searchKeywordState, searchLoadingState } from "@/recoil/search/search-atom";
 import { useRouter } from "next/navigation";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
 
 export default function KeywordStorage() {
@@ -18,7 +19,7 @@ export default function KeywordStorage() {
         setSearchLoading(true);
       }
     },
-    []
+    [router, setSearchLoading]
   );
   const onDeleteKeyword = useCallback(
     (text: string) => (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -27,6 +28,10 @@ export default function KeywordStorage() {
     },
     []
   );
+
+  useEffect(() => {
+    setSearchKeyword((localStorage.getItem(keywordStr) || "").split(","));
+  }, [setSearchKeyword]);
 
   return searchKeyword.length > 0 ? (
     <div className="flex flex-row flex-wrap gap-1 py-3">

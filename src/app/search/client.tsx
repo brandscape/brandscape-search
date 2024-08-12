@@ -14,6 +14,11 @@ export default function Client({ brandData }: Props) {
       <section className="max-w-[45rem] m-auto flex flex-col gap-0">
         <SearchClient brandData={brandData} />
         <KeywordStorage />
+        <div className="text-black flex flex-row flex-nowrap">
+          <div>
+            <span className="text-base font-bold tracking-tighter">적용 필터</span>
+          </div>
+        </div>
       </section>
       <FilterContainer />
     </main>

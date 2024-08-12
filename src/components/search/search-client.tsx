@@ -52,12 +52,15 @@ export default function SearchClient({ brandData }: Props) {
         }
       }
     },
-    [id, router, setSearchKeyword]
+    [id, router, setSearchKeyword, setSearchLoading]
   );
 
-  const onFilterClick = useCallback(() => setIsFilterOpen(true), []);
+  const onFilterClick = useCallback(() => setIsFilterOpen(true), [setIsFilterOpen]);
 
-  useEffect(() => setSearchLoading(false), [brandData.response.header.responseTime]);
+  useEffect(
+    () => setSearchLoading(false),
+    [brandData.response.header.responseTime, setSearchLoading]
+  );
 
   return (
     <>

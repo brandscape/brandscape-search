@@ -32,6 +32,9 @@ export default function FilterContainer() {
     }
   }, []);
 
+  const onSubmit = useCallback((e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+  }, []);
   const onClose = useCallback(() => setIsFilterOpen(false), [setIsFilterOpen]);
   return (
     <section
@@ -44,10 +47,10 @@ export default function FilterContainer() {
         <div className="title pb-[0.625rem]">
           <h1 className="text-2xl font-bold tracking-tighter">검색 필터</h1>
         </div>
-        <form className="flex flex-col flex-nowrap gap-5">
+        <form className="flex flex-col flex-nowrap gap-5" onSubmit={onSubmit}>
           <div className="flex flex-col flex-nowrap gap-4 pb-2.5">
             <h1 className="text-lg font-semibold tracking-tighter">행정 상태</h1>
-            <div className="flex flex-row flex-nowrap gap-4">
+            <div className="flex flex-row flex-nowrap gap-4 xs:grid xs:grid-cols-4 xs:gap-2">
               <FilterCheckbox
                 id="all"
                 name="all"
@@ -134,12 +137,14 @@ export default function FilterContainer() {
           </div>
           <div className="button-group flex flex-row flex-nowrap gap-2">
             <button
+              type="button"
               className="flex-1 text-[--color-primary-normal] bg-[--color-primary-weak] py-[10px] px-5 text-base font-semibold tracking-tighter rounded-lg hover:text-[--color-primary-strong] hover:bg-[--color-primary-assistive] transition-colors"
               onClick={onClose}
             >
               취소
             </button>
             <button
+              type="submit"
               className="flex-1 text-[--color-text-inverse] bg-[--color-primary-normal] py-[10px] px-5 text-base font-semibold tracking-tighter rounded-lg hover:text-[#F6F7F9] hover:bg-[--color-primary-strong] transition-colors"
               onClick={() => console.log("click")}
             >
