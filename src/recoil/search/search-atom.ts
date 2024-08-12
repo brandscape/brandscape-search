@@ -17,6 +17,9 @@ export const filterOptionState = atom<FilterType>({
     publication: true,
     cancel: true,
     abandonment: true,
+    classification: undefined,
+    similarityCode: undefined,
+    asignProduct: undefined,
   },
 });
 

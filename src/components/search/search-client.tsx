@@ -4,13 +4,15 @@ import { BaseSyntheticEvent, useCallback, useEffect, useId } from "react";
 import SearchInput from "../SearchInput";
 import { Brand, SearchResponse, keywordStr } from "@/app/search/type";
 import { useRouter } from "next/navigation";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import {
+  filterOptionState,
   isFilterOpenState,
   searchKeywordState,
   searchLoadingState,
 } from "@/recoil/search/search-atom";
 import { toast } from "react-toastify";
+import { AdministrationState } from "@/recoil/search/type";
 
 interface Props {
   brandData: SearchResponse<Brand>;
@@ -21,19 +23,23 @@ export default function SearchClient({ brandData }: Props) {
   const router = useRouter();
 
   const [searchLoading, setSearchLoading] = useRecoilState(searchLoadingState);
+  const filterOptions = useRecoilValue(filterOptionState);
   const setIsFilterOpen = useSetRecoilState(isFilterOpenState);
   const setSearchKeyword = useSetRecoilState(searchKeywordState);
 
+  /**
+   * @description 검색 컨펌 이벤트 핸들러
+   */
   const onSearchSubmit = useCallback(
     (e: BaseSyntheticEvent) => {
       e.preventDefault();
       const searchInput = e.target["default-search"];
-      const param = new URLSearchParams(window.location.search).get("s");
+      const params = new URLSearchParams(window.location.search);
 
       if (searchInput instanceof HTMLInputElement) {
         if (searchInput.value) {
           /** @description 중복검색 방지 */
-          if (searchInput.value !== param) {
+          if (searchInput.value !== params.get("s")) {
             const keywordValues = localStorage.getItem(keywordStr);
             const searchKeywords = keywordValues === null ? [] : keywordValues.split(",");
 
@@ -41,7 +47,10 @@ export default function SearchClient({ brandData }: Props) {
             localStorage.setItem(keywordStr, keywords.slice(0, 8).toString());
             setSearchKeyword(keywords);
 
-            router.push(`/search?s=${searchInput.value}`);
+            params.delete("s");
+            router.push(
+              `/search?s=${searchInput.value}${params.toString() && "&" + params.toString()}`
+            );
             setSearchLoading(true);
           }
           searchInput.value = "";
@@ -55,7 +64,23 @@ export default function SearchClient({ brandData }: Props) {
     [id, router, setSearchKeyword, setSearchLoading]
   );
 
-  const onFilterClick = useCallback(() => setIsFilterOpen(true), [setIsFilterOpen]);
+  /**
+   * @description 필터 열기 버튼 클릭 이벤트 핸들러
+   */
+  const onFilterClick = useCallback(() => {
+    const formEl = document.getElementById("filter-form");
+    if (formEl instanceof HTMLFormElement) {
+      Object.keys(filterOptions).forEach((name, _) => {
+        const el = formEl.elements.namedItem(name);
+        if (el instanceof HTMLInputElement && el.type === "checkbox") {
+          const optionName = name as AdministrationState;
+          el.checked = Boolean(filterOptions[optionName]);
+        }
+      });
+    }
+
+    setIsFilterOpen(true);
+  }, [filterOptions, setIsFilterOpen]);
 
   useEffect(
     () => setSearchLoading(false),
@@ -74,7 +99,7 @@ export default function SearchClient({ brandData }: Props) {
           <form className="mx-auto h-full" onSubmit={onSearchSubmit}>
             <SearchInput
               textColor="text-[--color-text-normal]"
-              placeholderColor="text-[--color-text-minor]"
+              placeholderColor="minor"
               border="border border-solid border-[#E1E5EB]"
             />
           </form>

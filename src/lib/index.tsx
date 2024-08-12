@@ -4,7 +4,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 import { Slide, ToastContainer } from "react-toastify";
 import type { ToastOptions } from "react-toastify";
-import InfoSvg from "@/icons/InfoSvg";
+import InfoSvg from "@/icons/info-svg";
 import RecoilProvider from "./recoil-provider";
 
 export default function RootProvider({ children }: React.PropsWithChildren) {

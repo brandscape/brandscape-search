@@ -3,20 +3,51 @@ import xml2js from "xml2js";
 import { notFound } from "next/navigation";
 import Client from "./client";
 
-const getData = async (search: string | null) => {
+const getData = async (params: URLSearchParams) => {
+  const search = params.get("s");
+  const [
+    application,
+    registration,
+    refused,
+    expiration,
+    withdrawal,
+    publication,
+    cancel,
+    abandonment,
+    classification,
+    similarityCode,
+    asignProduct,
+  ] = [
+    params.get("app"),
+    params.get("reg"),
+    params.get("ref"),
+    params.get("exp"),
+    params.get("wit"),
+    params.get("pub"),
+    params.get("can"),
+    params.get("aba"),
+    params.get("tc"),
+    params.get("sc"),
+    params.get("gd"),
+  ];
+
   if (search) {
     const params = {
       trademarkName: search,
       // pageNo: 1,
       ServiceKey: process.env.KIPRIS_ACCESS_KEY || "",
-      application: "true", // 출원
-      registration: "true", // 등록
-      refused: "true", // 거절
-      expiration: "true", // 소멸
-      withdrawal: "true", // 취하
-      publication: "true", // 공고
-      cancel: "true", // 무효
-      abandonment: "true", // 포기
+      application: application || "true", // 출원
+      registration: registration || "true", // 등록
+      refused: refused || "true", // 거절
+      expiration: expiration || "true", // 소멸
+      withdrawal: withdrawal || "true", // 취하
+      publication: publication || "true", // 공고
+      cancel: cancel || "true", // 무효
+      abandonment: abandonment || "true", // 포기
+
+      ...(classification && { classification: classification.replace(/ /g, "|") }),
+      ...(similarityCode && { similarityCode: similarityCode.replace(/ /g, "|") }),
+      ...(asignProduct && { asignProduct: asignProduct.replace(/ /g, "|") }),
 
       character: "true", // 문자상표
       figure: "true", // 도형상표
@@ -57,9 +88,8 @@ const getData = async (search: string | null) => {
 export default async function Search() {
   const href = headers().get("x-current-href");
   const searchParams = new URL(href || "").searchParams;
-  const search = searchParams.get("s");
 
-  const xml = await getData(search);
+  const xml = await getData(searchParams);
 
   if (!xml) return notFound();
 

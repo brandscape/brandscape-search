@@ -1,12 +1,12 @@
 interface Props {
   textColor?: string;
-  placeholderColor?: string;
+  placeholderColor?: "inverse" | "minor";
   border?: string;
 }
 
 export default function SearchInput({
   textColor = "text-[--color-text-inverse]",
-  placeholderColor = "text-[--color-text-inverse]",
+  placeholderColor = "inverse",
   border = "",
 }: Props) {
   return (
@@ -38,7 +38,11 @@ export default function SearchInput({
           type="search"
           name="default-search"
           id="default-search"
-          className={`block w-full h-full p-4 ps-10 text-sm rounded-lg bg-[#FFFFFF]/50 focus:ring-blue-500 placeholder:${placeholderColor} outline-none ${textColor} ${border}`}
+          className={`block w-full h-full p-4 ps-10 text-sm rounded-lg bg-[#FFFFFF]/50 focus:ring-blue-500 outline-none ${textColor} ${border} ${
+            placeholderColor === "minor"
+              ? "placeholder:text-[color-text-minor]"
+              : "placeholder:text-[--color-text-inverse]"
+          }`}
           placeholder="상표 또는 출원/등록번호를 입력하세요"
         />
       </div>

@@ -1,16 +1,16 @@
+export type AdministrationState =
+  | "application" // 출원
+  | "registration" // 등록
+  | "refused" // 거절
+  | "expiration" // 소멸
+  | "withdrawal" // 취하
+  | "publication" // 공고
+  | "cancel" // 무효
+  | "abandonment"; // 포기
 /**
  * @description Kipris API는 boolean 타입도 {"true" | "false"}와 같은 문자로 처리 필요
  */
 export type FilterType = {
-  application: boolean; // 출원
-  registration: boolean; // 등록
-  refused: boolean; // 거절
-  expiration: boolean; // 소멸
-  withdrawal: boolean; // 취하
-  publication: boolean; // 공고
-  cancel: boolean; // 무효
-  abandonment: boolean; // 포기
-
   classification?: string; // 상품분류
   similarityCode?: string; // 유사군코드
   asignProduct?: string; // 지정상품
@@ -25,4 +25,4 @@ export type FilterType = {
 
   applicantName?: string; // 출원인
   regPrivilegeName?: string; // 등록권자
-};
+} & Record<AdministrationState, boolean>;

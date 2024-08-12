@@ -10,7 +10,6 @@ import { usePathname } from "next/navigation";
 export default function Header() {
   const pathname = usePathname();
   const onToggle = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    console.log("toggle");
     e.preventDefault();
     const hamburger = document.querySelector(".hamburger");
     const menu = document.querySelector(".nav-menu");

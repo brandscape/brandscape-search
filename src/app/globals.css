@@ -107,6 +107,18 @@ header .hamburger.is-opened .bar:last-child {
 #default-search::-webkit-search-cancel-button {
   display: none;
 }
+input[type="search"].show-clear::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'><path d='M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z'/></svg>");
+
+  background-color: var(--color-text-assistive);
+  outline: 1px solid var(--color-text-assistive);
+  border: 1px solid var(--color-text-assistive);
+  border-radius: 50%;
+  height: 0.875rem;
+  width: 0.875rem;
+}
 
 @layer utilities {
   .text-balance {
@@ -119,6 +131,7 @@ header .hamburger.is-opened .bar:last-child {
     --color-primary-normal: rgba(46, 102, 216, 1);
     --color-primary-most: rgba(5, 23, 61, 1);
     --color-primary-strong: rgba(26, 77, 182, 1);
+    --color-primary-minor: #ecf1fb;
     --color-primary-weak: #e5ebf9;
     --color-primary-assistive: #d1dbf2;
     --color-text-strong: #363637;
