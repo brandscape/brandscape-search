@@ -21,12 +21,21 @@ export default function KeywordStorage() {
     },
     [router, setSearchLoading]
   );
+
   const onDeleteKeyword = useCallback(
-    (text: string) => (e: React.MouseEvent<HTMLButtonElement>) => {
+    (index: number) => (e: React.MouseEvent<HTMLButtonElement>) => {
       e.stopPropagation();
-      console.log("delete", text);
+      let copySearchKeyword = searchKeyword;
+      if (index !== -1) {
+        copySearchKeyword = [
+          ...copySearchKeyword.slice(0, index),
+          ...copySearchKeyword.slice(index + 1),
+        ];
+        setSearchKeyword(copySearchKeyword);
+        localStorage.setItem(keywordStr, copySearchKeyword.join(","));
+      }
     },
-    []
+    [searchKeyword]
   );
 
   useEffect(() => {
@@ -44,7 +53,7 @@ export default function KeywordStorage() {
           >
             <label className="cursor-pointer">{text}</label>
             <button
-              onClick={onDeleteKeyword(text)}
+              onClick={onDeleteKeyword(index)}
               className="text-[#CFD5DC] hover:text-slate-400 transition-color"
             >
               <svg
