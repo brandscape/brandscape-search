@@ -23,6 +23,7 @@ function Option({ targetName, label }: ChildProps) {
       const element = document.getElementById(targetName);
       const checkboxAll = document.getElementById("all");
 
+      const params = new URLSearchParams(window.location.search);
       let searchString = "";
 
       if (element instanceof HTMLInputElement && element.type === "checkbox") {
@@ -41,8 +42,14 @@ function Option({ targetName, label }: ChildProps) {
         targetName === "cancel" && (searchString += "&can=false");
         targetName === "refused" && (searchString += "&ref=false");
         targetName === "registration" && (searchString += "&reg=false");
+      } else if (element instanceof HTMLInputElement && element.type === "search") {
+        setFilterOption((prev) => ({ ...prev, [targetName]: undefined }));
+        targetName === "classification" && params.delete("tc");
+        targetName === "similarityCode" && params.delete("sc");
+        targetName === "asignProduct" && params.delete("gd");
       }
-      router.push(`${pathname}${window.location.search}${searchString}`);
+
+      router.push(`${pathname}?${params.toString()}${searchString}`);
 
       setSearchLoading(true);
     },
@@ -72,6 +79,9 @@ export default function FilterOptions() {
     publication,
     cancel,
     abandonment,
+    classification,
+    similarityCode,
+    asignProduct,
   ] = [
     params.get("app"),
     params.get("reg"),
@@ -81,6 +91,9 @@ export default function FilterOptions() {
     params.get("pub"),
     params.get("can"),
     params.get("aba"),
+    params.get("tc"),
+    params.get("sc"),
+    params.get("gd"),
   ];
 
   return (
@@ -97,6 +110,15 @@ export default function FilterOptions() {
         {isNull(cancel) && <Option targetName="cancel" label="무효" />}
         {isNull(refused) && <Option targetName="refused" label="거절" />}
         {isNull(registration) && <Option targetName="registration" label="등록" />}
+        {classification && (
+          <Option targetName="classification" label={classification.replace(/ /g, "+")} />
+        )}
+        {similarityCode && (
+          <Option targetName="similarityCode" label={similarityCode.replace(/ /g, "+")} />
+        )}
+        {asignProduct && (
+          <Option targetName="asignProduct" label={asignProduct.replace(/ /g, "+")} />
+        )}
       </div>
     </div>
   );
