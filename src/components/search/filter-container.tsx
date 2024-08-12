@@ -45,89 +45,92 @@ export default function FilterContainer() {
           <h1 className="text-2xl font-bold tracking-tighter">검색 필터</h1>
         </div>
         <form className="flex flex-col flex-nowrap gap-5">
-          <div className="flex flex-row flex-nowrap gap-4">
-            <FilterCheckbox
-              id="all"
-              name="all"
-              text="전체"
-              checked
-              onChange={(e) => {
-                if (e.target.form) {
-                  e.target.form["application"] instanceof HTMLInputElement &&
-                    (e.target.form["application"].checked = e.target.checked);
-                  e.target.form["publication"] instanceof HTMLInputElement &&
-                    (e.target.form["publication"].checked = e.target.checked);
-                  e.target.form["withdrawal"] instanceof HTMLInputElement &&
-                    (e.target.form["withdrawal"].checked = e.target.checked);
-                  e.target.form["expiration"] instanceof HTMLInputElement &&
-                    (e.target.form["expiration"].checked = e.target.checked);
-                  e.target.form["abandonment"] instanceof HTMLInputElement &&
-                    (e.target.form["abandonment"].checked = e.target.checked);
-                  e.target.form["cancel"] instanceof HTMLInputElement &&
-                    (e.target.form["cancel"].checked = e.target.checked);
-                  e.target.form["refused"] instanceof HTMLInputElement &&
-                    (e.target.form["refused"].checked = e.target.checked);
-                  e.target.form["registration"] instanceof HTMLInputElement &&
-                    (e.target.form["registration"].checked = e.target.checked);
-                }
-              }}
-            />
-            <FilterCheckbox
-              id="application"
-              name="application"
-              text="출원"
-              checked
-              onChange={onChangeCheckbox}
-            />
-            <FilterCheckbox
-              id="publication"
-              name="publication"
-              text="공고"
-              checked
-              onChange={onChangeCheckbox}
-            />
-            <FilterCheckbox
-              id="withdrawal"
-              name="withdrawal"
-              text="취하"
-              checked
-              onChange={onChangeCheckbox}
-            />
-            <FilterCheckbox
-              id="expiration"
-              name="expiration"
-              text="소멸"
-              checked
-              onChange={onChangeCheckbox}
-            />
-            <FilterCheckbox
-              id="abandonment"
-              name="abandonment"
-              text="포기"
-              checked
-              onChange={onChangeCheckbox}
-            />
-            <FilterCheckbox
-              id="cancel"
-              name="cancel"
-              text="무효"
-              checked
-              onChange={onChangeCheckbox}
-            />
-            <FilterCheckbox
-              id="refused"
-              name="refused"
-              text="거절"
-              checked
-              onChange={onChangeCheckbox}
-            />
-            <FilterCheckbox
-              id="registration"
-              name="registration"
-              text="등록"
-              checked
-              onChange={onChangeCheckbox}
-            />
+          <div className="flex flex-col flex-nowrap gap-4 pb-2.5">
+            <h1 className="text-lg font-semibold tracking-tighter">행정 상태</h1>
+            <div className="flex flex-row flex-nowrap gap-4">
+              <FilterCheckbox
+                id="all"
+                name="all"
+                text="전체"
+                checked
+                onChange={(e) => {
+                  if (e.target.form) {
+                    e.target.form["application"] instanceof HTMLInputElement &&
+                      (e.target.form["application"].checked = e.target.checked);
+                    e.target.form["publication"] instanceof HTMLInputElement &&
+                      (e.target.form["publication"].checked = e.target.checked);
+                    e.target.form["withdrawal"] instanceof HTMLInputElement &&
+                      (e.target.form["withdrawal"].checked = e.target.checked);
+                    e.target.form["expiration"] instanceof HTMLInputElement &&
+                      (e.target.form["expiration"].checked = e.target.checked);
+                    e.target.form["abandonment"] instanceof HTMLInputElement &&
+                      (e.target.form["abandonment"].checked = e.target.checked);
+                    e.target.form["cancel"] instanceof HTMLInputElement &&
+                      (e.target.form["cancel"].checked = e.target.checked);
+                    e.target.form["refused"] instanceof HTMLInputElement &&
+                      (e.target.form["refused"].checked = e.target.checked);
+                    e.target.form["registration"] instanceof HTMLInputElement &&
+                      (e.target.form["registration"].checked = e.target.checked);
+                  }
+                }}
+              />
+              <FilterCheckbox
+                id="application"
+                name="application"
+                text="출원"
+                checked
+                onChange={onChangeCheckbox}
+              />
+              <FilterCheckbox
+                id="publication"
+                name="publication"
+                text="공고"
+                checked
+                onChange={onChangeCheckbox}
+              />
+              <FilterCheckbox
+                id="withdrawal"
+                name="withdrawal"
+                text="취하"
+                checked
+                onChange={onChangeCheckbox}
+              />
+              <FilterCheckbox
+                id="expiration"
+                name="expiration"
+                text="소멸"
+                checked
+                onChange={onChangeCheckbox}
+              />
+              <FilterCheckbox
+                id="abandonment"
+                name="abandonment"
+                text="포기"
+                checked
+                onChange={onChangeCheckbox}
+              />
+              <FilterCheckbox
+                id="cancel"
+                name="cancel"
+                text="무효"
+                checked
+                onChange={onChangeCheckbox}
+              />
+              <FilterCheckbox
+                id="refused"
+                name="refused"
+                text="거절"
+                checked
+                onChange={onChangeCheckbox}
+              />
+              <FilterCheckbox
+                id="registration"
+                name="registration"
+                text="등록"
+                checked
+                onChange={onChangeCheckbox}
+              />
+            </div>
           </div>
           <div className="button-group flex flex-row flex-nowrap gap-2">
             <button
