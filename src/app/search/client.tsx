@@ -1,10 +1,9 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import { Brand, SearchResponse } from "./type";
 import SearchClient from "@/components/search/search-client";
 import FilterContainer from "@/components/search/filter-container";
-const KeywordStorage = dynamic(() => import("@/components/search/keyword-storage"), { ssr: false });
+import KeywordStorage from "@/components/search/keyword-storage";
 
 interface Props {
   brandData: SearchResponse<Brand>;

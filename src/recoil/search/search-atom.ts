@@ -20,6 +20,11 @@ export const filterOptionState = atom<FilterType>({
   },
 });
 
+export const searchKeywordState = atom<string[]>({
+  key: "searchKeyword",
+  default: [],
+});
+
 /**
  * @description 검색 로딩 Atom
  */

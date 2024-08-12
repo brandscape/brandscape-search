@@ -5,7 +5,6 @@ import { useCallback } from "react";
 import { useRecoilState } from "recoil";
 import FilterCheckbox from "./filter-checkbox";
 import { every } from "lodash";
-import type { FilterType } from "@/recoil/search/type";
 
 export default function FilterContainer() {
   const [isFilterOpen, setIsFilterOpen] = useRecoilState(isFilterOpenState);
@@ -30,7 +29,7 @@ export default function FilterContainer() {
     }
   }, []);
 
-  const onClose = useCallback(() => setIsFilterOpen(false), []);
+  const onClose = useCallback(() => setIsFilterOpen(false), [setIsFilterOpen]);
   return (
     <section
       role="dialog"

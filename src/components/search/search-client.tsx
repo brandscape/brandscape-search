@@ -5,7 +5,11 @@ import SearchInput from "../SearchInput";
 import { Brand, SearchResponse, keywordStr } from "@/app/search/type";
 import { useRouter } from "next/navigation";
 import { useRecoilState, useSetRecoilState } from "recoil";
-import { isFilterOpenState, searchLoadingState } from "@/recoil/search/search-atom";
+import {
+  isFilterOpenState,
+  searchKeywordState,
+  searchLoadingState,
+} from "@/recoil/search/search-atom";
 import { toast } from "react-toastify";
 
 interface Props {
@@ -18,33 +22,38 @@ export default function SearchClient({ brandData }: Props) {
 
   const [searchLoading, setSearchLoading] = useRecoilState(searchLoadingState);
   const setIsFilterOpen = useSetRecoilState(isFilterOpenState);
+  const setSearchKeyword = useSetRecoilState(searchKeywordState);
 
-  const onSearchSubmit = useCallback((e: BaseSyntheticEvent) => {
-    e.preventDefault();
-    const searchInput = e.target["default-search"];
-    const param = new URLSearchParams(window.location.search).get("s");
+  const onSearchSubmit = useCallback(
+    (e: BaseSyntheticEvent) => {
+      e.preventDefault();
+      const searchInput = e.target["default-search"];
+      const param = new URLSearchParams(window.location.search).get("s");
 
-    if (searchInput instanceof HTMLInputElement) {
-      if (searchInput.value) {
-        /** @description 중복검색 방지 */
-        if (searchInput.value !== param) {
-          const keywordValues = localStorage.getItem(keywordStr);
-          const searchKeywords = keywordValues === null ? [] : keywordValues.split(",");
+      if (searchInput instanceof HTMLInputElement) {
+        if (searchInput.value) {
+          /** @description 중복검색 방지 */
+          if (searchInput.value !== param) {
+            const keywordValues = localStorage.getItem(keywordStr);
+            const searchKeywords = keywordValues === null ? [] : keywordValues.split(",");
 
-          const keywords = [searchInput.value, ...searchKeywords];
-          localStorage.setItem(keywordStr, keywords.slice(0, 8).toString());
+            const keywords = [searchInput.value, ...searchKeywords];
+            localStorage.setItem(keywordStr, keywords.slice(0, 8).toString());
+            setSearchKeyword(keywords);
 
-          router.push(`/search?s=${searchInput.value}`);
-          setSearchLoading(true);
+            router.push(`/search?s=${searchInput.value}`);
+            setSearchLoading(true);
+          }
+          searchInput.value = "";
+        } else {
+          toast.isActive(id)
+            ? toast.update(id, { render: "상호 또는 상표를 입력하세요" })
+            : toast.info("상포 또는 상표를 입력하세요", { toastId: id });
         }
-        searchInput.value = "";
-      } else {
-        toast.isActive(id)
-          ? toast.update(id, { render: "상호 또는 상표를 입력하세요" })
-          : toast.info("상포 또는 상표를 입력하세요", { toastId: id });
       }
-    }
-  }, []);
+    },
+    [id, router, setSearchKeyword]
+  );
 
   const onFilterClick = useCallback(() => setIsFilterOpen(true), []);
 

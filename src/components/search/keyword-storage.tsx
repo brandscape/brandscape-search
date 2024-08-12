@@ -1,14 +1,12 @@
 "use client";
 
-import { keywordStr } from "@/app/search/type";
-import { searchLoadingState } from "@/recoil/search/search-atom";
+import { searchKeywordState, searchLoadingState } from "@/recoil/search/search-atom";
 import { useRouter } from "next/navigation";
 import { useCallback } from "react";
-import { useSetRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 
 export default function KeywordStorage() {
-  if (typeof window === "undefined") return null;
-  const searchKeyword = (localStorage.getItem(keywordStr) || "").split(",");
+  const [searchKeyword, setSearchKeyword] = useRecoilState(searchKeywordState);
   const router = useRouter();
   const setSearchLoading = useSetRecoilState(searchLoadingState);
 
@@ -29,7 +27,8 @@ export default function KeywordStorage() {
     },
     []
   );
-  return (
+
+  return searchKeyword.length > 0 ? (
     <div className="flex flex-row flex-wrap gap-1 py-3">
       {searchKeyword.map((text, index) => {
         return (
@@ -61,5 +60,7 @@ export default function KeywordStorage() {
         );
       })}
     </div>
+  ) : (
+    <div className="flex flex-row flex-wrap gap-1 py-3">Loading</div>
   );
 }
