@@ -23,7 +23,7 @@ export default function FilterCheckbox({
         onChange={onChange}
         className={`
         relative peer shrink-0 appearance-none w-4 h-4 border 
-        border-[#E1E5EB] rounded bg-transparent 
+        border-[#E1E5EB] rounded bg-transparent cursor-pointer
         checked:bg-[--color-primary-normal] checked:border-0`}
       />
       <label
@@ -33,7 +33,7 @@ export default function FilterCheckbox({
         {text}
       </label>
       <svg
-        className="absolute w-4 h-4 hidden peer-checked:block text-white p-0.5"
+        className="absolute w-4 h-4 hidden peer-checked:block text-white p-0.5 cursor-pointer"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
         fill="none"
@@ -41,6 +41,7 @@ export default function FilterCheckbox({
         strokeWidth="4"
         strokeLinecap="round"
         strokeLinejoin="round"
+        onClick={() => document.getElementById(id || "")?.click()}
       >
         <polyline points="20 6 9 17 4 12"></polyline>
       </svg>
