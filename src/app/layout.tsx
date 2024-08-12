@@ -1,8 +1,12 @@
+import "./globals.css";
+
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import "./globals.css";
 import Header from "@/components/Header";
 import { Viewport } from "next";
+import RootProvider from "@/lib";
+import { Suspense } from "react";
+import Loading from "./loading";
 
 const myFont = localFont({
   src: "../fonts/PretendardVariable.woff2",
@@ -25,15 +29,6 @@ export const viewport: Viewport = {
   viewportFit: "cover",
 };
 
-{
-  /* <Head>
-  <meta
-    name="viewport"
-    content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover"
-  />
-</Head> */
-}
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -42,8 +37,12 @@ export default function RootLayout({
   return (
     <html lang="ko" className={`${myFont.variable}`}>
       <body>
-        <Header />
-        {children}
+        <RootProvider>
+          <Suspense fallback={<Loading />}>
+            <Header />
+            {children}
+          </Suspense>
+        </RootProvider>
       </body>
     </html>
   );

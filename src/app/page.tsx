@@ -3,18 +3,35 @@
 import Image from "next/image";
 import Logo from "../../public/images/brandscape-main-logo.png";
 import SearchInput from "@/components/SearchInput";
-import { BaseSyntheticEvent } from "react";
+import { BaseSyntheticEvent, useCallback, useId } from "react";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
+import { keywordStr } from "./search/type";
 
 export default function Home() {
-  const onSearchSubmit = (e: BaseSyntheticEvent) => {
+  const id = useId();
+  const router = useRouter();
+  const onSearchSubmit = useCallback((e: BaseSyntheticEvent) => {
     e.preventDefault();
     const searchInput = e.target["default-search"];
 
     if (searchInput instanceof HTMLInputElement) {
-      /** @todo api test */
-      console.log("submit test", searchInput.value);
+      if (searchInput.value) {
+        const keywordValues = localStorage.getItem(keywordStr);
+        const searchKeywords = keywordValues === null ? [] : keywordValues.split(",");
+
+        const keywords = [searchInput.value, ...searchKeywords];
+        localStorage.setItem(keywordStr, keywords.slice(0, 8).toString());
+
+        router.push(`/search?s=${searchInput.value}`);
+      } else {
+        toast.isActive(id)
+          ? toast.update(id, { render: "상호 또는 상표를 입력하세요" })
+          : toast.info("상호 또는 상표를 입력하세요", { toastId: id });
+      }
     }
-  };
+  }, []);
+
   return (
     <main className="min-h-screen w-full p-24 xs:px-10 lg:px-[6.5rem] main-background flex items-center justify-center">
       <div className="container flex flex-col flex-nowrap gap-[1.875rem] justify-center items-center">

@@ -16,15 +16,15 @@ const config: Config = {
       xs: { max: "608px" },
       xxs: { max: "512px" },
     },
-    colors: {
-      "primary-normal": "rgba(46, 102, 216, 1)",
-      "primary-most": "rgba(5, 23, 61, 1)",
-      "primary-strong": "rgba(26, 77, 182, 1)",
-      "text-normal": "rgba(71, 74, 78, 1)",
-      "text-inverse": "rgba(255, 255, 255, 1)",
-      "text-minor": "rgba(207, 213, 220, 1)",
-    },
     extend: {
+      colors: {
+        "primary-normal": "rgba(46, 102, 216, 1)",
+        "primary-most": "rgba(5, 23, 61, 1)",
+        "primary-strong": "rgba(26, 77, 182, 1)",
+        "text-normal": "rgba(71, 74, 78, 1)",
+        "text-inverse": "rgba(255, 255, 255, 1)",
+        "text-minor": "rgba(207, 213, 220, 1)",
+      },
       backgroundImage: {
         "brandscape-logo": "",
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",

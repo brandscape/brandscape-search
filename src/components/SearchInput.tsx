@@ -1,13 +1,25 @@
-export default function SearchInput() {
+interface Props {
+  textColor?: string;
+  placeholderColor?: string;
+  border?: string;
+}
+
+export default function SearchInput({
+  textColor = "text-[--color-text-inverse]",
+  placeholderColor = "text-[--color-text-inverse]",
+  border = "",
+}: Props) {
   return (
     <>
       <label htmlFor="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only">
         Search
       </label>
       <div className="relative">
-        <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+        <div
+          className={`absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none ${textColor}`}
+        >
           <svg
-            className="w-4 h-4 text-[--color-text-inverse]"
+            className="w-4 h-4"
             aria-hidden="true"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -26,9 +38,8 @@ export default function SearchInput() {
           type="search"
           name="default-search"
           id="default-search"
-          className="block w-full p-4 ps-10 text-sm text-[--color-text-inverse] rounded-lg bg-[#FFFFFF]/50 focus:ring-blue-500 placeholder:text-[--color-text-inverse] outline-none"
+          className={`block w-full h-full p-4 ps-10 text-sm rounded-lg bg-[#FFFFFF]/50 focus:ring-blue-500 placeholder:${placeholderColor} outline-none ${textColor} ${border}`}
           placeholder="상표 또는 출원/등록번호를 입력하세요"
-          required
         />
       </div>
     </>
