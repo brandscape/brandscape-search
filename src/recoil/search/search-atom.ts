@@ -20,6 +20,15 @@ export const filterOptionState = atom<FilterType>({
     classification: undefined,
     similarityCode: undefined,
     asignProduct: undefined,
+    applicationNumber: undefined,
+    internationalRegisterNumber: undefined,
+    registerNumber: undefined,
+    applicationStartDate: undefined,
+    applicationEndDate: undefined,
+    registerStartDate: undefined,
+    registerEndDate: undefined,
+    internationalRegisterStartDate: undefined,
+    internationalRegisterEndDate: undefined,
   },
 });
 

@@ -19,9 +19,12 @@ export type FilterType = {
   internationalRegisterNumber?: string; // 국제등록번호
   registerNumber?: string; // 등록번호
 
-  applicationDate?: string; // 출원일자
-  registerDate?: string; // 등록일자
-  internationalRegisterDate?: string; // 국제등록일자
+  applicationStartDate?: string; // 출원시작일자
+  applicationEndDate?: string; // 출원종료일자
+  registerStartDate?: string; // 등록시작일자
+  registerEndDate?: string; // 등록종료일자
+  internationalRegisterStartDate?: string; // 국제등록시작일자
+  internationalRegisterEndDate?: string; // 국제등록종료일자
 
   applicantName?: string; // 출원인
   regPrivilegeName?: string; // 등록권자

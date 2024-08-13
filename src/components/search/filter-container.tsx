@@ -5,12 +5,18 @@ import {
   isFilterOpenState,
   searchLoadingState,
 } from "@/recoil/search/search-atom";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import FilterCheckbox from "./filter-checkbox";
 import { every, isNull } from "lodash";
 import { useRouter } from "next/navigation";
 import { AdministrationState } from "@/recoil/search/type";
+import DatePicker, { registerLocale } from "react-datepicker";
+import { ko } from "date-fns/locale/ko";
+import DateSvg from "@/icons/date-svg";
+import { RangeDateType } from "@/app/search/type";
+
+registerLocale("ko", ko);
 
 export default function FilterContainer() {
   const router = useRouter();
@@ -18,6 +24,11 @@ export default function FilterContainer() {
   const [isFilterOpen, setIsFilterOpen] = useRecoilState(isFilterOpenState);
   const [filterOptions, setFilterOptions] = useRecoilState(filterOptionState);
   const setSearchLoading = useSetRecoilState(searchLoadingState);
+
+  /** @description 출원일자 */
+  const [tcDates, setTcDates] = useState<RangeDateType>();
+  const [rdDates, setRdDates] = useState<RangeDateType>();
+  const [mdDates, setMdDates] = useState<RangeDateType>();
 
   const onChangeCheckbox = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.checked) {
@@ -79,8 +90,37 @@ export default function FilterContainer() {
             el.name === "classification" && el.value && (searchString += `&tc=${el.value}`);
             el.name === "similarityCode" && el.value && (searchString += `&sc=${el.value}`);
             el.name === "asignProduct" && el.value && (searchString += `&gd=${el.value}`);
+            el.name === "applicationNumber" && el.value && (searchString += `&an=${el.value}`);
+            el.name === "internationalRegisterNumber" &&
+              el.value &&
+              (searchString += `&mn=${el.value}`);
+            el.name === "registerNumber" && el.value && (searchString += `&rn=${el.value}`);
+
+            copyFilterOptions = { ...copyFilterOptions, [el.name]: el.value };
           }
         });
+
+        // 출원일자(TC)
+        const [applicationStartDateEl, applicationEndDateEl] = [
+          targetEl.elements.namedItem("applicationStartDate") as HTMLInputElement,
+          targetEl.elements.namedItem("applicationEndDate") as HTMLInputElement,
+        ];
+        (applicationStartDateEl.value || applicationEndDateEl.value) &&
+          (searchString += `&tc=${applicationStartDateEl.value}~${applicationEndDateEl.value}`);
+        // 등록일자(RD)
+        const [registerStartDateEl, registerEndDateEl] = [
+          targetEl.elements.namedItem("registerStartDate") as HTMLInputElement,
+          targetEl.elements.namedItem("registerEndDate") as HTMLInputElement,
+        ];
+        (registerStartDateEl.value || registerEndDateEl.value) &&
+          (searchString += `&rd=${registerStartDateEl.value}~${registerEndDateEl.value}`);
+        // 국제등록일자(MD)
+        const [internationalRegisterStartDateEl, internationalRegisterEndDateEl] = [
+          targetEl.elements.namedItem("internationalRegisterStartDate") as HTMLInputElement,
+          targetEl.elements.namedItem("internationalRegisterEndDate") as HTMLInputElement,
+        ];
+        (internationalRegisterStartDateEl.value || internationalRegisterEndDateEl.value) &&
+          (searchString += `&md=${internationalRegisterStartDateEl.value}~${internationalRegisterEndDateEl.value}`);
 
         router.push(`/search?s=${searchParams.get("s")}${searchString}`);
         setSearchLoading(true);
@@ -109,6 +149,9 @@ export default function FilterContainer() {
         classification,
         similarityCode,
         asignProduct,
+        applicationNumber,
+        internationalRegisterNumber,
+        registerNumber,
       ] = [
         params.get("app"),
         params.get("reg"),
@@ -121,6 +164,9 @@ export default function FilterContainer() {
         params.get("tc"),
         params.get("sc"),
         params.get("gd"),
+        params.get("an"),
+        params.get("mn"),
+        params.get("rn"),
       ];
 
       const checkboxAll = document.getElementById("all");
@@ -137,7 +183,6 @@ export default function FilterContainer() {
           isNull(registration),
         ]));
 
-      console.log("initial effect", { classification, similarityCode, asignProduct });
       setFilterOptions((prev) => ({
         ...prev,
         application: application === "false" ? false : true,
@@ -151,6 +196,9 @@ export default function FilterContainer() {
         ...(classification && { classification: classification.replace(/ /g, "+") }),
         ...(similarityCode && { similarityCode: similarityCode.replace(/ /g, "+") }),
         ...(asignProduct && { asignProduct: asignProduct.replace(/ /g, "+") }),
+        ...(applicationNumber && { applicationNumber }),
+        ...(internationalRegisterNumber && { internationalRegisterNumber }),
+        ...(registerNumber && { registerNumber }),
       }));
     },
     [setFilterOptions]
@@ -255,7 +303,8 @@ export default function FilterContainer() {
               />
             </div>
           </div>
-          <div key="category" className="flex flex-col flex-nowrap gap-4 pb-2 5">
+          {/** @section */}
+          <div key="category" className="flex flex-col flex-nowrap gap-4 pb-2.5">
             <h1 className="text-lg font-semibold tracking-tighter">분류정보</h1>
             <div className="flex flex-row flex-nowrap gap-4 xs:grid xs:grid-cols-1">
               <div className="flex flex-col flex-nowrap flex-1 gap-2">
@@ -272,7 +321,7 @@ export default function FilterContainer() {
                     type="search"
                     name="classification"
                     id="classification"
-                    className="show-clear outline-none border border-[#E1E5EB] rounded px-3 py-2 w-full peer invalid:border-2 invalid:border-[#EF7070]"
+                    className="show-clear outline-none border border-[#E1E5EB] rounded px-3 py-2 w-full text-sm peer invalid:border-2 invalid:border-[#EF7070]"
                     defaultValue={filterOptions.classification}
                     placeholder="ex) 06+09+11"
                     pattern="\d+(\+\d+)*"
@@ -297,7 +346,7 @@ export default function FilterContainer() {
                     type="search"
                     name="similarityCode"
                     id="similarityCode"
-                    className="show-clear outline-none border border-[#E1E5EB] rounded px-3 py-2 w-full peer invalid:border-2 invalid:border-[#EF7070]"
+                    className="show-clear outline-none border border-[#E1E5EB] rounded px-3 py-2 w-full text-sm peer invalid:border-2 invalid:border-[#EF7070]"
                     defaultValue={filterOptions.similarityCode}
                     placeholder="ex) G1004+G1103"
                     pattern="G\d+(\+G\d+)*"
@@ -322,7 +371,7 @@ export default function FilterContainer() {
                     type="search"
                     name="asignProduct"
                     id="asignProduct"
-                    className="show-clear outline-none border border-[#E1E5EB] rounded px-3 py-2 w-full peer invalid:border-2 invalid:border-[#EF7070]"
+                    className="show-clear outline-none border border-[#E1E5EB] rounded px-3 py-2 w-full text-sm peer invalid:border-2 invalid:border-[#EF7070]"
                     defaultValue={filterOptions.asignProduct}
                     placeholder="ex)스마트폰+통신+식물*재배"
                     pattern="[가-힣+*]+"
@@ -335,6 +384,331 @@ export default function FilterContainer() {
               </div>
             </div>
           </div>
+          {/** @section */}
+          <div key="number-infomation" className="flex flex-col flex-nowrap gap-4 pb-2.5">
+            <h1 className="text-lg font-semibold tracking-tighter">번호정보</h1>
+            <div className="flex flex-row flex-nowrap gap-4 xs:grid xs:grid-cols-1">
+              <div className="flex flex-col flex-nowrap flex-1 gap-2">
+                <label htmlFor="applicationNumber">
+                  <span className="text-sm font-medium tracking-tighter text-ellipsis text-[--color-text-normal]">
+                    출원번호&nbsp;
+                  </span>
+                  <span className="text-sm font-normal tracking-tighter text-ellipsis text-[--color-text-assistive]">
+                    (AN)
+                  </span>
+                </label>
+                <div>
+                  <input
+                    type="search"
+                    name="applicationNumber"
+                    id="applicationNumber"
+                    className="show-clear outline-none border border-[#E1E5EB] rounded px-3 py-2 w-full text-sm peer invalid:border-2 invalid:border-[#EF7070]"
+                    defaultValue={filterOptions.applicationNumber}
+                    placeholder="ex)40201200123456"
+                    pattern="\d+"
+                    onKeyDown={onBlockEnterKey}
+                  />
+                  <p className="invisible hidden mt-2 font-medium text-xs text-ellipsis text-[#EF7070] peer-invalid:visible peer-invalid:block">
+                    유효하지 않은 번호 입니다. 입력한 번호를 확인해 주세요.
+                  </p>
+                </div>
+              </div>
+              <div className="flex flex-col flex-nowrap flex-1 gap-2">
+                <label htmlFor="internationalRegisterNumber">
+                  <span className="text-sm font-medium tracking-tighter text-ellipsis text-[--color-text-normal]">
+                    국제 등록번호&nbsp;
+                  </span>
+                  <span className="text-sm font-normal tracking-tighter text-ellipsis text-[--color-text-assistive]">
+                    (MN)
+                  </span>
+                </label>
+                <div>
+                  <input
+                    type="search"
+                    name="internationalRegisterNumber"
+                    id="internationalRegisterNumber"
+                    className="show-clear outline-none border border-[#E1E5EB] rounded px-3 py-2 w-full text-sm peer invalid:border-2 invalid:border-[#EF7070]"
+                    defaultValue={filterOptions.internationalRegisterNumber}
+                    placeholder="ex)12345607"
+                    pattern="\d+"
+                    onKeyDown={onBlockEnterKey}
+                  />
+                  <p className="invisible hidden mt-2 font-medium text-xs text-ellipsis text-[#EF7070] peer-invalid:visible peer-invalid:block">
+                    유효하지 않은 번호 입니다. 입력한 번호를 확인해 주세요.
+                  </p>
+                </div>
+              </div>
+              <div className="flex flex-col flex-nowrap flex-1 gap-2">
+                <label htmlFor="registerNumber">
+                  <span className="text-sm font-medium tracking-tighter text-ellipsis text-[--color-text-normal]">
+                    등록번호&nbsp;
+                  </span>
+                  <span className="text-sm font-normal tracking-tighter text-ellipsis text-[--color-text-assistive]">
+                    (RN)
+                  </span>
+                </label>
+                <div>
+                  <input
+                    type="search"
+                    name="registerNumber"
+                    id="registerNumber"
+                    className="show-clear outline-none border border-[#E1E5EB] rounded px-3 py-2 w-full text-sm peer invalid:border-2 invalid:border-[#EF7070]"
+                    defaultValue={filterOptions.registerNumber}
+                    placeholder="ex)4012345670000"
+                    pattern="\d+"
+                    onKeyDown={onBlockEnterKey}
+                  />
+                  <p className="invisible hidden mt-2 font-medium text-xs text-ellipsis text-[#EF7070] peer-invalid:visible peer-invalid:block">
+                    유효하지 않은 번호 입니다. 입력한 번호를 확인해 주세요.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          {/** @section */}
+          <div key="date-infomation" className="flex flex-col flex-nowrap gap-4 pb-2.5">
+            <h1 className="text-lg font-semibold tracking-tighter">일자정보</h1>
+            <div className="grid grid-cols-1 gap-2">
+              <div className="flex flex-col flex-nowrap gap-2">
+                <div>
+                  <span className="text-sm font-medium tracking-tighter text-ellipsis text-[--color-text-normal]">
+                    출원일자&nbsp;
+                  </span>
+                  <span className="text-sm font-normal tracking-tighter text-ellipsis text-[--color-text-assistive]">
+                    (TC)
+                  </span>
+                </div>
+              </div>
+              <div className="flex flex-row flex-nowrap gap-1 items-center">
+                <div className="w-full relative">
+                  <DatePicker
+                    id="applicationStartDate"
+                    name="applicationStartDate"
+                    locale="ko"
+                    dateFormat={"yyyy-MM-dd"}
+                    className="outline-none border border-[#E1E5EB] rounded px-3 py-2 w-full text-sm"
+                    disabledKeyboardNavigation
+                    showIcon
+                    icon={<DateSvg />}
+                    popperPlacement="top-end"
+                    selected={tcDates?.startDate}
+                    onChange={(date) =>
+                      date &&
+                      setTcDates((prev) => {
+                        if (prev && prev.endDate) {
+                          return date > prev.endDate
+                            ? {
+                                startDate: date,
+                                endDate: new Date(new Date().setDate(date.getDate() + 1)),
+                              }
+                            : { ...prev, startDate: date };
+                        }
+                        return { ...prev, startDate: date };
+                      })
+                    }
+                    selectsStart
+                    startDate={tcDates?.startDate}
+                    endDate={tcDates?.endDate}
+                  />
+                  {tcDates?.startDate && (
+                    <button
+                      type="button"
+                      className="clear-button"
+                      onClick={() => setTcDates((prev) => ({ ...prev, startDate: undefined }))}
+                    />
+                  )}
+                </div>
+                <span>~</span>
+                <div className="w-full relative">
+                  <DatePicker
+                    id="applicationEndDate"
+                    name="applicationEndDate"
+                    locale="ko"
+                    dateFormat={"yyyy-MM-dd"}
+                    className="outline-none border border-[#E1E5EB] rounded px-3 py-2 w-full text-sm"
+                    disabledKeyboardNavigation
+                    showIcon
+                    icon={<DateSvg />}
+                    popperPlacement="top-start"
+                    selected={tcDates?.endDate}
+                    onChange={(date) => date && setTcDates((prev) => ({ ...prev, endDate: date }))}
+                    selectsEnd
+                    startDate={tcDates?.startDate}
+                    endDate={tcDates?.endDate}
+                    minDate={tcDates?.startDate}
+                  />
+                  {tcDates?.endDate && (
+                    <button
+                      type="button"
+                      className="clear-button"
+                      onClick={() => setTcDates((prev) => ({ ...prev, endDate: undefined }))}
+                    />
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 gap-2">
+              <div className="flex flex-col flex-nowrap gap-2">
+                <div>
+                  <span className="text-sm font-medium tracking-tighter text-ellipsis text-[--color-text-normal]">
+                    등록일자&nbsp;
+                  </span>
+                  <span className="text-sm font-normal tracking-tighter text-ellipsis text-[--color-text-assistive]">
+                    (RD)
+                  </span>
+                </div>
+              </div>
+              <div className="flex flex-row flex-nowrap gap-1 items-center">
+                <div className="w-full relative">
+                  <DatePicker
+                    id="registerStartDate"
+                    name="registerStartDate"
+                    locale="ko"
+                    dateFormat={"yyyy-MM-dd"}
+                    className="outline-none border border-[#E1E5EB] rounded px-3 py-2 w-full text-sm"
+                    disabledKeyboardNavigation
+                    showIcon
+                    icon={<DateSvg />}
+                    popperPlacement="top-end"
+                    selected={rdDates?.startDate}
+                    onChange={(date) =>
+                      date &&
+                      setRdDates((prev) => {
+                        if (prev && prev.endDate) {
+                          return date > prev.endDate
+                            ? {
+                                startDate: date,
+                                endDate: new Date(new Date().setDate(date.getDate() + 1)),
+                              }
+                            : { ...prev, startDate: date };
+                        }
+                        return { ...prev, startDate: date };
+                      })
+                    }
+                    selectsStart
+                    startDate={rdDates?.startDate}
+                    endDate={rdDates?.endDate}
+                  />
+                  {rdDates?.startDate && (
+                    <button
+                      type="button"
+                      className="clear-button"
+                      onClick={() => setRdDates((prev) => ({ ...prev, startDate: undefined }))}
+                    />
+                  )}
+                </div>
+                <span>~</span>
+                <div className="w-full relative">
+                  <DatePicker
+                    id="registerEndDate"
+                    name="registerEndDate"
+                    locale="ko"
+                    dateFormat={"yyyy-MM-dd"}
+                    className="outline-none border border-[#E1E5EB] rounded px-3 py-2 w-full text-sm"
+                    disabledKeyboardNavigation
+                    showIcon
+                    icon={<DateSvg />}
+                    popperPlacement="top-start"
+                    selected={rdDates?.endDate}
+                    onChange={(date) => date && setRdDates((prev) => ({ ...prev, endDate: date }))}
+                    selectsEnd
+                    startDate={rdDates?.startDate}
+                    endDate={rdDates?.endDate}
+                    minDate={rdDates?.startDate}
+                  />
+                  {rdDates?.endDate && (
+                    <button
+                      type="button"
+                      className="clear-button"
+                      onClick={() => setRdDates((prev) => ({ ...prev, endDate: undefined }))}
+                    />
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 gap-2">
+              <div className="flex flex-col flex-nowrap gap-2">
+                <div>
+                  <span className="text-sm font-medium tracking-tighter text-ellipsis text-[--color-text-normal]">
+                    국제등록일자&nbsp;
+                  </span>
+                  <span className="text-sm font-normal tracking-tighter text-ellipsis text-[--color-text-assistive]">
+                    (MD)
+                  </span>
+                </div>
+              </div>
+              <div className="flex flex-row flex-nowrap gap-1 items-center">
+                <div className="w-full relative">
+                  <DatePicker
+                    id="internationalRegisterStartDate"
+                    name="internationalRegisterStartDate"
+                    locale="ko"
+                    dateFormat={"yyyy-MM-dd"}
+                    className="outline-none border border-[#E1E5EB] rounded px-3 py-2 w-full text-sm"
+                    disabledKeyboardNavigation
+                    showIcon
+                    icon={<DateSvg />}
+                    popperPlacement="top-end"
+                    selected={mdDates?.startDate}
+                    onChange={(date) =>
+                      date &&
+                      setMdDates((prev) => {
+                        if (prev && prev.endDate) {
+                          return date > prev.endDate
+                            ? {
+                                startDate: date,
+                                endDate: new Date(new Date().setDate(date.getDate() + 1)),
+                              }
+                            : { ...prev, startDate: date };
+                        }
+                        return { ...prev, startDate: date };
+                      })
+                    }
+                    selectsStart
+                    startDate={mdDates?.startDate}
+                    endDate={mdDates?.endDate}
+                  />
+                  {mdDates?.startDate && (
+                    <button
+                      type="button"
+                      className="clear-button"
+                      onClick={() => setMdDates((prev) => ({ ...prev, startDate: undefined }))}
+                    />
+                  )}
+                </div>
+                <span>~</span>
+                <div className="w-full relative">
+                  <DatePicker
+                    id="internationalRegisterEndDate"
+                    name="internationalRegisterEndDate"
+                    locale="ko"
+                    dateFormat={"yyyy-MM-dd"}
+                    className="outline-none border border-[#E1E5EB] rounded px-3 py-2 w-full text-sm"
+                    disabledKeyboardNavigation
+                    showIcon
+                    icon={<DateSvg />}
+                    popperPlacement="top-start"
+                    selected={mdDates?.endDate}
+                    onChange={(date) => date && setMdDates((prev) => ({ ...prev, endDate: date }))}
+                    selectsEnd
+                    startDate={mdDates?.startDate}
+                    endDate={mdDates?.endDate}
+                    minDate={mdDates?.startDate}
+                  />
+                  {mdDates?.endDate && (
+                    <button
+                      type="button"
+                      className="clear-button"
+                      onClick={() => setMdDates((prev) => ({ ...prev, endDate: undefined }))}
+                    />
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+          {/** @section  */}
           <div className="button-group flex flex-row flex-nowrap gap-2">
             <button
               type="button"

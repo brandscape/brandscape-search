@@ -1,6 +1,7 @@
 "use client";
 
 import "react-toastify/dist/ReactToastify.css";
+import "react-datepicker/dist/react-datepicker.css";
 
 import { Slide, ToastContainer } from "react-toastify";
 import type { ToastOptions } from "react-toastify";

@@ -27,12 +27,6 @@ function Option({ targetName, label }: ChildProps) {
       let searchString = "";
 
       if (element instanceof HTMLInputElement && element.type === "checkbox") {
-        element.checked = false;
-        setFilterOption((prev) => ({ ...prev, [targetName]: false }));
-        checkboxAll instanceof HTMLInputElement &&
-          checkboxAll.checked &&
-          (checkboxAll.checked = false);
-
         /** @todo */
         targetName === "application" && (searchString += "&app=false");
         targetName === "publication" && (searchString += "&pub=false");
@@ -42,11 +36,22 @@ function Option({ targetName, label }: ChildProps) {
         targetName === "cancel" && (searchString += "&can=false");
         targetName === "refused" && (searchString += "&ref=false");
         targetName === "registration" && (searchString += "&reg=false");
+
+        element.checked = false;
+        checkboxAll instanceof HTMLInputElement &&
+          checkboxAll.checked &&
+          (checkboxAll.checked = false);
+        setFilterOption((prev) => ({ ...prev, [targetName]: false }));
       } else if (element instanceof HTMLInputElement && element.type === "search") {
-        setFilterOption((prev) => ({ ...prev, [targetName]: undefined }));
         targetName === "classification" && params.delete("tc");
         targetName === "similarityCode" && params.delete("sc");
         targetName === "asignProduct" && params.delete("gd");
+        targetName === "applicationNumber" && params.delete("an");
+        targetName === "internationalRegisterNumber" && params.delete("mn");
+        targetName === "registerNumber" && params.delete("rn");
+
+        element.value = "";
+        setFilterOption((prev) => ({ ...prev, [targetName]: undefined }));
       }
 
       router.push(`${pathname}?${params.toString()}${searchString}`);
@@ -82,6 +87,9 @@ export default function FilterOptions() {
     classification,
     similarityCode,
     asignProduct,
+    applicationNumber,
+    internationalRegisterNumber,
+    registerNumber,
   ] = [
     params.get("app"),
     params.get("reg"),
@@ -94,6 +102,9 @@ export default function FilterOptions() {
     params.get("tc"),
     params.get("sc"),
     params.get("gd"),
+    params.get("an"),
+    params.get("mn"),
+    params.get("rn"),
   ];
 
   return (
@@ -119,6 +130,11 @@ export default function FilterOptions() {
         {asignProduct && (
           <Option targetName="asignProduct" label={asignProduct.replace(/ /g, "+")} />
         )}
+        {applicationNumber && <Option targetName="applicationNumber" label={applicationNumber} />}
+        {internationalRegisterNumber && (
+          <Option targetName="internationalRegisterNumber" label={internationalRegisterNumber} />
+        )}
+        {registerNumber && <Option targetName="registerNumber" label={registerNumber} />}
       </div>
     </div>
   );

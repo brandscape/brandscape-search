@@ -17,6 +17,9 @@ const getData = async (params: URLSearchParams) => {
     classification,
     similarityCode,
     asignProduct,
+    applicationNumber,
+    internationalRegisterNumber,
+    registerNumber,
   ] = [
     params.get("app"),
     params.get("reg"),
@@ -29,6 +32,9 @@ const getData = async (params: URLSearchParams) => {
     params.get("tc"),
     params.get("sc"),
     params.get("gd"),
+    params.get("an"),
+    params.get("mn"),
+    params.get("rn"),
   ];
 
   if (search) {
@@ -48,6 +54,9 @@ const getData = async (params: URLSearchParams) => {
       ...(classification && { classification: classification.replace(/ /g, "|") }),
       ...(similarityCode && { similarityCode: similarityCode.replace(/ /g, "|") }),
       ...(asignProduct && { asignProduct: asignProduct.replace(/ /g, "|") }),
+      ...(applicationNumber && { applicationNumber }),
+      ...(internationalRegisterNumber && { internationalRegisterNumber }),
+      ...(registerNumber && { registerNumber }),
 
       character: "true", // 문자상표
       figure: "true", // 도형상표

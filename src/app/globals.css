@@ -181,6 +181,33 @@ input[type="search"].show-clear::-webkit-search-cancel-button {
   background: var(--color-primary-normal);
 }
 
+/** react datepicker custom */
+.react-datepicker-wrapper {
+  width: 100%;
+}
+.react-datepicker-wrapper .react-datepicker__view-calendar-icon input[type="text"] {
+  padding: 0.5rem 1.5625rem 0.5rem 0.75rem;
+}
+.react-datepicker-wrapper .react-datepicker__view-calendar-icon svg {
+  padding: 0.65rem;
+  right: 0;
+}
+.clear-button {
+  position: absolute;
+  top: 0.7rem;
+  right: 2rem;
+  height: 0.875rem;
+  width: 0.875rem;
+  -webkit-appearance: none;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'><path d='M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z'/></svg>");
+
+  background-color: var(--color-text-assistive);
+  outline: 1px solid var(--color-text-assistive);
+  border: 1px solid var(--color-text-assistive);
+  border-radius: 50%;
+}
+
 /* Loading */
 @keyframes rotation-loader {
   0% {
