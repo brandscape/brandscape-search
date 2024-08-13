@@ -1,16 +1,20 @@
+import { RangeDateType } from "@/app/search/type";
 import CloseSvg from "@/icons/close-svg";
 import { filterOptionState, searchLoadingState } from "@/recoil/search/search-atom";
 import { isNull } from "lodash";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useCallback } from "react";
+import { Dispatch, SetStateAction, useCallback } from "react";
 import { useSetRecoilState } from "recoil";
 
 interface ChildProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   targetName: string;
   label: string;
+  setTdDates?: Dispatch<SetStateAction<RangeDateType | undefined>>;
+  setRdDates?: Dispatch<SetStateAction<RangeDateType | undefined>>;
+  setMdDates?: Dispatch<SetStateAction<RangeDateType | undefined>>;
 }
 
-function Option({ targetName, label }: ChildProps) {
+function Option({ targetName, label, setTdDates, setRdDates, setMdDates }: ChildProps) {
   const router = useRouter();
   const pathname = usePathname();
 
@@ -52,13 +56,46 @@ function Option({ targetName, label }: ChildProps) {
 
         element.value = "";
         setFilterOption((prev) => ({ ...prev, [targetName]: undefined }));
+      } else if (targetName === "applicationDate") {
+        params.delete("td");
+        setTdDates && setTdDates(undefined);
+        setFilterOption((prev) => ({
+          ...prev,
+          applicationStartDate: undefined,
+          applicationEndDate: undefined,
+        }));
+      } else if (targetName === "registerDate") {
+        params.delete("rd");
+        setRdDates && setRdDates(undefined);
+        setFilterOption((prev) => ({
+          ...prev,
+          registerStartDate: undefined,
+          registerEndDate: undefined,
+        }));
+      } else if (targetName === "internationalRegisterDate") {
+        params.delete("md");
+        setMdDates && setMdDates(undefined);
+        setFilterOption((prev) => ({
+          ...prev,
+          internationalRegisterStartDate: undefined,
+          internationalRegisterEndDate: undefined,
+        }));
       }
 
       router.push(`${pathname}?${params.toString()}${searchString}`);
 
       setSearchLoading(true);
     },
-    [setFilterOption, setSearchLoading, pathname, router, targetName]
+    [
+      setFilterOption,
+      setSearchLoading,
+      pathname,
+      router,
+      targetName,
+      setTdDates,
+      setRdDates,
+      setMdDates,
+    ]
   );
 
   return (
@@ -73,7 +110,12 @@ function Option({ targetName, label }: ChildProps) {
   );
 }
 
-export default function FilterOptions() {
+interface Props {
+  setTdDates: Dispatch<SetStateAction<RangeDateType | undefined>>;
+  setRdDates: Dispatch<SetStateAction<RangeDateType | undefined>>;
+  setMdDates: Dispatch<SetStateAction<RangeDateType | undefined>>;
+}
+export default function FilterOptions({ setTdDates, setRdDates, setMdDates }: Props) {
   const params = useSearchParams();
   const [
     application,
@@ -90,6 +132,9 @@ export default function FilterOptions() {
     applicationNumber,
     internationalRegisterNumber,
     registerNumber,
+    applicationDate,
+    registerDate,
+    internationalRegisterDate,
   ] = [
     params.get("app"),
     params.get("reg"),
@@ -105,6 +150,9 @@ export default function FilterOptions() {
     params.get("an"),
     params.get("mn"),
     params.get("rn"),
+    params.get("td"),
+    params.get("rd"),
+    params.get("md"),
   ];
 
   return (
@@ -135,6 +183,19 @@ export default function FilterOptions() {
           <Option targetName="internationalRegisterNumber" label={internationalRegisterNumber} />
         )}
         {registerNumber && <Option targetName="registerNumber" label={registerNumber} />}
+        {applicationDate && (
+          <Option targetName="applicationDate" label={applicationDate} setTdDates={setTdDates} />
+        )}
+        {registerDate && (
+          <Option targetName="registerDate" label={registerDate} setRdDates={setRdDates} />
+        )}
+        {internationalRegisterDate && (
+          <Option
+            targetName="internationalRegisterDate"
+            label={internationalRegisterDate}
+            setTdDates={setMdDates}
+          />
+        )}
       </div>
     </div>
   );

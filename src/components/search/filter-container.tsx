@@ -3,9 +3,12 @@
 import {
   filterOptionState,
   isFilterOpenState,
+  mdDateState,
+  rdDateState,
   searchLoadingState,
+  tdDateState,
 } from "@/recoil/search/search-atom";
-import { useCallback, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useCallback, useEffect, useState } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import FilterCheckbox from "./filter-checkbox";
 import { every, isNull } from "lodash";
@@ -18,17 +21,22 @@ import { RangeDateType } from "@/app/search/type";
 
 registerLocale("ko", ko);
 
-export default function FilterContainer() {
+interface Props {
+  tdDateState: [RangeDateType | undefined, Dispatch<SetStateAction<RangeDateType | undefined>>];
+  rdDateState: [RangeDateType | undefined, Dispatch<SetStateAction<RangeDateType | undefined>>];
+  mdDateState: [RangeDateType | undefined, Dispatch<SetStateAction<RangeDateType | undefined>>];
+}
+export default function FilterContainer({
+  tdDateState: [tdDates, setTdDates],
+  rdDateState: [rdDates, setRdDates],
+  mdDateState: [mdDates, setMdDates],
+}: Props) {
   const router = useRouter();
 
   const [isFilterOpen, setIsFilterOpen] = useRecoilState(isFilterOpenState);
   const [filterOptions, setFilterOptions] = useRecoilState(filterOptionState);
-  const setSearchLoading = useSetRecoilState(searchLoadingState);
 
-  /** @description 출원일자 */
-  const [tcDates, setTcDates] = useState<RangeDateType>();
-  const [rdDates, setRdDates] = useState<RangeDateType>();
-  const [mdDates, setMdDates] = useState<RangeDateType>();
+  const setSearchLoading = useSetRecoilState(searchLoadingState);
 
   const onChangeCheckbox = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.checked) {
@@ -106,7 +114,7 @@ export default function FilterContainer() {
           targetEl.elements.namedItem("applicationEndDate") as HTMLInputElement,
         ];
         (applicationStartDateEl.value || applicationEndDateEl.value) &&
-          (searchString += `&tc=${applicationStartDateEl.value}~${applicationEndDateEl.value}`);
+          (searchString += `&td=${applicationStartDateEl.value}~${applicationEndDateEl.value}`);
         // 등록일자(RD)
         const [registerStartDateEl, registerEndDateEl] = [
           targetEl.elements.namedItem("registerStartDate") as HTMLInputElement,
@@ -152,6 +160,9 @@ export default function FilterContainer() {
         applicationNumber,
         internationalRegisterNumber,
         registerNumber,
+        applicationDate,
+        registerDate,
+        internationalRegisterDate,
       ] = [
         params.get("app"),
         params.get("reg"),
@@ -167,6 +178,9 @@ export default function FilterContainer() {
         params.get("an"),
         params.get("mn"),
         params.get("rn"),
+        params.get("td"),
+        params.get("rd"),
+        params.get("md"),
       ];
 
       const checkboxAll = document.getElementById("all");
@@ -199,9 +213,47 @@ export default function FilterContainer() {
         ...(applicationNumber && { applicationNumber }),
         ...(internationalRegisterNumber && { internationalRegisterNumber }),
         ...(registerNumber && { registerNumber }),
+        ...(applicationDate && {
+          applicationStartDate: applicationDate.split("~")[0] || undefined,
+          applicationEndDate: applicationDate.split("~")[1] || undefined,
+        }),
+        ...(registerDate && {
+          registerStartDate: registerDate.split("~")[0] || undefined,
+          registerEndDate: registerDate.split("~")[1] || undefined,
+        }),
+        ...(internationalRegisterDate && {
+          internationalRegisterStartDate: internationalRegisterDate.split("~")[0] || undefined,
+          internationalRegisterEndDate: internationalRegisterDate.split("~")[1] || undefined,
+        }),
+      }));
+
+      setTdDates((prev) => ({
+        ...prev,
+        ...(applicationDate &&
+          applicationDate.split("~")[0] && { startDate: new Date(applicationDate.split("~")[0]) }),
+        ...(applicationDate &&
+          applicationDate.split("~")[1] && { endDate: new Date(applicationDate.split("~")[1]) }),
+      }));
+      setRdDates((prev) => ({
+        ...prev,
+        ...(registerDate &&
+          registerDate.split("~")[0] && { startDate: new Date(registerDate.split("~")[0]) }),
+        ...(registerDate &&
+          registerDate.split("~")[1] && { endDate: new Date(registerDate.split("~")[1]) }),
+      }));
+      setMdDates((prev) => ({
+        ...prev,
+        ...(internationalRegisterDate &&
+          internationalRegisterDate.split("~")[0] && {
+            startDate: new Date(internationalRegisterDate.split("~")[0]),
+          }),
+        ...(internationalRegisterDate &&
+          internationalRegisterDate.split("~")[1] && {
+            endDate: new Date(internationalRegisterDate.split("~")[1]),
+          }),
       }));
     },
-    [setFilterOptions]
+    [setFilterOptions, setTdDates, setRdDates, setMdDates]
   );
 
   return (
@@ -491,10 +543,10 @@ export default function FilterContainer() {
                     showIcon
                     icon={<DateSvg />}
                     popperPlacement="top-end"
-                    selected={tcDates?.startDate}
+                    selected={tdDates?.startDate}
                     onChange={(date) =>
                       date &&
-                      setTcDates((prev) => {
+                      setTdDates((prev) => {
                         if (prev && prev.endDate) {
                           return date > prev.endDate
                             ? {
@@ -507,14 +559,14 @@ export default function FilterContainer() {
                       })
                     }
                     selectsStart
-                    startDate={tcDates?.startDate}
-                    endDate={tcDates?.endDate}
+                    startDate={tdDates?.startDate}
+                    endDate={tdDates?.endDate}
                   />
-                  {tcDates?.startDate && (
+                  {tdDates?.startDate && (
                     <button
                       type="button"
                       className="clear-button"
-                      onClick={() => setTcDates((prev) => ({ ...prev, startDate: undefined }))}
+                      onClick={() => setTdDates((prev) => ({ ...prev, startDate: undefined }))}
                     />
                   )}
                 </div>
@@ -530,18 +582,18 @@ export default function FilterContainer() {
                     showIcon
                     icon={<DateSvg />}
                     popperPlacement="top-start"
-                    selected={tcDates?.endDate}
-                    onChange={(date) => date && setTcDates((prev) => ({ ...prev, endDate: date }))}
+                    selected={tdDates?.endDate}
+                    onChange={(date) => date && setTdDates((prev) => ({ ...prev, endDate: date }))}
                     selectsEnd
-                    startDate={tcDates?.startDate}
-                    endDate={tcDates?.endDate}
-                    minDate={tcDates?.startDate}
+                    startDate={tdDates?.startDate}
+                    endDate={tdDates?.endDate}
+                    minDate={tdDates?.startDate}
                   />
-                  {tcDates?.endDate && (
+                  {tdDates?.endDate && (
                     <button
                       type="button"
                       className="clear-button"
-                      onClick={() => setTcDates((prev) => ({ ...prev, endDate: undefined }))}
+                      onClick={() => setTdDates((prev) => ({ ...prev, endDate: undefined }))}
                     />
                   )}
                 </div>

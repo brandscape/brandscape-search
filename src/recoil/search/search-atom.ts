@@ -1,5 +1,6 @@
 import { atom } from "recoil";
 import { FilterType } from "./type";
+import { RangeDateType } from "@/app/search/type";
 
 export const isFilterOpenState = atom<boolean>({
   key: "isFilterOpen",
@@ -43,30 +44,14 @@ export const searchKeywordState = atom<string[]>({
 export const searchLoadingState = atom<boolean>({
   key: "searchLoading",
   default: false,
-  /** @deprecated */
-  // effects: [
-  //   ({ setSelf, onSet }) => {
-  //     if (typeof window !== "undefined") {
-  //       const keywordValues = localStorage.getItem(keywordStr);
-  //       if (keywordValues !== null) {
-  //         const arr = keywordValues.split(",");
-  //         console.log("test", arr);
-  //         setSelf(arr);
-  //       }
-
-  //       onSet((newValue, _, isReset) => {
-  //         console.log("onSet", newValue, isReset);
-  //         if (isReset) localStorage.removeItem(keywordStr);
-  //       });
-  //     }
-  //   },
-  //   () => {
-  //     // NOTE: clean uo func
-  //   },
-  // ],
 });
 
-export const searchFilterState = atom<any>({
-  key: "searchFilter",
-  default: {},
+export const tdDateState = atom<RangeDateType>({
+  key: "tdDate",
+});
+export const rdDateState = atom<RangeDateType>({
+  key: "rdDate",
+});
+export const mdDateState = atom<RangeDateType>({
+  key: "mdDate",
 });

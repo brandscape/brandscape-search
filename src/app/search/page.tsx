@@ -20,6 +20,9 @@ const getData = async (params: URLSearchParams) => {
     applicationNumber,
     internationalRegisterNumber,
     registerNumber,
+    applicationDate,
+    registerDate,
+    internationalRegisterDate,
   ] = [
     params.get("app"),
     params.get("reg"),
@@ -35,6 +38,9 @@ const getData = async (params: URLSearchParams) => {
     params.get("an"),
     params.get("mn"),
     params.get("rn"),
+    params.get("td"),
+    params.get("rd"),
+    params.get("md"),
   ];
 
   if (search) {
@@ -57,7 +63,13 @@ const getData = async (params: URLSearchParams) => {
       ...(applicationNumber && { applicationNumber }),
       ...(internationalRegisterNumber && { internationalRegisterNumber }),
       ...(registerNumber && { registerNumber }),
+      ...(applicationDate && { applicationDate: applicationDate.replace(/-/g, "") }),
+      ...(registerDate && { registerDate: registerDate.replace(/-/g, "") }),
+      ...(internationalRegisterDate && {
+        internationalRegisterDate: internationalRegisterDate.replace(/-/g, ""),
+      }),
 
+      /** required params */
       character: "true", // 문자상표
       figure: "true", // 도형상표
       compositionCharacter: "true", // 복합문자
@@ -85,6 +97,7 @@ const getData = async (params: URLSearchParams) => {
 
     const queryString = new URLSearchParams(params).toString();
     const url = `https://plus.kipris.or.kr/kipo-api/kipi/trademarkInfoSearchService/getAdvancedSearch?${queryString}`;
+    console.log("👉", applicationDate?.replace(/-/g, ""), queryString);
 
     const response = await fetch(url);
 
