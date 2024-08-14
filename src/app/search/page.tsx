@@ -23,6 +23,8 @@ const getData = async (params: URLSearchParams) => {
     applicationDate,
     registerDate,
     internationalRegisterDate,
+    applicantName,
+    regPrivilegeName,
   ] = [
     params.get("app"),
     params.get("reg"),
@@ -41,6 +43,8 @@ const getData = async (params: URLSearchParams) => {
     params.get("td"),
     params.get("rd"),
     params.get("md"),
+    params.get("ap"),
+    params.get("rg"),
   ];
 
   if (search) {
@@ -68,6 +72,8 @@ const getData = async (params: URLSearchParams) => {
       ...(internationalRegisterDate && {
         internationalRegisterDate: internationalRegisterDate.replace(/-/g, ""),
       }),
+      ...(applicantName && { applicantName }),
+      ...(regPrivilegeName && { regPrivilegeName }),
 
       /** required params */
       character: "true", // 문자상표
@@ -97,14 +103,17 @@ const getData = async (params: URLSearchParams) => {
 
     const queryString = new URLSearchParams(params).toString();
     const url = `https://plus.kipris.or.kr/kipo-api/kipi/trademarkInfoSearchService/getAdvancedSearch?${queryString}`;
-    console.log("👉", applicationDate?.replace(/-/g, ""), queryString);
+    console.log("👉", queryString.split("&"));
 
     const response = await fetch(url);
 
     if (!response.ok) throw new Error("failed to fetch API data");
 
     return response.text();
-  } else throw new Error("search is not defined");
+  } else {
+    /** @todo search 없을때 페이지 설정 */
+    return "search is not defined";
+  }
 };
 
 export default async function Search() {
@@ -113,6 +122,7 @@ export default async function Search() {
 
   const xml = await getData(searchParams);
 
+  if (typeof xml === "string" && xml === "search is not defined") return <h1>HELLO WORLD</h1>;
   if (!xml) return notFound();
 
   const parser = new xml2js.Parser({ explicitArray: false });

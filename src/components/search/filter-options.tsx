@@ -53,6 +53,8 @@ function Option({ targetName, label, setTdDates, setRdDates, setMdDates }: Child
         targetName === "applicationNumber" && params.delete("an");
         targetName === "internationalRegisterNumber" && params.delete("mn");
         targetName === "registerNumber" && params.delete("rn");
+        targetName === "applicantName" && params.delete("ap");
+        targetName === "regPrivilegeName" && params.delete("rg");
 
         element.value = "";
         setFilterOption((prev) => ({ ...prev, [targetName]: undefined }));
@@ -135,6 +137,8 @@ export default function FilterOptions({ setTdDates, setRdDates, setMdDates }: Pr
     applicationDate,
     registerDate,
     internationalRegisterDate,
+    applicantName,
+    regPrivilegeName,
   ] = [
     params.get("app"),
     params.get("reg"),
@@ -153,10 +157,12 @@ export default function FilterOptions({ setTdDates, setRdDates, setMdDates }: Pr
     params.get("td"),
     params.get("rd"),
     params.get("md"),
+    params.get("ap"),
+    params.get("rg"),
   ];
 
   return (
-    <div className="text-black flex flex-row flex-nowrap gap-3">
+    <div className="text-black flex flex-row flex-nowrap gap-3 mb-3">
       <div>
         <span className="text-base font-bold tracking-tighter">적용 필터</span>
       </div>
@@ -196,6 +202,8 @@ export default function FilterOptions({ setTdDates, setRdDates, setMdDates }: Pr
             setTdDates={setMdDates}
           />
         )}
+        {applicantName && <Option targetName="applicantName" label={applicantName} />}
+        {regPrivilegeName && <Option targetName="regPrivilegeName" label={regPrivilegeName} />}
       </div>
     </div>
   );

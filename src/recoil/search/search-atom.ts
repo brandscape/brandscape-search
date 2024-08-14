@@ -30,6 +30,8 @@ export const filterOptionState = atom<FilterType>({
     registerEndDate: undefined,
     internationalRegisterStartDate: undefined,
     internationalRegisterEndDate: undefined,
+    applicantName: undefined,
+    regPrivilegeName: undefined,
   },
 });
 

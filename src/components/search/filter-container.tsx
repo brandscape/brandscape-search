@@ -103,6 +103,8 @@ export default function FilterContainer({
               el.value &&
               (searchString += `&mn=${el.value}`);
             el.name === "registerNumber" && el.value && (searchString += `&rn=${el.value}`);
+            el.name === "applicantName" && el.value && (searchString += `&ap=${el.value}`);
+            el.name === "regPrivilegeName" && el.value && (searchString += `&rg=${el.value}`);
 
             copyFilterOptions = { ...copyFilterOptions, [el.name]: el.value };
           }
@@ -163,6 +165,8 @@ export default function FilterContainer({
         applicationDate,
         registerDate,
         internationalRegisterDate,
+        applicantName,
+        regPrivilegeName,
       ] = [
         params.get("app"),
         params.get("reg"),
@@ -181,6 +185,8 @@ export default function FilterContainer({
         params.get("td"),
         params.get("rd"),
         params.get("md"),
+        params.get("ap"),
+        params.get("rg"),
       ];
 
       const checkboxAll = document.getElementById("all");
@@ -225,6 +231,8 @@ export default function FilterContainer({
           internationalRegisterStartDate: internationalRegisterDate.split("~")[0] || undefined,
           internationalRegisterEndDate: internationalRegisterDate.split("~")[1] || undefined,
         }),
+        ...(applicantName && { applicantName }),
+        ...(regPrivilegeName && { regPrivilegeName }),
       }));
 
       setTdDates((prev) => ({
@@ -261,7 +269,7 @@ export default function FilterContainer({
       role="dialog"
       className={`${
         isFilterOpen ? "visible z-[1] opacity-100" : "invisible -z-[1] opacity-0"
-      } absolute top-[3.5rem] left-0 min-h-screen bg-current w-full`}
+      } absolute top-[3.5rem] left-0 min-h-screen bg-current w-full h-full`}
     >
       <div className="py-16 text-[--color-text-strong] flex flex-col flex-nowrap gap-5 max-w-[45.5rem] m-auto xs:px-4">
         <div className="title pb-[0.625rem]">
@@ -355,7 +363,7 @@ export default function FilterContainer({
               />
             </div>
           </div>
-          {/** @section */}
+          {/** @section 분류정보 */}
           <div key="category" className="flex flex-col flex-nowrap gap-4 pb-2.5">
             <h1 className="text-lg font-semibold tracking-tighter">분류정보</h1>
             <div className="flex flex-row flex-nowrap gap-4 xs:grid xs:grid-cols-1">
@@ -436,7 +444,7 @@ export default function FilterContainer({
               </div>
             </div>
           </div>
-          {/** @section */}
+          {/** @section 번호정보 */}
           <div key="number-infomation" className="flex flex-col flex-nowrap gap-4 pb-2.5">
             <h1 className="text-lg font-semibold tracking-tighter">번호정보</h1>
             <div className="flex flex-row flex-nowrap gap-4 xs:grid xs:grid-cols-1">
@@ -517,7 +525,7 @@ export default function FilterContainer({
               </div>
             </div>
           </div>
-          {/** @section */}
+          {/** @section 일자정보 */}
           <div key="date-infomation" className="flex flex-col flex-nowrap gap-4 pb-2.5">
             <h1 className="text-lg font-semibold tracking-tighter">일자정보</h1>
             <div className="grid grid-cols-1 gap-2">
@@ -756,6 +764,54 @@ export default function FilterContainer({
                       onClick={() => setMdDates((prev) => ({ ...prev, endDate: undefined }))}
                     />
                   )}
+                </div>
+              </div>
+            </div>
+          </div>
+          {/** @section 권리자 정보 */}
+          <div key="authorizer-infomation" className="flex flex-col flex-nowrap gap-4 pb-2.5">
+            <h1 className="text-lg font-semibold tracking-tighter">권리자 정보</h1>
+            <div className="flex flex-row flex-nowrap gap-4 xs:grid xs:grid-cols-1">
+              <div className="flex flex-col flex-nowrap flex-1 gap-2">
+                <label htmlFor="applicantName">
+                  <span className="text-sm font-medium tracking-tighter text-ellipsis text-[--color-text-normal]">
+                    출원인&nbsp;
+                  </span>
+                  <span className="text-sm font-normal tracking-tighter text-ellipsis text-[--color-text-assistive]">
+                    (AP)
+                  </span>
+                </label>
+                <div>
+                  <input
+                    type="search"
+                    name="applicantName"
+                    id="applicantName"
+                    className="show-clear outline-none border border-[#E1E5EB] rounded px-3 py-2 w-full text-sm"
+                    defaultValue={filterOptions.applicantName}
+                    placeholder="ex)특허정보원"
+                    onKeyDown={onBlockEnterKey}
+                  />
+                </div>
+              </div>
+              <div className="flex flex-col flex-nowrap flex-1 gap-2">
+                <label htmlFor="regPrivilegeName">
+                  <span className="text-sm font-medium tracking-tighter text-ellipsis text-[--color-text-normal]">
+                    등록권자&nbsp;
+                  </span>
+                  <span className="text-sm font-normal tracking-tighter text-ellipsis text-[--color-text-assistive]">
+                    (RG)
+                  </span>
+                </label>
+                <div>
+                  <input
+                    type="search"
+                    name="regPrivilegeName"
+                    id="regPrivilegeName"
+                    className="show-clear outline-none border border-[#E1E5EB] rounded px-3 py-2 w-full text-sm"
+                    defaultValue={filterOptions.regPrivilegeName}
+                    placeholder="ex)툭허청장"
+                    onKeyDown={onBlockEnterKey}
+                  />
                 </div>
               </div>
             </div>

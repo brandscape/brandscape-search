@@ -65,7 +65,7 @@ export default function Header() {
         </div>
         <div className="nav-menu transition-right duration-500 flex flex-row flex-nowrap gap-2 px-5 xs:fixed xs:right-[-100%] z-10 ">
           <Link
-            href="/"
+            href="/search"
             className="px-3 xs:px-0 xs:py-3 py-[10px] rounded text-[15px] font-medium text-[--color-text-minor] xs:text-[--color-text-normal] leading-[1.125rem] tracking-tighter xs:hover:text-[--color-text-minor] hover:text-[--color-text-inverse] transition-[color] duration-300"
             onClick={onClearClick}
           >
