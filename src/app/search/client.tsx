@@ -6,6 +6,12 @@ import FilterContainer from "@/components/search/filter-container";
 import KeywordStorage from "@/components/search/keyword-storage";
 import FilterOptions from "@/components/search/filter-options";
 import { useState } from "react";
+import InfoContainer from "@/components/search/info-contianer";
+import SearchNotFound from "@/components/search/search-not-found";
+import { useRecoilValue } from "recoil";
+import { searchLoadingState } from "@/recoil/search/search-atom";
+import Loading from "../loading";
+import TableContainer from "@/components/search/table-container";
 
 interface Props {
   brandData: SearchResponse<Brand>;
@@ -18,17 +24,32 @@ export default function Client({ brandData }: Props) {
   /** @description [날짜 필터] 국제등록일자 */
   const [mdDates, setMdDates] = useState<RangeDateType>();
 
-  console.log("data", JSON.stringify(brandData.response.body.items));
+  const isSearchLoading = useRecoilValue(searchLoadingState);
+
+  console.log("data", isSearchLoading, brandData.response);
   return (
     <main className="min-h-screen py-24 m-auto max-w-[60rem] xs:px-4 relative">
       <section className="max-w-[45rem] m-auto flex flex-col gap-0">
         <SearchClient brandData={brandData} />
         <KeywordStorage />
-        <FilterOptions setTdDates={setTdDates} setRdDates={setRdDates} setMdDates={setMdDates} />
+        {!isSearchLoading && (
+          <FilterOptions setTdDates={setTdDates} setRdDates={setRdDates} setMdDates={setMdDates} />
+        )}
       </section>
-      <section className="w-full p-5 border-t border-[#EDF0F4]">
-        <h1>HELLO WORLD</h1>
-      </section>
+      {isSearchLoading ? (
+        <Loading />
+      ) : (
+        <section className="w-full p-5 border-t border-[#EDF0F4]">
+          {+brandData.response.count.totalCount ? (
+            <>
+              <InfoContainer count={brandData.response.count} />
+              <TableContainer />
+            </>
+          ) : (
+            <SearchNotFound />
+          )}
+        </section>
+      )}
       <FilterContainer
         tdDateState={[tdDates, setTdDates]}
         rdDateState={[rdDates, setRdDates]}

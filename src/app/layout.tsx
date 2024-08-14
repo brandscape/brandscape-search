@@ -38,7 +38,7 @@ export default function RootLayout({
     <html lang="ko" className={`${myFont.variable}`}>
       <body>
         <RootProvider>
-          <Suspense fallback={<Loading />}>
+          <Suspense fallback={<Loading isFullHeight />}>
             <Header />
             {children}
           </Suspense>
