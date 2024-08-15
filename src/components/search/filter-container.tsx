@@ -150,7 +150,6 @@ export default function FilterContainer({
         router.push(`${window.location.pathname}?${params.toString()}`);
       }
 
-      console.log("1", params.get("p"));
       const [
         application,
         registration,

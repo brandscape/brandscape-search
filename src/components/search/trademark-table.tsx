@@ -4,6 +4,9 @@ import { parse, format } from "date-fns";
 import { useRouter } from "next/navigation";
 import { useCallback } from "react";
 import { Brand, SearchResponse } from "@/app/search/type";
+import { pick } from "lodash";
+import { useSetRecoilState } from "recoil";
+import { detailSearchDataState } from "@/recoil/search/search-atom";
 
 interface Props {
   body: SearchResponse<Brand>["response"]["body"];
@@ -17,6 +20,8 @@ export default function TrademarkTable({ body, count }: Props) {
   const router = useRouter();
   const pathname = usePathname();
   const pageParam = useSearchParams().get("p");
+
+  const setDetailSearchData = useSetRecoilState(detailSearchDataState);
 
   const currentPage = pageParam ? +pageParam : 1;
   const totalPages = Math.ceil(+count.totalCount / +count.numOfRows); // 총 페이지 수
@@ -33,7 +38,6 @@ export default function TrademarkTable({ body, count }: Props) {
     (currentGroup + 1) * pagesPerGroup
   );
 
-  console.log({ pageNumbers });
   /**
    * 페이지 이동 클릭 이벤트 핸들러
    * @param {number} number 이동할 페이지 번호
@@ -47,6 +51,25 @@ export default function TrademarkTable({ body, count }: Props) {
         router.push(`${pathname}?${searchParams.toString()}&p=${number}`);
     },
     [pathname, router, pageNumbers]
+  );
+
+  const onClickRow = useCallback(
+    (item: Brand) => () => {
+      const parsedNumber = Number(item.applicationNumber);
+      if (isNaN(parsedNumber)) return;
+      setDetailSearchData(
+        pick(item, [
+          "applicationNumber",
+          "internationalRegisterNumber",
+          "applicantName",
+          "regPrivilegeName",
+          "applicationDate",
+          "registrationDate",
+        ])
+      );
+      router.push(`/search/${parsedNumber}}`);
+    },
+    [router, setDetailSearchData]
   );
 
   return (
@@ -103,7 +126,7 @@ export default function TrademarkTable({ body, count }: Props) {
                         <tr
                           key={`all-td-${index}`}
                           className="bg-white transition-all duration-300 hover:bg-[#F6F7F9] h-12 text-[--color-text-normal] cursor-pointer"
-                          onClick={() => console.log("row click!!", index)}
+                          onClick={onClickRow(item)}
                         >
                           {/** Mobile display */}
                           <td className="px-3 py-[0.3125rem] whitespace-nowrap text-xs font-semibold tracking-tighter text-center hidden xs:table-cell">
@@ -117,7 +140,7 @@ export default function TrademarkTable({ body, count }: Props) {
                                   />
                                 </picture>
                               </div>
-                              <div className="flex flex-col flex-nowrap gap-1">
+                              <div className="flex flex-col flex-nowrap gap-1 w-[2.25rem]">
                                 <div
                                   className={`${
                                     ["소멸", "취하", "포기", "무효", "거절"].includes(
@@ -129,14 +152,14 @@ export default function TrademarkTable({ body, count }: Props) {
                                 >
                                   {item.applicationStatus}
                                 </div>
-                                <span className="text-[--color-text-assistive] text-xs font-normal">
+                                <span className="text-[--color-text-assistive] text-xs font-normal whitespace-pre-wrap break-all">
                                   {item.classificationCode && `${item.classificationCode}류`}
                                 </span>
                               </div>
                             </div>
                           </td>
                           <td className="px-3 py-[0.3125rem] text-xs tracking-tighter text-center hidden xs:table-cell">
-                            <div className="overflow-hidden whitespace-nowrap break-keep text-ellipsis max-w-28">
+                            <div className="overflow-hidden whitespace-nowrap break-keep text-ellipsis max-w-24">
                               {item.applicantName}
                             </div>
                           </td>
@@ -263,7 +286,7 @@ export default function TrademarkTable({ body, count }: Props) {
                           </div>
                         </td>
                         <td className="px-3 py-[0.3125rem] text-xs tracking-tighter text-center hidden xs:table-cell">
-                          <div className="overflow-hidden whitespace-nowrap break-keep text-ellipsis max-w-28">
+                          <div className="overflow-hidden whitespace-nowrap break-keep text-ellipsis max-w-24">
                             {body.items.item.applicantName}
                           </div>
                         </td>
@@ -360,7 +383,7 @@ export default function TrademarkTable({ body, count }: Props) {
           <nav className="flex items-center justify-center py-4 " aria-label="Table navigation">
             <ul className="flex items-center justify-center text-sm h-auto gap-2">
               <li
-                className="inline-flex items-center justify-center gap-2 w-[2.125rem] h-[2.125rem] ml-0 text-[--color-text-normal] bg-white font-medium text-sm leading-7 cursor-pointer rounded hover:bg-[#EDF0F4] hover:text-[--color-text-strong]"
+                className="inline-flex items-center justify-center gap-2 w-[2.125rem] h-[2.125rem] ml-0 text-[--color-text-normal] bg-white font-medium text-sm leading-7 cursor-pointer rounded hover:bg-[#EDF0F4] hover:text-[--color-text-strong] xs:w-[1.5rem] xs:h-[1.5rem]"
                 onClick={onClickPage(currentPage - 1)}
               >
                 <svg
@@ -385,14 +408,14 @@ export default function TrademarkTable({ body, count }: Props) {
                     currentPage === num ? (
                       <li
                         key={`page-${num}`}
-                        className="inline-flex justify-center items-center w-[2.125rem] h-[2.125rem] bg-[#EDF0F4] text-[--color-text-strong] font-medium text-sm cursor-pointer rounded"
+                        className="inline-flex justify-center items-center w-[2.125rem] h-[2.125rem] bg-[#EDF0F4] text-[--color-text-strong] font-medium text-sm cursor-pointer rounded xs:w-[1.5rem] xs:h-[1.5rem]"
                       >
                         {num}
                       </li>
                     ) : (
                       <li
                         key={`page-${num}`}
-                        className="inline-flex justify-center items-center w-[2.125rem] h-[2.125rem] text-[--color-text-normal] bg-white font-medium text-sm cursor-pointer rounded hover:bg-[#EDF0F4] hover:text-[--color-text-strong]"
+                        className="inline-flex justify-center items-center w-[2.125rem] h-[2.125rem] text-[--color-text-normal] bg-white font-medium text-sm cursor-pointer rounded hover:bg-[#EDF0F4] hover:text-[--color-text-strong] xs:w-[1.5rem] xs:h-[1.5rem]"
                         onClick={onClickPage(num)}
                       >
                         {num}
@@ -402,7 +425,7 @@ export default function TrademarkTable({ body, count }: Props) {
                 </ul>
               </li>
               <li
-                className="inline-flex items-center justify-center gap-2 w-[2.125rem] h-[2.125rem] ml-0 text-[--color-text-normal] bg-white font-medium text-sm leading-7 cursor-pointer rounded hover:bg-[#EDF0F4] hover:text-[--color-text-strong]"
+                className="inline-flex items-center justify-center gap-2 w-[2.125rem] h-[2.125rem] ml-0 text-[--color-text-normal] bg-white font-medium text-sm leading-7 cursor-pointer rounded hover:bg-[#EDF0F4] hover:text-[--color-text-strong] xs:w-[1.5rem] xs:h-[1.5rem]"
                 onClick={onClickPage(currentPage + 1)}
               >
                 <svg

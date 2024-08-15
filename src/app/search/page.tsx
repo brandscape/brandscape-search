@@ -136,7 +136,6 @@ const getValidTrademarkData = async (params: URLSearchParams) => {
   const search = params.get("s");
 
   const [pageNo] = [params.get("p")];
-  console.log("1️⃣ validTrademarkjson", pageNo);
   if (search) {
     const params = {
       ...(/^\d{13}$/.test(search) ? { applicationNumber: search } : { trademarkName: search }),
@@ -179,7 +178,6 @@ const getValidTrademarkData = async (params: URLSearchParams) => {
 
     const queryString = new URLSearchParams(params).toString();
     const url = `https://plus.kipris.or.kr/kipo-api/kipi/trademarkInfoSearchService/getAdvancedSearch?${queryString}`;
-    console.log("2️⃣", queryString);
 
     const response = await fetch(url);
 

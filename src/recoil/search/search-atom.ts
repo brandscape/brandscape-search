@@ -1,5 +1,5 @@
 import { atom } from "recoil";
-import { FilterType } from "./type";
+import { FilterType, DetailSearchDataType } from "./type";
 import { RangeDateType } from "@/app/search/type";
 
 export const isFilterOpenState = atom<boolean>({
@@ -46,6 +46,11 @@ export const searchKeywordState = atom<string[]>({
 export const searchLoadingState = atom<boolean>({
   key: "searchLoading",
   default: false,
+});
+
+export const detailSearchDataState = atom<DetailSearchDataType>({
+  key: "detailSearchData",
+  default: {},
 });
 
 export const tdDateState = atom<RangeDateType>({

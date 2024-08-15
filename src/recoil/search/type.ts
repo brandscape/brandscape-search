@@ -1,3 +1,5 @@
+import { Brand } from "@/app/search/type";
+
 export type AdministrationState =
   | "application" // 출원
   | "registration" // 등록
@@ -29,3 +31,15 @@ export type FilterType = {
   applicantName?: string; // 출원인
   regPrivilegeName?: string; // 등록권자
 } & Record<AdministrationState, boolean>;
+
+export type DetailSearchDataType = Partial<
+  Pick<
+    Brand,
+    | "applicationNumber"
+    | "internationalRegisterNumber"
+    | "applicantName"
+    | "regPrivilegeName"
+    | "applicationDate"
+    | "registrationDate"
+  >
+>;
