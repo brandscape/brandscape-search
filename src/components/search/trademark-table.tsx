@@ -101,7 +101,7 @@ export default function TrademarkTable({ body, count }: TableProps) {
                           <div className="max-w-[5.5rem] border border-[#E1E5EB] rounded">
                             <picture>
                               <img
-                                src={item.drawing}
+                                src={(item.drawing || "").replace("http://", "https://")}
                                 alt="thumbnail-image"
                                 className="w-full h-full object-cover"
                               />
@@ -166,7 +166,7 @@ export default function TrademarkTable({ body, count }: TableProps) {
                         <div className="max-w-10 m-auto border border-[#E1E5EB] rounded">
                           <picture>
                             <img
-                              src={item.drawing}
+                              src={(item.drawing || "").replace("http://", "https://")}
                               alt="thumbnail-image"
                               className="w-full h-full object-cover"
                             />
