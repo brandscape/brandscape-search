@@ -6,6 +6,7 @@ import Client from "./client";
 const getData = async (params: URLSearchParams) => {
   const search = params.get("s");
   const [
+    pageNo,
     application,
     registration,
     refused,
@@ -26,6 +27,7 @@ const getData = async (params: URLSearchParams) => {
     applicantName,
     regPrivilegeName,
   ] = [
+    params.get("p"),
     params.get("app"),
     params.get("reg"),
     params.get("ref"),
@@ -48,9 +50,10 @@ const getData = async (params: URLSearchParams) => {
   ];
 
   if (search) {
+    console.log("👉", pageNo);
     const params = {
       trademarkName: search,
-      // pageNo: 1,
+      ...(pageNo && { pageNo }),
       ServiceKey: process.env.KIPRIS_ACCESS_KEY || "",
       application: application || "true", // 출원
       registration: registration || "true", // 등록

@@ -43,7 +43,7 @@ export default function SearchInput({
               ? "placeholder:text-[color-text-minor]"
               : "placeholder:text-[--color-text-inverse]"
           }`}
-          placeholder="상표 또는 출원/등록번호를 입력하세요"
+          placeholder="상표 또는 출원번호를 입력하세요"
         />
       </div>
     </>

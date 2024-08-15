@@ -39,11 +39,11 @@ export default function Client({ brandData }: Props) {
       {isSearchLoading ? (
         <Loading />
       ) : (
-        <section className="w-full p-5 border-t border-[#EDF0F4]">
+        <section className="w-full p-5 border-t border-[#EDF0F4] xs:p-0">
           {+brandData.response.count.totalCount ? (
             <>
               <InfoContainer count={brandData.response.count} />
-              <TableContainer />
+              <TableContainer body={brandData.response.body} count={brandData.response.count} />
             </>
           ) : (
             <SearchNotFound />

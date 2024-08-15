@@ -142,6 +142,22 @@ input[type="search"].show-clear::-webkit-search-cancel-button {
   }
 }
 
+.badge {
+  padding: 0.25rem 0.5rem;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0.25rem;
+}
+.enable-badge {
+  color: #40a088;
+  background-color: #e9f9f5;
+}
+.disable-badge {
+  color: var(--color-text-assistive);
+  background-color: #edf0f4;
+}
+
 /** react toastify custom */
 .Toastify .Toastify__toast-container {
   display: flex;
@@ -233,15 +249,23 @@ input[type="search"].show-clear::-webkit-search-cancel-button {
   width: 3px;
   height: 10px;
 }
-::-webkit-scrollbar-track {
+.scroll-custom::-webkit-scrollbar {
+  width: 3px;
+  height: 3px;
+}
+::-webkit-scrollbar-track,
+.scroll-custom::-webkit-scrollbar-track {
   background: #f1f1f1;
 }
-::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb,
+.scroll-custom::-webkit-scrollbar-thumb {
   background: rgba(34, 45, 50, 0.5);
 }
-::-webkit-scrollbar-thumb:hover {
+::-webkit-scrollbar-thumb:hover,
+.scroll-custom::-webkit-scrollbar-thumb:hover {
   background: rgba(34, 45, 50, 1);
 }
+
 .scrollbar-hidden {
   -ms-overflow-style: none;
   scrollbar-width: none;

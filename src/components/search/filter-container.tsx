@@ -273,7 +273,7 @@ export default function FilterContainer({
     >
       <div className="py-16 text-[--color-text-strong] flex flex-col flex-nowrap gap-5 max-w-[45.5rem] m-auto xs:px-4">
         <div className="title pb-[0.625rem]">
-          <h1 className="text-2xl font-bold tracking-tighter">검색 필터</h1>
+          <h1 className="text-2xl font-bold tracking-tighter">상세 검색</h1>
         </div>
         <form id="filter-form" className="flex flex-col flex-nowrap gap-5" onSubmit={onSubmit}>
           <div key="administration-state" className="flex flex-col flex-nowrap gap-4 pb-2.5">

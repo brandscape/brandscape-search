@@ -9,9 +9,9 @@ export default function InfoContainer({ count }: Props) {
   const searchParams = useSearchParams();
 
   return (
-    <div className="flex flex-col flex-nowrap items-center justify-center p-5 gap-5 xs:gap-3">
+    <div className="flex flex-col flex-nowrap items-center justify-center p-5 gap-5 xs:gap-3 ">
       <div className="text-center">
-        <p className="text-[--color-text-strong] text-[2rem] leading-[2.375rem] -tracking-[0.1rem] font-medium mb-2 sm:text-2xl sm:-tracking-[0.075rem] sm:mb-1">
+        <p className="text-[--color-text-strong] text-[2rem] leading-[2.375rem] -tracking-[0.1rem] font-medium mb-2 sm:text-2xl sm:-tracking-[0.075rem] break-keep sm:mb-1">
           <b className="font-bold">‘{searchParams.get("s")}’</b>를 포함한 상표가 {count.totalCount}
           개나 있어요
         </p>

@@ -1,35 +1,64 @@
-import { useState } from "react";
+import { Brand, SearchResponse } from "@/app/search/type";
+import { useCallback, useState } from "react";
+import TrademarkTable from "./trademark-table";
+import { usePathname, useRouter } from "next/navigation";
 
-export default function TableContainer() {
+export interface TableProps {
+  body: SearchResponse<Brand>["response"]["body"];
+  count: SearchResponse<Brand>["response"]["count"];
+}
+
+export default function TableContainer({ body, count }: TableProps) {
+  const router = useRouter();
+  const pathname = usePathname();
   const [activeTab, setActiveTab] = useState<number>(1);
+
+  const onClickTab = useCallback(
+    (activeIndex: number) => () => {
+      setActiveTab(activeIndex);
+
+      const searchParams = new URLSearchParams(window.location.search);
+      searchParams.delete("p");
+      router.push(`${pathname}?${searchParams.toString()}`);
+    },
+    [setActiveTab]
+  );
   return (
-    <div className="p-5">
+    <div className="p-5 flex flex-col gap-5 xs:p-0">
+      {/** Tabs  */}
       <div className="tabs">
         <div className="flex justify-center">
           <ul className="flex bg-gray-100 rounded-lg transition-all duration-300 p-0.5 overflow-hidden">
             <li
               className={
-                "inline-block py-3 px-6 text-[--color-text-assistive] hover:text-[--color-text-normal] font-semibold text-base whitespace-nowrap cursor-pointer aria-[active=true]:text-[--color-text-normal] aria-[active=true]:bg-white aria-[active=true]:rounded-lg aria-[active=true]:shadow-tab-shadow"
+                "inline-block py-3 px-6 text-[--color-text-assistive] hover:text-[--color-text-normal] font-semibold text-base whitespace-nowrap cursor-pointer data-[active=true]:text-[--color-text-normal] data-[active=true]:bg-white data-[active=true]:rounded-lg data-[active=true]:shadow-tab-shadow"
               }
               data-tab={`tabs-1`}
-              aria-active={activeTab === 1}
+              data-active={activeTab === 1}
               role="tab"
-              onClick={() => setActiveTab(1)}
+              onClick={onClickTab(1)}
             >
               모든 상표
             </li>
             <li
-              className="inline-block py-3 px-6 text-[--color-text-assistive] hover:text-[--color-text-normal] font-semibold text-base whitespace-nowrap cursor-pointer aria-[active=true]:text-[--color-text-normal] aria-[active=true]:bg-white aria-[active=true]:rounded-lg aria-[active=true]:shadow-tab-shadow"
+              className="inline-block py-3 px-6 text-[--color-text-assistive] hover:text-[--color-text-normal] font-semibold text-base whitespace-nowrap cursor-pointer data-[active=true]:text-[--color-text-normal] data-[active=true]:bg-white data-[active=true]:rounded-lg data-[active=true]:shadow-tab-shadow"
               data-tab={`tabs-2`}
-              aria-active={activeTab === 2}
+              data-active={activeTab === 2}
               role="tab"
-              onClick={() => setActiveTab(2)}
+              onClick={onClickTab(2)}
             >
               유효한 상표
             </li>
           </ul>
         </div>
       </div>
+
+      {/** Table */}
+      {activeTab === 1 ? (
+        <TrademarkTable body={body} count={count} />
+      ) : (
+        <span className="text-black">준비중...</span>
+      )}
     </div>
   );
 }
