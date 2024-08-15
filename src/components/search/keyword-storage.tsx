@@ -16,6 +16,7 @@ export default function KeywordStorage() {
       const params = new URLSearchParams(window.location.search);
       if (params.get("s") !== text) {
         params.delete("s");
+        params.delete("p");
         router.push(`/search?s=${text}${params.toString() && "&" + params.toString()}`);
         setSearchLoading(true);
       }

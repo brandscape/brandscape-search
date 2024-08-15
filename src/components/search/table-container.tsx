@@ -3,12 +3,19 @@ import { useCallback, useState } from "react";
 import TrademarkTable from "./trademark-table";
 import { usePathname, useRouter } from "next/navigation";
 
-export interface TableProps {
-  body: SearchResponse<Brand>["response"]["body"];
-  count: SearchResponse<Brand>["response"]["count"];
-}
+type BodySet = Record<"allDataBody" | "validDataBody", SearchResponse<Brand>["response"]["body"]>;
+type CountSet = Record<
+  "allDataCount" | "validDataCount",
+  SearchResponse<Brand>["response"]["count"]
+>;
+export interface TableProps extends BodySet, CountSet {}
 
-export default function TableContainer({ body, count }: TableProps) {
+export default function TableContainer({
+  allDataBody,
+  allDataCount,
+  validDataBody,
+  validDataCount,
+}: TableProps) {
   const router = useRouter();
   const pathname = usePathname();
   const [activeTab, setActiveTab] = useState<number>(1);
@@ -55,9 +62,9 @@ export default function TableContainer({ body, count }: TableProps) {
 
       {/** Table */}
       {activeTab === 1 ? (
-        <TrademarkTable body={body} count={count} />
+        <TrademarkTable body={allDataBody} count={allDataCount} />
       ) : (
-        <span className="text-black">준비중...</span>
+        <TrademarkTable body={validDataBody} count={validDataCount} />
       )}
     </div>
   );

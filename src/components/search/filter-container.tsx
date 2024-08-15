@@ -3,10 +3,7 @@
 import {
   filterOptionState,
   isFilterOpenState,
-  mdDateState,
-  rdDateState,
   searchLoadingState,
-  tdDateState,
 } from "@/recoil/search/search-atom";
 import { Dispatch, SetStateAction, useCallback, useEffect, useState } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
@@ -147,6 +144,13 @@ export default function FilterContainer({
     () => {
       const params = new URL(window.location.href).searchParams;
 
+      const page = params.get("p") ? +params.get("p")! : 1;
+      if (page > 1) {
+        params.delete("p");
+        router.push(`${window.location.pathname}?${params.toString()}`);
+      }
+
+      console.log("1", params.get("p"));
       const [
         application,
         registration,
@@ -261,7 +265,7 @@ export default function FilterContainer({
           }),
       }));
     },
-    [setFilterOptions, setTdDates, setRdDates, setMdDates]
+    [setFilterOptions, setTdDates, setRdDates, setMdDates, router]
   );
 
   return (

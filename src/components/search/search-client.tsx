@@ -15,10 +15,10 @@ import { toast } from "react-toastify";
 import { AdministrationState } from "@/recoil/search/type";
 
 interface Props {
-  brandData: SearchResponse<Brand>;
+  allTrademarkData: SearchResponse<Brand>;
 }
 
-export default function SearchClient({ brandData }: Props) {
+export default function SearchClient({ allTrademarkData }: Props) {
   const id = useId();
   const router = useRouter();
 
@@ -84,47 +84,40 @@ export default function SearchClient({ brandData }: Props) {
 
   useEffect(
     () => setSearchLoading(false),
-    [brandData.response.header.responseTime, setSearchLoading]
+    [allTrademarkData.response.header.responseTime, setSearchLoading]
   );
 
   return (
-    <>
-      <div className="flex flex-row flex-nowrap gap-4 text-black">
-        <b>🛠️ 개발중</b>
-        <span>{searchLoading ? "{loading...}" : "{done...}"}</span>
-        <pre>{brandData.response.count.totalCount}</pre>
+    <div className="flex flex-row flex-nowrap gap-2">
+      <div className="search-container w-full h-[3.125rem]">
+        <form className="mx-auto h-full" onSubmit={onSearchSubmit}>
+          <SearchInput
+            textColor="text-[--color-text-normal]"
+            placeholderColor="minor"
+            border="border border-solid border-[#E1E5EB]"
+          />
+        </form>
       </div>
-      <div className="flex flex-row flex-nowrap gap-2">
-        <div className="search-container w-full h-[3.125rem]">
-          <form className="mx-auto h-full" onSubmit={onSearchSubmit}>
-            <SearchInput
-              textColor="text-[--color-text-normal]"
-              placeholderColor="minor"
-              border="border border-solid border-[#E1E5EB]"
-            />
-          </form>
-        </div>
-        <div className="filter-container">
-          <button
-            className="inline-flex justify-center items-center p-3 w-[3.125rem] h-[3.125rem] rounded-lg bg-[#EDF0F4]"
-            onClick={onFilterClick}
+      <div className="filter-container">
+        <button
+          className="inline-flex justify-center items-center p-3 w-[3.125rem] h-[3.125rem] rounded-lg bg-[#EDF0F4]"
+          onClick={onFilterClick}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="18"
+            height="18"
+            viewBox="0 0 18 18"
+            fill="none"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="18"
-              height="18"
-              viewBox="0 0 18 18"
-              fill="none"
-            >
-              <path
-                d="M7.5 4.5C7.5 2.84315 6.15685 1.5 4.5 1.5C2.84315 1.5 1.5 2.84315 1.5 4.5C1.5 6.15685 2.84315 7.5 4.5 7.5C6.15685 7.5 7.5 6.15685 7.5 4.5ZM7.5 4.5H16.5M10.5 13.5C10.5 11.8431 11.8431 10.5 13.5 10.5C15.1569 10.5 16.5 11.8431 16.5 13.5C16.5 15.1569 15.1569 16.5 13.5 16.5C11.8431 16.5 10.5 15.1569 10.5 13.5ZM10.5 13.5C6.3995 13.5 1.5 13.5 1.5 13.5"
-                stroke="#848990"
-                strokeWidth="2"
-              />
-            </svg>
-          </button>
-        </div>
+            <path
+              d="M7.5 4.5C7.5 2.84315 6.15685 1.5 4.5 1.5C2.84315 1.5 1.5 2.84315 1.5 4.5C1.5 6.15685 2.84315 7.5 4.5 7.5C6.15685 7.5 7.5 6.15685 7.5 4.5ZM7.5 4.5H16.5M10.5 13.5C10.5 11.8431 11.8431 10.5 13.5 10.5C15.1569 10.5 16.5 11.8431 16.5 13.5C16.5 15.1569 15.1569 16.5 13.5 16.5C11.8431 16.5 10.5 15.1569 10.5 13.5ZM10.5 13.5C6.3995 13.5 1.5 13.5 1.5 13.5"
+              stroke="#848990"
+              strokeWidth="2"
+            />
+          </svg>
+        </button>
       </div>
-    </>
+    </div>
   );
 }

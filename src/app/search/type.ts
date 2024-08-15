@@ -10,7 +10,7 @@ export type SearchResponse<T> = {
     };
     body: {
       items: {
-        item: T[];
+        item: T[] | T;
       };
     };
     count: {

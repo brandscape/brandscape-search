@@ -3,12 +3,17 @@ import { TableProps } from "./table-container";
 import { parse, format } from "date-fns";
 import { useRouter } from "next/navigation";
 import { useCallback } from "react";
+import { Brand, SearchResponse } from "@/app/search/type";
 
+interface Props {
+  body: SearchResponse<Brand>["response"]["body"];
+  count: SearchResponse<Brand>["response"]["count"];
+}
 /**
  * @description 모든 상표 테이블 컴포넌트
  * @returns
  */
-export default function TrademarkTable({ body, count }: TableProps) {
+export default function TrademarkTable({ body, count }: Props) {
   const router = useRouter();
   const pathname = usePathname();
   const pageParam = useSearchParams().get("p");
@@ -28,6 +33,7 @@ export default function TrademarkTable({ body, count }: TableProps) {
     (currentGroup + 1) * pagesPerGroup
   );
 
+  console.log({ pageNumbers });
   /**
    * 페이지 이동 클릭 이벤트 핸들러
    * @param {number} number 이동할 페이지 번호
@@ -40,7 +46,7 @@ export default function TrademarkTable({ body, count }: TableProps) {
         number <= pageNumbers.length &&
         router.push(`${pathname}?${searchParams.toString()}&p=${number}`);
     },
-    [pathname, router]
+    [pathname, router, pageNumbers]
   );
 
   return (
@@ -88,26 +94,72 @@ export default function TrademarkTable({ body, count }: TableProps) {
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#F6F7F9]">
-                {body.items.item.map((item, index) => {
-                  return (
-                    <tr
-                      key={`all-td-${index}`}
-                      className="bg-white transition-all duration-300 hover:bg-[#F6F7F9] h-12 text-[--color-text-normal] cursor-pointer"
-                      onClick={() => console.log("row click!!", index)}
-                    >
-                      {/** Mobile display */}
-                      <td className="px-3 py-[0.3125rem] whitespace-nowrap text-xs font-semibold tracking-tighter text-center hidden xs:table-cell">
-                        <div className="flex flex-row flex-nowrap items-center justify-center gap-2">
-                          <div className="max-w-[5.5rem] border border-[#E1E5EB] rounded">
-                            <picture>
-                              <img
-                                src={(item.drawing || "").replace("http://", "https://")}
-                                alt="thumbnail-image"
-                                className="w-full h-full object-cover"
-                              />
-                            </picture>
-                          </div>
-                          <div className="flex flex-col flex-nowrap gap-1">
+                {/**
+                 * @important **Important:** 검색결과가 1개일 경우 Object, 다수의 결과일 경우 Array
+                 */}
+                {Array.isArray(body.items.item)
+                  ? body.items.item.map((item, index) => {
+                      return (
+                        <tr
+                          key={`all-td-${index}`}
+                          className="bg-white transition-all duration-300 hover:bg-[#F6F7F9] h-12 text-[--color-text-normal] cursor-pointer"
+                          onClick={() => console.log("row click!!", index)}
+                        >
+                          {/** Mobile display */}
+                          <td className="px-3 py-[0.3125rem] whitespace-nowrap text-xs font-semibold tracking-tighter text-center hidden xs:table-cell">
+                            <div className="flex flex-row flex-nowrap items-center justify-center gap-2">
+                              <div className="max-w-[5.5rem] border border-[#E1E5EB] rounded">
+                                <picture>
+                                  <img
+                                    src={(item.drawing || "").replace("http://", "https://")}
+                                    alt="thumbnail-image"
+                                    className="w-full h-full object-cover"
+                                  />
+                                </picture>
+                              </div>
+                              <div className="flex flex-col flex-nowrap gap-1">
+                                <div
+                                  className={`${
+                                    ["소멸", "취하", "포기", "무효", "거절"].includes(
+                                      item.applicationStatus
+                                    )
+                                      ? "disable-badge"
+                                      : "enable-badge"
+                                  } badge`}
+                                >
+                                  {item.applicationStatus}
+                                </div>
+                                <span className="text-[--color-text-assistive] text-xs font-normal">
+                                  {item.classificationCode && `${item.classificationCode}류`}
+                                </span>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="px-3 py-[0.3125rem] text-xs tracking-tighter text-center hidden xs:table-cell">
+                            <div className="overflow-hidden whitespace-nowrap break-keep text-ellipsis max-w-28">
+                              {item.applicantName}
+                            </div>
+                          </td>
+                          <td className="px-3 py-[0.3125rem] text-xs tracking-tighter text-center hidden xs:table-cell">
+                            <div>
+                              {item.applicationDate
+                                ? format(
+                                    parse(item.applicationDate, "yyyyMMdd", new Date()),
+                                    "yyyy-MM-dd"
+                                  )
+                                : "-"}
+                            </div>
+                            <div>
+                              {item.registrationDate
+                                ? format(
+                                    parse(item.registrationDate, "yyyyMMdd", new Date()),
+                                    "yyyy-MM-dd"
+                                  )
+                                : "-"}
+                            </div>
+                          </td>
+                          {/** PC display */}
+                          <td className="px-3 py-[0.3125rem] whitespace-nowrap text-xs font-semibold tracking-tighter text-center xs:hidden">
                             <div
                               className={`${
                                 ["소멸", "취하", "포기", "무효", "거절"].includes(
@@ -119,100 +171,187 @@ export default function TrademarkTable({ body, count }: TableProps) {
                             >
                               {item.applicationStatus}
                             </div>
-                            <span className="text-[--color-text-assistive] text-xs font-normal">
-                              {item.classificationCode && `${item.classificationCode}류`}
-                            </span>
+                          </td>
+                          <td className="table-cell align-middle text-center xs:hidden">
+                            <div className="max-w-10 m-auto border border-[#E1E5EB] rounded">
+                              <picture>
+                                <img
+                                  src={(item.drawing || "").replace("http://", "https://")}
+                                  alt="thumbnail-image"
+                                  className="w-full h-full object-cover"
+                                />
+                              </picture>
+                            </div>
+                          </td>
+                          <td className="px-3 py-[0.3125rem] whitespace-wrap break-keep text-xs font-semibold tracking-tighter text-center xs:hidden">
+                            <div>{item.title}</div>
+                          </td>
+                          <td className="px-3 py-[0.3125rem] whitespace-nowrap break-keep text-xs tracking-tighter text-center xs:hidden">
+                            <div>{item.classificationCode && `${item.classificationCode}류`}</div>
+                          </td>
+                          <td className="px-3 py-[0.3125rem] text-xs tracking-tighter text-center xs:hidden">
+                            <div className="overflow-hidden whitespace-nowrap break-keep text-ellipsis max-w-[6.25rem]">
+                              {item.applicantName}
+                            </div>
+                          </td>
+                          <td className="px-3 py-[0.3125rem] whitespace-nowrap text-xs tracking-tighter text-center xs:hidden">
+                            <div>
+                              {item.applicationDate
+                                ? format(
+                                    parse(item.applicationDate, "yyyyMMdd", new Date()),
+                                    "yyyy-MM-dd"
+                                  )
+                                : "-"}
+                            </div>
+                          </td>
+                          <td className="px-3 py-[0.3125rem] whitespace-nowrap text-xs tracking-tighter text-center xs:hidden">
+                            <div>
+                              {item.registrationDate
+                                ? format(
+                                    parse(item.registrationDate, "yyyyMMdd", new Date()),
+                                    "yyyy-MM-dd"
+                                  )
+                                : "-"}
+                            </div>
+                          </td>
+                          <td className="px-3 py-[0.3125rem] whitespace-nowrap text-xs tracking-tighter text-center xs:hidden">
+                            <div>{item.applicationNumber || "-"}</div>
+                          </td>
+                          <td className="px-3 py-[0.3125rem] whitespace-nowrap text-xs tracking-tighter text-center xs:hidden">
+                            <div>{item.registrationNumber || "-"}</div>
+                          </td>
+                        </tr>
+                      );
+                    })
+                  : typeof body.items.item === "object" && (
+                      <tr
+                        className="bg-white transition-all duration-300 hover:bg-[#F6F7F9] h-12 text-[--color-text-normal] cursor-pointer"
+                        onClick={() => console.log("단일 row click!!")}
+                      >
+                        {/** Mobile display */}
+                        <td className="px-3 py-[0.3125rem] whitespace-nowrap text-xs font-semibold tracking-tighter text-center hidden xs:table-cell">
+                          <div className="flex flex-row flex-nowrap items-center justify-center gap-2">
+                            <div className="max-w-[5.5rem] border border-[#E1E5EB] rounded">
+                              <picture>
+                                <img
+                                  src={(body.items.item.drawing || "").replace(
+                                    "http://",
+                                    "https://"
+                                  )}
+                                  alt="thumbnail-image"
+                                  className="w-full h-full object-cover"
+                                />
+                              </picture>
+                            </div>
+                            <div className="flex flex-col flex-nowrap gap-1">
+                              <div
+                                className={`${
+                                  ["소멸", "취하", "포기", "무효", "거절"].includes(
+                                    body.items.item.applicationStatus
+                                  )
+                                    ? "disable-badge"
+                                    : "enable-badge"
+                                } badge`}
+                              >
+                                {body.items.item.applicationStatus}
+                              </div>
+                              <span className="text-[--color-text-assistive] text-xs font-normal">
+                                {body.items.item.classificationCode &&
+                                  `${body.items.item.classificationCode}류`}
+                              </span>
+                            </div>
                           </div>
-                        </div>
-                      </td>
-                      <td className="px-3 py-[0.3125rem] text-xs tracking-tighter text-center hidden xs:table-cell">
-                        <div className="overflow-hidden whitespace-nowrap break-keep text-ellipsis max-w-28">
-                          {item.applicantName}
-                        </div>
-                      </td>
-                      <td className="px-3 py-[0.3125rem] text-xs tracking-tighter text-center hidden xs:table-cell">
-                        <div>
-                          {item.applicationDate
-                            ? format(
-                                parse(item.applicationDate, "yyyyMMdd", new Date()),
-                                "yyyy-MM-dd"
+                        </td>
+                        <td className="px-3 py-[0.3125rem] text-xs tracking-tighter text-center hidden xs:table-cell">
+                          <div className="overflow-hidden whitespace-nowrap break-keep text-ellipsis max-w-28">
+                            {body.items.item.applicantName}
+                          </div>
+                        </td>
+                        <td className="px-3 py-[0.3125rem] text-xs tracking-tighter text-center hidden xs:table-cell">
+                          <div>
+                            {body.items.item.applicationDate
+                              ? format(
+                                  parse(body.items.item.applicationDate, "yyyyMMdd", new Date()),
+                                  "yyyy-MM-dd"
+                                )
+                              : "-"}
+                          </div>
+                          <div>
+                            {body.items.item.registrationDate
+                              ? format(
+                                  parse(body.items.item.registrationDate, "yyyyMMdd", new Date()),
+                                  "yyyy-MM-dd"
+                                )
+                              : "-"}
+                          </div>
+                        </td>
+                        {/** PC display */}
+                        <td className="px-3 py-[0.3125rem] whitespace-nowrap text-xs font-semibold tracking-tighter text-center xs:hidden">
+                          <div
+                            className={`${
+                              ["소멸", "취하", "포기", "무효", "거절"].includes(
+                                body.items.item.applicationStatus
                               )
-                            : "-"}
-                        </div>
-                        <div>
-                          {item.registrationDate
-                            ? format(
-                                parse(item.registrationDate, "yyyyMMdd", new Date()),
-                                "yyyy-MM-dd"
-                              )
-                            : "-"}
-                        </div>
-                      </td>
-                      {/** PC display */}
-                      <td className="px-3 py-[0.3125rem] whitespace-nowrap text-xs font-semibold tracking-tighter text-center xs:hidden">
-                        <div
-                          className={`${
-                            ["소멸", "취하", "포기", "무효", "거절"].includes(
-                              item.applicationStatus
-                            )
-                              ? "disable-badge"
-                              : "enable-badge"
-                          } badge`}
-                        >
-                          {item.applicationStatus}
-                        </div>
-                      </td>
-                      <td className="table-cell align-middle text-center xs:hidden">
-                        <div className="max-w-10 m-auto border border-[#E1E5EB] rounded">
-                          <picture>
-                            <img
-                              src={(item.drawing || "").replace("http://", "https://")}
-                              alt="thumbnail-image"
-                              className="w-full h-full object-cover"
-                            />
-                          </picture>
-                        </div>
-                      </td>
-                      <td className="px-3 py-[0.3125rem] whitespace-wrap break-keep text-xs font-semibold tracking-tighter text-center xs:hidden">
-                        <div>{item.title}</div>
-                      </td>
-                      <td className="px-3 py-[0.3125rem] whitespace-nowrap break-keep text-xs tracking-tighter text-center xs:hidden">
-                        <div>{item.classificationCode && `${item.classificationCode}류`}</div>
-                      </td>
-                      <td className="px-3 py-[0.3125rem] text-xs tracking-tighter text-center xs:hidden">
-                        <div className="overflow-hidden whitespace-nowrap break-keep text-ellipsis max-w-[6.25rem]">
-                          {item.applicantName}
-                        </div>
-                      </td>
-                      <td className="px-3 py-[0.3125rem] whitespace-nowrap text-xs tracking-tighter text-center xs:hidden">
-                        <div>
-                          {item.applicationDate
-                            ? format(
-                                parse(item.applicationDate, "yyyyMMdd", new Date()),
-                                "yyyy-MM-dd"
-                              )
-                            : "-"}
-                        </div>
-                      </td>
-                      <td className="px-3 py-[0.3125rem] whitespace-nowrap text-xs tracking-tighter text-center xs:hidden">
-                        <div>
-                          {item.registrationDate
-                            ? format(
-                                parse(item.registrationDate, "yyyyMMdd", new Date()),
-                                "yyyy-MM-dd"
-                              )
-                            : "-"}
-                        </div>
-                      </td>
-                      <td className="px-3 py-[0.3125rem] whitespace-nowrap text-xs tracking-tighter text-center xs:hidden">
-                        <div>{item.applicationNumber || "-"}</div>
-                      </td>
-                      <td className="px-3 py-[0.3125rem] whitespace-nowrap text-xs tracking-tighter text-center xs:hidden">
-                        <div>{item.registrationNumber || "-"}</div>
-                      </td>
-                    </tr>
-                  );
-                })}
+                                ? "disable-badge"
+                                : "enable-badge"
+                            } badge`}
+                          >
+                            {body.items.item.applicationStatus}
+                          </div>
+                        </td>
+                        <td className="table-cell align-middle text-center xs:hidden">
+                          <div className="max-w-10 m-auto border border-[#E1E5EB] rounded">
+                            <picture>
+                              <img
+                                src={(body.items.item.drawing || "").replace("http://", "https://")}
+                                alt="thumbnail-image"
+                                className="w-full h-full object-cover"
+                              />
+                            </picture>
+                          </div>
+                        </td>
+                        <td className="px-3 py-[0.3125rem] whitespace-wrap break-keep text-xs font-semibold tracking-tighter text-center xs:hidden">
+                          <div>{body.items.item.title}</div>
+                        </td>
+                        <td className="px-3 py-[0.3125rem] whitespace-nowrap break-keep text-xs tracking-tighter text-center xs:hidden">
+                          <div>
+                            {body.items.item.classificationCode &&
+                              `${body.items.item.classificationCode}류`}
+                          </div>
+                        </td>
+                        <td className="px-3 py-[0.3125rem] text-xs tracking-tighter text-center xs:hidden">
+                          <div className="overflow-hidden whitespace-nowrap break-keep text-ellipsis max-w-[6.25rem]">
+                            {body.items.item.applicantName}
+                          </div>
+                        </td>
+                        <td className="px-3 py-[0.3125rem] whitespace-nowrap text-xs tracking-tighter text-center xs:hidden">
+                          <div>
+                            {body.items.item.applicationDate
+                              ? format(
+                                  parse(body.items.item.applicationDate, "yyyyMMdd", new Date()),
+                                  "yyyy-MM-dd"
+                                )
+                              : "-"}
+                          </div>
+                        </td>
+                        <td className="px-3 py-[0.3125rem] whitespace-nowrap text-xs tracking-tighter text-center xs:hidden">
+                          <div>
+                            {body.items.item.registrationDate
+                              ? format(
+                                  parse(body.items.item.registrationDate, "yyyyMMdd", new Date()),
+                                  "yyyy-MM-dd"
+                                )
+                              : "-"}
+                          </div>
+                        </td>
+                        <td className="px-3 py-[0.3125rem] whitespace-nowrap text-xs tracking-tighter text-center xs:hidden">
+                          <div>{body.items.item.applicationNumber || "-"}</div>
+                        </td>
+                        <td className="px-3 py-[0.3125rem] whitespace-nowrap text-xs tracking-tighter text-center xs:hidden">
+                          <div>{body.items.item.registrationNumber || "-"}</div>
+                        </td>
+                      </tr>
+                    )}
               </tbody>
             </table>
           </div>

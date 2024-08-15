@@ -13,10 +13,9 @@ import { searchLoadingState } from "@/recoil/search/search-atom";
 import Loading from "../loading";
 import TableContainer from "@/components/search/table-container";
 
-interface Props {
-  brandData: SearchResponse<Brand>;
-}
-export default function Client({ brandData }: Props) {
+type DataSet = Record<"allTrademarkData" | "validTrademarkData", SearchResponse<Brand>>;
+interface Props extends DataSet {}
+export default function Client({ allTrademarkData, validTrademarkData }: Props) {
   /** @description [날짜 필터] 출원일자 */
   const [tdDates, setTdDates] = useState<RangeDateType>();
   /** @description [날짜 필터] 등록일자 */
@@ -26,11 +25,10 @@ export default function Client({ brandData }: Props) {
 
   const isSearchLoading = useRecoilValue(searchLoadingState);
 
-  console.log("data", isSearchLoading, brandData.response);
   return (
     <main className="min-h-screen py-24 m-auto max-w-[60rem] xs:px-4 relative">
       <section className="max-w-[45rem] m-auto flex flex-col gap-0">
-        <SearchClient brandData={brandData} />
+        <SearchClient allTrademarkData={allTrademarkData} />
         <KeywordStorage />
         {!isSearchLoading && (
           <FilterOptions setTdDates={setTdDates} setRdDates={setRdDates} setMdDates={setMdDates} />
@@ -40,10 +38,15 @@ export default function Client({ brandData }: Props) {
         <Loading />
       ) : (
         <section className="w-full p-5 border-t border-[#EDF0F4] xs:p-0">
-          {+brandData.response.count.totalCount ? (
+          {+allTrademarkData.response.count.totalCount ? (
             <>
-              <InfoContainer count={brandData.response.count} />
-              <TableContainer body={brandData.response.body} count={brandData.response.count} />
+              <InfoContainer count={allTrademarkData.response.count} />
+              <TableContainer
+                allDataBody={allTrademarkData.response.body}
+                allDataCount={allTrademarkData.response.count}
+                validDataBody={validTrademarkData.response.body}
+                validDataCount={validTrademarkData.response.count}
+              />
             </>
           ) : (
             <SearchNotFound />
