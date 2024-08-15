@@ -40,7 +40,7 @@ export default function TrademarkTable({ body, count }: TableProps) {
         number <= pageNumbers.length &&
         router.push(`${pathname}?${searchParams.toString()}&p=${number}`);
     },
-    []
+    [pathname, router]
   );
 
   return (

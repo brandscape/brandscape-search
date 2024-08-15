@@ -6,8 +6,7 @@ const nextConfig = {
       {
         protocol: "http",
         hostname: "plus.kipris.or.kr",
-        port: "",
-        pathname: "",
+        pathname: "**",
       },
     ],
   },

@@ -21,7 +21,7 @@ export default function TableContainer({ body, count }: TableProps) {
       searchParams.delete("p");
       router.push(`${pathname}?${searchParams.toString()}`);
     },
-    [setActiveTab]
+    [pathname, router, setActiveTab]
   );
   return (
     <div className="p-5 flex flex-col gap-5 xs:p-0">
