@@ -7,6 +7,7 @@ import { Viewport } from "next";
 import RootProvider from "@/lib";
 import { Suspense } from "react";
 import Loading from "./loading";
+import Footer from "@/components/Footer";
 
 const myFont = localFont({
   src: "../fonts/PretendardVariable.woff2",
@@ -41,6 +42,7 @@ export default function RootLayout({
           <Suspense fallback={<Loading isFullHeight />}>
             <Header />
             {children}
+            <Footer />
           </Suspense>
         </RootProvider>
       </body>

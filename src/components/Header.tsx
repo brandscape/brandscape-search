@@ -72,7 +72,7 @@ export default function Header() {
             상표검색
           </Link>
           <Link
-            href="https://naver.com"
+            href="https://brandscapeip.com/%EC%83%81%ED%91%9C%EC%B6%9C%EC%9B%90"
             target="_blank"
             className="px-3 xs:px-0 xs:py-3 py-[10px] rounded text-[15px] font-medium text-[--color-text-minor] xs:text-[--color-text-normal] leading-[1.125rem] tracking-tighter xs:hover:text-[--color-text-minor] hover:text-[--color-text-inverse] transition-[color] duration-300"
             onClick={onClearClick}
@@ -80,7 +80,7 @@ export default function Header() {
             상표출원
           </Link>
           <Link
-            href="https://google.com"
+            href="https://brandscapeip.com/%EB%B9%84%EC%9A%A9%EC%95%88%EB%82%B4"
             target="_blank"
             className="px-3 xs:px-0 xs:py-3 py-[10px] rounded text-[15px] font-medium text-[--color-text-minor] xs:text-[--color-text-normal] leading-[1.125rem] tracking-tighter xs:hover:text-[--color-text-minor] hover:text-[--color-text-inverse] transition-[color] duration-300"
             onClick={onClearClick}
@@ -88,7 +88,7 @@ export default function Header() {
             비용안내
           </Link>
           <Link
-            href="https://tailwindcss.com/"
+            href="https://brandscapeip.com/%ED%9A%8C%EC%82%AC%EC%86%8C%EA%B0%9C"
             target="_blank"
             className="px-3 xs:px-0 xs:py-3 py-[10px] rounded text-[15px] font-medium text-[--color-text-minor] xs:text-[--color-text-normal] leading-[1.125rem] tracking-tighter xs:hover:text-[--color-text-minor] hover:text-[--color-text-inverse] transition-[color] duration-300"
             onClick={onClearClick}
@@ -96,7 +96,7 @@ export default function Header() {
             회사소개
           </Link>
           <Link
-            href="https://nextjs.org/"
+            href="https://brandscapeip.com/%EA%B3%A0%EA%B0%9D%EC%84%BC%ED%84%B0"
             target="_blank"
             className="px-3 xs:px-0 xs:py-3 py-[10px] rounded text-[15px] font-medium text-[--color-text-minor] xs:text-[--color-text-normal] leading-[1.125rem] tracking-tighter xs:hover:text-[--color-text-minor] hover:text-[--color-text-inverse] transition-[color] duration-300"
             onClick={onClearClick}
