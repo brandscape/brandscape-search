@@ -5,12 +5,13 @@ import { detailSearchDataState } from "@/recoil/search/search-atom";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useRecoilValue } from "recoil";
-import { TradeMarkClassificationInfo, TradeMarkClassificationInfoResponse } from "./type";
+import { TradeMarkClassificationInfo, InfoResponse, RelatedDocsonfileInfo } from "./type";
+import RelatedDocsonfileInfoTable from "@/components/search/detail/related-docsonfile-info-table";
 
 interface Props {
   slug: string;
-  tradeMarkClassificationInfo: TradeMarkClassificationInfoResponse<TradeMarkClassificationInfo>; // 상표분류코드이력
-  relatedDocsonfileInfo: any; // 통합이력정보(상표)
+  tradeMarkClassificationInfo: InfoResponse<TradeMarkClassificationInfo>; // 상표분류코드이력
+  relatedDocsonfileInfo: InfoResponse<RelatedDocsonfileInfo>; // 통합이력정보(상표)
 }
 export default function Client({
   slug,
@@ -127,11 +128,11 @@ export default function Client({
         <TradeMarkClassificationInfoTable body={tradeMarkClassificationInfo.response.body} />
       </section>
       {/* 통합이력정보(상표) 테이블 섹션 */}
-      <section className="related-docsonfile-info grid grid-cols-[280px_1fr] gap-5 xs:grid-cols-1 xs:gap-0 xs:p-5 xs:mt-[3.8125rem]">
+      <section className="related-docsonfile-info p-5 flex flex-col gap-4">
         <div className="title text-lg text-[--color-text-strong] font-semibold tracking-tighter">
           <h2>통합 행정정보</h2>
         </div>
-        {/* <div className="text-black">{JSON.stringify(tradeMarkClassificationInfo)}</div> */}
+        <RelatedDocsonfileInfoTable body={relatedDocsonfileInfo.response.body} />
       </section>
     </main>
   );

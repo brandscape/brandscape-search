@@ -1,13 +1,15 @@
-export type TradeMarkClassificationInfoResponse<T> = {
+export type InfoResponse<T> = {
   response: {
     header: {
       resultCode: string;
       resultMsg: string;
     };
     body: {
-      items: {
-        tradeMarkClassificationInfo: T[];
-      };
+      items: T extends TradeMarkClassificationInfo
+        ? { tradeMarkClassificationInfo: T[] }
+        : T extends RelatedDocsonfileInfo
+        ? { relateddocsonfileInfo: T[] }
+        : never;
     };
   };
 };
@@ -35,3 +37,19 @@ export type TradeMarkClassificationInfoKeys =
  * @type {status} 상태
  */
 export type TradeMarkClassificationInfo = Record<TradeMarkClassificationInfoKeys, string>;
+
+export type RelatedDocsonfileInfoKeys =
+  | "appReferenceNumber"
+  | "applicationNumber"
+  | "documentDate"
+  | "documentNumber"
+  | "documentTitle"
+  | "documentTitleEng"
+  | "regReferenceNumber"
+  | "registrationNumber"
+  | "status"
+  | "statusEng"
+  | "step"
+  | "trialNumber";
+
+export type RelatedDocsonfileInfo = Record<RelatedDocsonfileInfoKeys, string>;
