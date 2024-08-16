@@ -271,8 +271,9 @@ export default function FilterContainer({
     <section
       role="dialog"
       className={`${
-        isFilterOpen ? "visible z-[1] opacity-100" : "invisible -z-[1] opacity-0"
-      } absolute top-[3.5rem] left-0 min-h-screen bg-current w-full h-full`}
+        isFilterOpen ? "block visible z-[1] opacity-100" : "hidden invisible -z-[1] opacity-0"
+      } relative left-0 min-h-screen bg-current w-full h-full bg-white`}
+      style={{ top: "calc(-100vh + 3.5rem)" }}
     >
       <div className="py-16 text-[--color-text-strong] flex flex-col flex-nowrap gap-5 max-w-[45.5rem] m-auto xs:px-4">
         <div className="title pb-[0.625rem]">

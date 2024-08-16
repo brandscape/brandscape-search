@@ -27,9 +27,7 @@ export default function IdentityClient() {
           <FilterOptions setTdDates={setTdDates} setRdDates={setRdDates} setMdDates={setMdDates} />
         </section>
       ) : (
-        <section className="max-w-[45rem] relative w-full m-auto flex flex-col gap-0">
-          <Loading />
-        </section>
+        <Loading />
       )}
     </main>
   );

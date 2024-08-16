@@ -7,7 +7,7 @@ export default function Loading({ isFullHeight = false }: Props) {
       <span className="loader"></span>
     </main>
   ) : (
-    <div className="w-full h-full absolute top-0 flex items-center justify-center">
+    <div className="w-full h-full absolute top-0 left-0 flex items-center justify-center">
       <span className="loader"></span>
     </div>
   );
