@@ -1,5 +1,4 @@
 import { usePathname, useSearchParams } from "next/navigation";
-import { TableProps } from "./table-container";
 import { parse, format } from "date-fns";
 import { useRouter } from "next/navigation";
 import { useCallback } from "react";
@@ -21,7 +20,7 @@ export default function TrademarkTable({ body, count }: Props) {
   const pathname = usePathname();
   const pageParam = useSearchParams().get("p");
 
-  const setDetailSearchData = useSetRecoilState(detailSearchDataState);
+  const setDatailSearchData = useSetRecoilState(detailSearchDataState);
 
   const currentPage = pageParam ? +pageParam : 1;
   const totalPages = Math.ceil(+count.totalCount / +count.numOfRows); // 총 페이지 수
@@ -59,30 +58,34 @@ export default function TrademarkTable({ body, count }: Props) {
       if (isNaN(parsedNumber)) return;
 
       const brandData = pick(item, [
+        "title",
         "applicationNumber",
         "internationalRegisterNumber",
         "applicantName",
         "regPrivilegeName",
         "applicationDate",
+        "applicationStatus",
         "registrationDate",
         "drawing",
       ]);
 
       localStorage.setItem(detailSearchStr, JSON.stringify(brandData));
-      setDetailSearchData(
+      setDatailSearchData(
         pick(item, [
+          "title",
           "applicationNumber",
           "internationalRegisterNumber",
           "applicantName",
           "regPrivilegeName",
           "applicationDate",
+          "applicationStatus",
           "registrationDate",
           "drawing",
         ])
       );
       router.push(`/search/${parsedNumber}`);
     },
-    [router, setDetailSearchData]
+    [router, setDatailSearchData]
   );
 
   return (
@@ -129,7 +132,7 @@ export default function TrademarkTable({ body, count }: Props) {
                   )}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#F6F7F9]">
+              <tbody className="divide-y divide-[#F6F7F9] border-b border-b-[#F6F7F9]">
                 {/**
                  * @important **Important:** 검색결과가 1개일 경우 Object, 다수의 결과일 경우 Array
                  */}

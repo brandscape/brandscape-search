@@ -35,11 +35,13 @@ export type FilterType = {
 export type DetailSearchDataType = Partial<
   Pick<
     Brand,
+    | "title"
     | "applicationNumber"
     | "internationalRegisterNumber"
     | "applicantName"
     | "regPrivilegeName"
     | "applicationDate"
+    | "applicationStatus"
     | "registrationDate"
     | "drawing"
   >

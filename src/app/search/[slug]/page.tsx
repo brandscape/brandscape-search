@@ -62,19 +62,15 @@ interface Props {
   params: { slug: string };
 }
 export default async function Page({ params }: Props) {
-  const href = headers().get("x-current-href");
   const data = await getFetch(params.slug);
-  console.log("👉", data);
 
   if (data.error) return notFound();
 
   return (
-    <div className="absolute w-full h-full flex flex-col items-center justify-center text-black">
-      My Post: {params.slug}
-      <Client
-        relatedDocsonfileInfo={data.relatedDocsonfileInfo}
-        tradeMarkClassificationInfo={data.tradeMarkClassificationInfo}
-      />
-    </div>
+    <Client
+      slug={params.slug}
+      relatedDocsonfileInfo={data.relatedDocsonfileInfo}
+      tradeMarkClassificationInfo={data.tradeMarkClassificationInfo}
+    />
   );
 }

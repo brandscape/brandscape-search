@@ -60,8 +60,6 @@ const localStorageEffect: <T>(key: string) => AtomEffect<T> =
       }
 
       onSet((newValue, _, isReset) => {
-        console.log("isReset", isReset);
-
         window.localStorage !== null && isReset
           ? window.localStorage.removeItem(key)
           : window.localStorage.setItem(key, JSON.stringify(newValue));
