@@ -3,7 +3,7 @@ interface Props {
 }
 export default function Loading({ isFullHeight = false }: Props) {
   return isFullHeight ? (
-    <main className={`w-full flex items-center justify-center min-h-screen`}>
+    <main className={`w-full relative flex items-center justify-center min-h-screen`}>
       <span className="loader"></span>
     </main>
   ) : (

@@ -244,6 +244,32 @@ input[type="search"].show-clear::-webkit-search-cancel-button {
   animation: rotation-loader 1s linear infinite;
 }
 
+/* Tooltip */
+.tooltip {
+  @apply invisible absolute;
+}
+.tooltip-top {
+  top: -2.5rem;
+}
+.tooltip-bottom {
+  bottom: -2.5rem;
+}
+.has-tooltip {
+  position: relative;
+}
+.has-tooltip:hover .tooltip {
+  @apply visible z-50;
+}
+.has-tooltip .tooltip.tooltip-top svg {
+  position: absolute;
+  bottom: -0.5rem;
+}
+.has-tooltip .tooltip.tooltip-bottom svg {
+  position: absolute;
+  top: -0.5rem;
+  transform: rotate(180deg);
+}
+
 /* 스크롤바 커스텀 */
 ::-webkit-scrollbar {
   width: 3px;

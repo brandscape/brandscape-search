@@ -4,7 +4,7 @@ import { BaseSyntheticEvent, useCallback, useEffect, useId } from "react";
 import SearchInput from "../SearchInput";
 import { Brand, SearchResponse, keywordStr } from "@/app/search/type";
 import { useRouter } from "next/navigation";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import {
   filterOptionState,
   isFilterOpenState,
@@ -13,17 +13,18 @@ import {
 } from "@/recoil/search/search-atom";
 import { toast } from "react-toastify";
 import { AdministrationState } from "@/recoil/search/type";
+import Tooltip from "../Tooltip";
 
 interface Props {
-  allTrademarkData: SearchResponse<Brand>;
+  allTrademarkData?: SearchResponse<Brand>;
 }
 
 export default function SearchClient({ allTrademarkData }: Props) {
   const id = useId();
   const router = useRouter();
 
-  const [searchLoading, setSearchLoading] = useRecoilState(searchLoadingState);
   const filterOptions = useRecoilValue(filterOptionState);
+  const setSearchLoading = useSetRecoilState(searchLoadingState);
   const setIsFilterOpen = useSetRecoilState(isFilterOpenState);
   const setSearchKeyword = useSetRecoilState(searchKeywordState);
 
@@ -84,7 +85,7 @@ export default function SearchClient({ allTrademarkData }: Props) {
 
   useEffect(
     () => setSearchLoading(false),
-    [allTrademarkData.response.header.responseTime, setSearchLoading]
+    [allTrademarkData?.response.header.responseTime, setSearchLoading]
   );
 
   return (
@@ -100,9 +101,10 @@ export default function SearchClient({ allTrademarkData }: Props) {
       </div>
       <div className="filter-container">
         <button
-          className="inline-flex justify-center items-center p-3 w-[3.125rem] h-[3.125rem] rounded-lg bg-[#EDF0F4]"
+          className="has-tooltip inline-flex justify-center items-center p-3 w-[3.125rem] h-[3.125rem] rounded-lg bg-[#EDF0F4]"
           onClick={onFilterClick}
         >
+          <Tooltip placement="bottom" text="클릭 시 상세 검색이 가능합니다." />
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="18"

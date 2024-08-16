@@ -31,7 +31,7 @@ export default function KeywordStorage() {
       if (index !== -1) {
         copySearchKeyword = [
           ...copySearchKeyword.slice(0, index),
-          ...copySearchKeyword.slice(index + 1),
+          ...copySearchKeyword.slice(index),
         ];
         setSearchKeyword(copySearchKeyword);
         localStorage.setItem(keywordStr, copySearchKeyword.join(","));
@@ -41,6 +41,7 @@ export default function KeywordStorage() {
   );
 
   useEffect(() => {
+    console.log("?", localStorage.getItem(keywordStr));
     setSearchKeyword(
       localStorage.getItem(keywordStr)
         ? (localStorage.getItem(keywordStr) as string).split(",")
