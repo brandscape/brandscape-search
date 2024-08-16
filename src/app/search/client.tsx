@@ -10,8 +10,8 @@ import InfoContainer from "@/components/search/info-contianer";
 import SearchNotFound from "@/components/search/search-not-found";
 import { useRecoilValue } from "recoil";
 import { searchLoadingState } from "@/recoil/search/search-atom";
-import Loading from "../loading";
 import TableContainer from "@/components/search/table-container";
+import Loading from "@/components/loading";
 
 type DataSet = Record<"allTrademarkData" | "validTrademarkData", SearchResponse<Brand>>;
 interface Props extends DataSet {}

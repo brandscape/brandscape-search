@@ -41,7 +41,6 @@ export default function KeywordStorage() {
   );
 
   useEffect(() => {
-    console.log("?", localStorage.getItem(keywordStr));
     setSearchKeyword(
       localStorage.getItem(keywordStr)
         ? (localStorage.getItem(keywordStr) as string).split(",")

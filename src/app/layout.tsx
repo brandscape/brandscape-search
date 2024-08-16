@@ -6,8 +6,8 @@ import Header from "@/components/Header";
 import { Viewport } from "next";
 import RootProvider from "@/lib";
 import { Suspense } from "react";
-import Loading from "./loading";
 import Footer from "@/components/Footer";
+import Loading from "./loading";
 
 const myFont = localFont({
   src: "../fonts/PretendardVariable.woff2",
@@ -39,7 +39,7 @@ export default function RootLayout({
     <html lang="ko" className={`${myFont.variable}`}>
       <body>
         <RootProvider>
-          <Suspense fallback={<Loading isFullHeight />}>
+          <Suspense fallback={<Loading />}>
             <Header />
             {children}
             <Footer />

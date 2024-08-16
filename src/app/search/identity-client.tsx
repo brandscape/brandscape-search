@@ -7,7 +7,7 @@ import { searchLoadingState } from "@/recoil/search/search-atom";
 import { useState } from "react";
 import { useRecoilValue } from "recoil";
 import { RangeDateType } from "./type";
-import Loading from "../loading";
+import Loading from "@/components/loading";
 
 export default function IdentityClient() {
   /** @description [날짜 필터] 출원일자 */
