@@ -21,7 +21,6 @@ export default function Client({
   const router = useRouter();
   const detailSearchData = useRecoilValue(detailSearchDataState);
 
-  console.log("✅", slug, relatedDocsonfileInfo, tradeMarkClassificationInfo);
   return (
     <main className="relative min-h-screen py-[7.5rem] m-auto max-w-[57.5rem] xs:px-0 xs:py-[3.5rem]">
       <section className="title bg-white mb-5 xs:p-3.5 xs:border-b xs:border-b-[#E1E5EB] xs:mb-0 xs:fixed xs:w-full">

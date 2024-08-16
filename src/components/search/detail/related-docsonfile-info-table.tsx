@@ -6,7 +6,6 @@ interface Props {
 }
 
 export default function RelatedDocsonfileInfoTable({ body }: Props) {
-  console.log("table body", body.items.relateddocsonfileInfo);
   return (
     <div className="flex flex-col">
       <div className="overflow-x-auto pb-4">

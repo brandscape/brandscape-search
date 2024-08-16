@@ -265,7 +265,7 @@ export default function TrademarkTable({ body, count }: Props) {
                   : typeof body.items.item === "object" && (
                       <tr
                         className="bg-white transition-all duration-300 hover:bg-[#F6F7F9] h-12 text-[--color-text-normal] cursor-pointer"
-                        onClick={() => console.log("단일 row click!!")}
+                        onClick={onClickRow(body.items.item)}
                       >
                         {/** Mobile display */}
                         <td className="px-3 py-[0.3125rem] whitespace-nowrap text-xs font-semibold tracking-tighter text-center hidden xs:table-cell">
