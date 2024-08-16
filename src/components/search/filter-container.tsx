@@ -272,10 +272,9 @@ export default function FilterContainer({
       role="dialog"
       className={`${
         isFilterOpen ? "block visible z-[1] opacity-100" : "hidden invisible -z-[1] opacity-0"
-      } relative left-0 min-h-screen bg-current w-full h-full bg-white`}
-      style={{ top: "calc(-100vh + 3.5rem)" }}
+      } absolute top-0 left-0 min-h-screen bg-current w-full h-full`}
     >
-      <div className="py-16 text-[--color-text-strong] flex flex-col flex-nowrap gap-5 max-w-[45.5rem] m-auto xs:px-4">
+      <div className="py-28 text-[--color-text-strong] flex flex-col flex-nowrap gap-5 max-w-[45.5rem] m-auto xs:px-4">
         <div className="title pb-[0.625rem]">
           <h1 className="text-2xl font-bold tracking-tighter">상세 검색</h1>
         </div>

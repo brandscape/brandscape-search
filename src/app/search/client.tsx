@@ -26,38 +26,44 @@ export default function Client({ allTrademarkData, validTrademarkData }: Props) 
   const isSearchLoading = useRecoilValue(searchLoadingState);
 
   return (
-    <main className="min-h-screen py-24 m-auto max-w-[60rem] xs:px-4 relative">
-      <section className="max-w-[45rem] m-auto flex flex-col gap-0">
-        <SearchClient allTrademarkData={allTrademarkData} />
-        <KeywordStorage />
-        {!isSearchLoading && (
-          <FilterOptions setTdDates={setTdDates} setRdDates={setRdDates} setMdDates={setMdDates} />
-        )}
-      </section>
-      {isSearchLoading ? (
-        <Loading />
-      ) : (
-        <section className="w-full p-5 border-t border-[#EDF0F4] xs:p-0">
-          {+allTrademarkData.response.count.totalCount ? (
-            <>
-              <InfoContainer count={allTrademarkData.response.count} />
-              <TableContainer
-                allDataBody={allTrademarkData.response.body}
-                allDataCount={allTrademarkData.response.count}
-                validDataBody={validTrademarkData.response.body}
-                validDataCount={validTrademarkData.response.count}
-              />
-            </>
-          ) : (
-            <SearchNotFound />
+    <>
+      <main className="min-h-screen py-24 m-auto max-w-[60rem] xs:px-4 relative">
+        <section className="max-w-[45rem] m-auto flex flex-col gap-0">
+          <SearchClient allTrademarkData={allTrademarkData} />
+          <KeywordStorage />
+          {!isSearchLoading && (
+            <FilterOptions
+              setTdDates={setTdDates}
+              setRdDates={setRdDates}
+              setMdDates={setMdDates}
+            />
           )}
         </section>
-      )}
-      <FilterContainer
-        tdDateState={[tdDates, setTdDates]}
-        rdDateState={[rdDates, setRdDates]}
-        mdDateState={[mdDates, setMdDates]}
-      />
-    </main>
+        {isSearchLoading ? (
+          <Loading />
+        ) : (
+          <section className="w-full p-5 border-t border-[#EDF0F4] xs:p-0">
+            {+allTrademarkData.response.count.totalCount ? (
+              <>
+                <InfoContainer count={allTrademarkData.response.count} />
+                <TableContainer
+                  allDataBody={allTrademarkData.response.body}
+                  allDataCount={allTrademarkData.response.count}
+                  validDataBody={validTrademarkData.response.body}
+                  validDataCount={validTrademarkData.response.count}
+                />
+              </>
+            ) : (
+              <SearchNotFound />
+            )}
+          </section>
+        )}
+        <FilterContainer
+          tdDateState={[tdDates, setTdDates]}
+          rdDateState={[rdDates, setRdDates]}
+          mdDateState={[mdDates, setMdDates]}
+        />
+      </main>
+    </>
   );
 }
