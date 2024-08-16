@@ -197,14 +197,12 @@ export default async function Search() {
   const validTrademarkXml = await getValidTrademarkData(searchParams);
 
   if (typeof allTrademarkXml === "string" && allTrademarkXml === "search is not defined")
-    return <h1>HELLO WORLD</h1>;
+    return <h1 className="text-black">HELLO WORLD</h1>;
   if (!allTrademarkXml) return notFound();
 
-  const allTrademarkParser = new xml2js.Parser({ explicitArray: false });
-  const allTrademarkJson = await allTrademarkParser.parseStringPromise(allTrademarkXml);
-
-  const validTrademarkParser = new xml2js.Parser({ explicitArray: false });
-  const validTrademarkJson = await validTrademarkParser.parseStringPromise(validTrademarkXml);
+  const parser = new xml2js.Parser({ explicitArray: false });
+  const allTrademarkJson = await parser.parseStringPromise(allTrademarkXml);
+  const validTrademarkJson = await parser.parseStringPromise(validTrademarkXml);
 
   return <Client allTrademarkData={allTrademarkJson} validTrademarkData={validTrademarkJson} />;
 }

@@ -75,6 +75,7 @@ type Keys =
 export type Brand = Record<Keys, string>;
 
 export const keywordStr = "search-keyword";
+export const detailSearchStr = "detail-search-data";
 
 export type RangeDateType = {
   startDate?: Date;

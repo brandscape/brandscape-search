@@ -3,7 +3,7 @@ import { TableProps } from "./table-container";
 import { parse, format } from "date-fns";
 import { useRouter } from "next/navigation";
 import { useCallback } from "react";
-import { Brand, SearchResponse } from "@/app/search/type";
+import { Brand, SearchResponse, detailSearchStr } from "@/app/search/type";
 import { pick } from "lodash";
 import { useSetRecoilState } from "recoil";
 import { detailSearchDataState } from "@/recoil/search/search-atom";
@@ -57,6 +57,18 @@ export default function TrademarkTable({ body, count }: Props) {
     (item: Brand) => () => {
       const parsedNumber = Number(item.applicationNumber);
       if (isNaN(parsedNumber)) return;
+
+      const brandData = pick(item, [
+        "applicationNumber",
+        "internationalRegisterNumber",
+        "applicantName",
+        "regPrivilegeName",
+        "applicationDate",
+        "registrationDate",
+        "drawing",
+      ]);
+
+      localStorage.setItem(detailSearchStr, JSON.stringify(brandData));
       setDetailSearchData(
         pick(item, [
           "applicationNumber",
@@ -65,9 +77,10 @@ export default function TrademarkTable({ body, count }: Props) {
           "regPrivilegeName",
           "applicationDate",
           "registrationDate",
+          "drawing",
         ])
       );
-      router.push(`/search/${parsedNumber}}`);
+      router.push(`/search/${parsedNumber}`);
     },
     [router, setDetailSearchData]
   );

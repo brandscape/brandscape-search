@@ -1,6 +1,6 @@
-import { atom } from "recoil";
+import { AtomEffect, atom } from "recoil";
 import { FilterType, DetailSearchDataType } from "./type";
-import { RangeDateType } from "@/app/search/type";
+import { RangeDateType, detailSearchStr } from "@/app/search/type";
 
 export const isFilterOpenState = atom<boolean>({
   key: "isFilterOpen",
@@ -48,9 +48,30 @@ export const searchLoadingState = atom<boolean>({
   default: false,
 });
 
+const store = typeof window !== "undefined" ? window.localStorage : null;
+
+const localStorageEffect: <T>(key: string) => AtomEffect<T> =
+  (key) =>
+  ({ setSelf, onSet }) => {
+    if (store) {
+      const savedValue = window.localStorage.getItem(key);
+      if (savedValue != null) {
+        setSelf(JSON.parse(savedValue));
+      }
+
+      onSet((newValue, _, isReset) => {
+        console.log("isReset", isReset);
+
+        window.localStorage !== null && isReset
+          ? window.localStorage.removeItem(key)
+          : window.localStorage.setItem(key, JSON.stringify(newValue));
+      });
+    }
+  };
 export const detailSearchDataState = atom<DetailSearchDataType>({
   key: "detailSearchData",
   default: {},
+  effects: [localStorageEffect(detailSearchStr)],
 });
 
 export const tdDateState = atom<RangeDateType>({

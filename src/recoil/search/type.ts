@@ -41,5 +41,6 @@ export type DetailSearchDataType = Partial<
     | "regPrivilegeName"
     | "applicationDate"
     | "registrationDate"
+    | "drawing"
   >
 >;
