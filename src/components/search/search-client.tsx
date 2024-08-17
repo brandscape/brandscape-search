@@ -14,6 +14,7 @@ import {
 import { toast } from "react-toastify";
 import { AdministrationState } from "@/recoil/search/type";
 import Tooltip from "../Tooltip";
+import { isApplicationNumber } from "@/utils";
 
 interface Props {
   allTrademarkData?: SearchResponse<Brand>;

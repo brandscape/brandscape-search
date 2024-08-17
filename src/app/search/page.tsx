@@ -3,6 +3,7 @@ import xml2js from "xml2js";
 import { notFound } from "next/navigation";
 import Client from "./client";
 import IdentityClient from "./identity-client";
+import { isApplicationNumber } from "@/utils";
 
 /**
  * 모든상표 테이블 데이터 API 이벤트 핸들러 입니다.

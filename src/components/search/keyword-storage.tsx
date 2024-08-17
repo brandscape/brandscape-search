@@ -6,6 +6,7 @@ import {
   searchKeywordState,
   searchLoadingState,
 } from "@/recoil/search/search-atom";
+import { isApplicationNumber } from "@/utils";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";

@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { keywordStr } from "./search/type";
 import { useSetRecoilState } from "recoil";
 import { filterOptionState, searchKeywordState } from "@/recoil/search/search-atom";
+import { isApplicationNumber } from "@/utils";
 
 export default function Home() {
   const id = useId();
