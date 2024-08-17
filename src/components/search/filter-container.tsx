@@ -272,7 +272,6 @@ export default function FilterContainer({
     [setFilterOptions, setTdDates, setRdDates, setMdDates, router]
   );
 
-  console.log("filter container", filterOptions);
   return (
     <section
       role="dialog"

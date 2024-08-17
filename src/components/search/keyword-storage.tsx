@@ -22,13 +22,25 @@ export default function KeywordStorage() {
       if (params.get("s") !== text) {
         params.delete("s");
         params.delete("p");
+        /^\d{13}$/.test(text) && params.delete("an");
+
         router.push(`/search?s=${text}${params.toString() && "&" + params.toString()}`);
-        setFilterOptions((prev) => ({
-          ...prev,
-          ...(/^\d{13}$/.test(text)
-            ? { applicationNumber: text, trademarkName: undefined }
-            : { trademarkName: text, applicationNumber: undefined }),
-        }));
+
+        setFilterOptions((prev) => {
+          const trademarkNameEl = document.getElementById("trademarkName") as HTMLInputElement;
+          const applicationNumberEl = document.getElementById(
+            "applicationNumber"
+          ) as HTMLInputElement;
+          if (/^\d{13}$/.test(text)) {
+            trademarkNameEl.value = "";
+            applicationNumberEl.value = text;
+            return { ...prev, applicationNumber: text, trademarkName: undefined };
+          } else {
+            trademarkNameEl.value = text;
+            applicationNumberEl.value = "";
+            return { ...prev, trademarkName: text, applicationNumber: undefined };
+          }
+        });
         setSearchLoading(true);
       }
     },
