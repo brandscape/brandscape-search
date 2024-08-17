@@ -3,9 +3,9 @@
 import FilterOptions from "@/components/search/filter-options";
 import KeywordStorage from "@/components/search/keyword-storage";
 import SearchClient from "@/components/search/search-client";
-import { searchLoadingState } from "@/recoil/search/search-atom";
-import { useState } from "react";
-import { useRecoilValue } from "recoil";
+import { filterOptionState, searchLoadingState } from "@/recoil/search/search-atom";
+import { useEffect, useState } from "react";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { RangeDateType } from "./type";
 import Loading from "@/components/loading";
 import FilterContainer from "@/components/search/filter-container";
@@ -19,6 +19,15 @@ export default function IdentityClient() {
   const [mdDates, setMdDates] = useState<RangeDateType>();
 
   const isSearchLoading = useRecoilValue(searchLoadingState);
+  const setFilterOptions = useSetRecoilState(filterOptionState);
+
+  useEffect(() => {
+    setFilterOptions((prev) => ({
+      ...prev,
+      applicationNumber: undefined,
+      trademarkName: undefined,
+    }));
+  }, []);
   return (
     <main className="flex min-h-screen py-24 m-auto max-w-[60rem] xs:px-4 relative">
       {!isSearchLoading ? (

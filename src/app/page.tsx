@@ -8,12 +8,14 @@ import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { keywordStr } from "./search/type";
 import { useSetRecoilState } from "recoil";
-import { searchKeywordState } from "@/recoil/search/search-atom";
+import { filterOptionState, searchKeywordState } from "@/recoil/search/search-atom";
 
 export default function Home() {
   const id = useId();
   const router = useRouter();
   const setSearchKeyword = useSetRecoilState(searchKeywordState);
+  const setFilterOptions = useSetRecoilState(filterOptionState);
+
   const onSearchSubmit = useCallback(
     (e: BaseSyntheticEvent) => {
       e.preventDefault();
@@ -28,6 +30,13 @@ export default function Home() {
           localStorage.setItem(keywordStr, keywords.slice(0, 8).toString());
           setSearchKeyword(keywords);
 
+          setFilterOptions((prev) => ({
+            ...prev,
+            ...(/^\d{13}$/.test(searchInput.value)
+              ? { applicationNumber: searchInput.value, trademarkName: undefined }
+              : { trademarkName: searchInput.value, applicationNumber: undefined }),
+          }));
+
           router.push(`/search?s=${searchInput.value}`);
         } else {
           toast.isActive(id)
@@ -36,7 +45,7 @@ export default function Home() {
         }
       }
     },
-    [id, router, setSearchKeyword]
+    [id, router, setSearchKeyword, setFilterOptions]
   );
 
   return (

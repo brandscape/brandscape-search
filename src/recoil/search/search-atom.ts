@@ -10,6 +10,7 @@ export const isFilterOpenState = atom<boolean>({
 export const filterOptionState = atom<FilterType>({
   key: "filterOption",
   default: {
+    trademarkName: undefined,
     application: true,
     registration: true,
     refused: true,

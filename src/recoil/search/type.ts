@@ -13,6 +13,7 @@ export type AdministrationState =
  * @description Kipris API는 boolean 타입도 {"true" | "false"}와 같은 문자로 처리 필요
  */
 export type FilterType = {
+  trademarkName?: string; // 상표명칭
   classification?: string; // 상품분류
   similarityCode?: string; // 유사군코드
   asignProduct?: string; // 지정상품

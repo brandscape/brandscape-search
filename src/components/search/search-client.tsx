@@ -4,7 +4,7 @@ import { BaseSyntheticEvent, useCallback, useEffect, useId } from "react";
 import SearchInput from "../SearchInput";
 import { Brand, SearchResponse, keywordStr } from "@/app/search/type";
 import { useRouter } from "next/navigation";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import {
   filterOptionState,
   isFilterOpenState,
@@ -23,7 +23,7 @@ export default function SearchClient({ allTrademarkData }: Props) {
   const id = useId();
   const router = useRouter();
 
-  const filterOptions = useRecoilValue(filterOptionState);
+  const [filterOptions, setFilterOptions] = useRecoilState(filterOptionState);
   const setSearchLoading = useSetRecoilState(searchLoadingState);
   const setIsFilterOpen = useSetRecoilState(isFilterOpenState);
   const setSearchKeyword = useSetRecoilState(searchKeywordState);
@@ -48,6 +48,13 @@ export default function SearchClient({ allTrademarkData }: Props) {
             localStorage.setItem(keywordStr, keywords.slice(0, 8).toString());
             setSearchKeyword(keywords);
 
+            setFilterOptions((prev) => ({
+              ...prev,
+              ...(/^\d{13}$/.test(searchInput.value)
+                ? { applicationNumber: searchInput.value, trademarkName: undefined }
+                : { trademarkName: searchInput.value, applicationNumber: undefined }),
+            }));
+
             params.delete("s");
             router.push(
               `/search?s=${searchInput.value}${params.toString() && "&" + params.toString()}`
@@ -62,7 +69,7 @@ export default function SearchClient({ allTrademarkData }: Props) {
         }
       }
     },
-    [id, router, setSearchKeyword, setSearchLoading]
+    [id, router, setSearchKeyword, setSearchLoading, setFilterOptions]
   );
 
   /**

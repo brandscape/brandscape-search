@@ -204,7 +204,7 @@ input[type="search"].show-clear::-webkit-search-cancel-button {
   padding: 0.5rem 1.5625rem 0.5rem 0.75rem;
 }
 .react-datepicker-wrapper .react-datepicker__view-calendar-icon svg {
-  padding: 0.3rem;
+  padding: 0.4rem;
   right: 0;
 }
 .clear-button {

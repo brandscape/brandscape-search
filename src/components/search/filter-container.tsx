@@ -73,6 +73,7 @@ export default function FilterContainer({
       const targetEl = e.target;
       const searchParams = new URL(window.location.href).searchParams;
 
+      let searchText = undefined;
       let searchString = "";
       let copyFilterOptions = filterOptions;
       if (targetEl instanceof HTMLFormElement) {
@@ -92,6 +93,7 @@ export default function FilterContainer({
 
             copyFilterOptions = { ...copyFilterOptions, [stateName]: el.checked };
           } else if (el instanceof HTMLInputElement && el.type === "search") {
+            el.name === "trademarkName" && el.value && (searchText = el.value);
             el.name === "classification" && el.value && (searchString += `&tc=${el.value}`);
             el.name === "similarityCode" && el.value && (searchString += `&sc=${el.value}`);
             el.name === "asignProduct" && el.value && (searchString += `&gd=${el.value}`);
@@ -129,9 +131,9 @@ export default function FilterContainer({
         (internationalRegisterStartDateEl.value || internationalRegisterEndDateEl.value) &&
           (searchString += `&md=${internationalRegisterStartDateEl.value}~${internationalRegisterEndDateEl.value}`);
 
-        const queryString = `?s=${searchParams.get("s")}${searchString}`;
+        const queryString = `?s=${searchText || searchParams.get("s")}${searchString}`;
         if (decodeURIComponent(window.location.search) !== queryString) {
-          router.push(`/search?s=${searchParams.get("s")}${searchString}`);
+          router.push(`/search${queryString}`);
           setSearchLoading(true);
           setFilterOptions((prev) => ({ ...prev, ...copyFilterOptions }));
         }
@@ -270,6 +272,7 @@ export default function FilterContainer({
     [setFilterOptions, setTdDates, setRdDates, setMdDates, router]
   );
 
+  console.log("filter container", filterOptions);
   return (
     <section
       role="dialog"
@@ -311,89 +314,110 @@ export default function FilterContainer({
             {/** @section 행정상태  */}
             <div key="administration-state" className="flex flex-col flex-nowrap gap-4">
               <h1 className="text-lg font-semibold tracking-tighter">행정 상태</h1>
-              <div className="flex flex-row flex-nowrap gap-4 xs:grid xs:grid-cols-4 xs:gap-2">
-                <FilterCheckbox
-                  id="all"
-                  name="all"
-                  text="전체"
-                  checked
-                  onChange={(e) => {
-                    if (e.target.form) {
-                      e.target.form["application"] instanceof HTMLInputElement &&
-                        (e.target.form["application"].checked = e.target.checked);
-                      e.target.form["publication"] instanceof HTMLInputElement &&
-                        (e.target.form["publication"].checked = e.target.checked);
-                      e.target.form["withdrawal"] instanceof HTMLInputElement &&
-                        (e.target.form["withdrawal"].checked = e.target.checked);
-                      e.target.form["expiration"] instanceof HTMLInputElement &&
-                        (e.target.form["expiration"].checked = e.target.checked);
-                      e.target.form["abandonment"] instanceof HTMLInputElement &&
-                        (e.target.form["abandonment"].checked = e.target.checked);
-                      e.target.form["cancel"] instanceof HTMLInputElement &&
-                        (e.target.form["cancel"].checked = e.target.checked);
-                      e.target.form["refused"] instanceof HTMLInputElement &&
-                        (e.target.form["refused"].checked = e.target.checked);
-                      e.target.form["registration"] instanceof HTMLInputElement &&
-                        (e.target.form["registration"].checked = e.target.checked);
-                    }
-                  }}
-                />
-                <FilterCheckbox
-                  id="application"
-                  name="application"
-                  text="출원"
-                  checked
-                  onChange={onChangeCheckbox}
-                />
-                <FilterCheckbox
-                  id="publication"
-                  name="publication"
-                  text="공고"
-                  checked
-                  onChange={onChangeCheckbox}
-                />
-                <FilterCheckbox
-                  id="withdrawal"
-                  name="withdrawal"
-                  text="취하"
-                  checked
-                  onChange={onChangeCheckbox}
-                />
-                <FilterCheckbox
-                  id="expiration"
-                  name="expiration"
-                  text="소멸"
-                  checked
-                  onChange={onChangeCheckbox}
-                />
-                <FilterCheckbox
-                  id="abandonment"
-                  name="abandonment"
-                  text="포기"
-                  checked
-                  onChange={onChangeCheckbox}
-                />
-                <FilterCheckbox
-                  id="cancel"
-                  name="cancel"
-                  text="무효"
-                  checked
-                  onChange={onChangeCheckbox}
-                />
-                <FilterCheckbox
-                  id="refused"
-                  name="refused"
-                  text="거절"
-                  checked
-                  onChange={onChangeCheckbox}
-                />
-                <FilterCheckbox
-                  id="registration"
-                  name="registration"
-                  text="등록"
-                  checked
-                  onChange={onChangeCheckbox}
-                />
+              <div className="flex flex-col flex-nowrap gap-4 xs:gap-2">
+                <div className="flex flex-row flex-nowrap gap-4 xs:grid xs:grid-cols-4 xs:gap-2">
+                  <FilterCheckbox
+                    id="all"
+                    name="all"
+                    text="전체"
+                    checked
+                    onChange={(e) => {
+                      if (e.target.form) {
+                        e.target.form["application"] instanceof HTMLInputElement &&
+                          (e.target.form["application"].checked = e.target.checked);
+                        e.target.form["publication"] instanceof HTMLInputElement &&
+                          (e.target.form["publication"].checked = e.target.checked);
+                        e.target.form["withdrawal"] instanceof HTMLInputElement &&
+                          (e.target.form["withdrawal"].checked = e.target.checked);
+                        e.target.form["expiration"] instanceof HTMLInputElement &&
+                          (e.target.form["expiration"].checked = e.target.checked);
+                        e.target.form["abandonment"] instanceof HTMLInputElement &&
+                          (e.target.form["abandonment"].checked = e.target.checked);
+                        e.target.form["cancel"] instanceof HTMLInputElement &&
+                          (e.target.form["cancel"].checked = e.target.checked);
+                        e.target.form["refused"] instanceof HTMLInputElement &&
+                          (e.target.form["refused"].checked = e.target.checked);
+                        e.target.form["registration"] instanceof HTMLInputElement &&
+                          (e.target.form["registration"].checked = e.target.checked);
+                      }
+                    }}
+                  />
+                  <FilterCheckbox
+                    id="application"
+                    name="application"
+                    text="출원"
+                    checked
+                    onChange={onChangeCheckbox}
+                  />
+                  <FilterCheckbox
+                    id="publication"
+                    name="publication"
+                    text="공고"
+                    checked
+                    onChange={onChangeCheckbox}
+                  />
+                  <FilterCheckbox
+                    id="withdrawal"
+                    name="withdrawal"
+                    text="취하"
+                    checked
+                    onChange={onChangeCheckbox}
+                  />
+                  <FilterCheckbox
+                    id="expiration"
+                    name="expiration"
+                    text="소멸"
+                    checked
+                    onChange={onChangeCheckbox}
+                  />
+                  <FilterCheckbox
+                    id="abandonment"
+                    name="abandonment"
+                    text="포기"
+                    checked
+                    onChange={onChangeCheckbox}
+                  />
+                  <FilterCheckbox
+                    id="cancel"
+                    name="cancel"
+                    text="무효"
+                    checked
+                    onChange={onChangeCheckbox}
+                  />
+                  <FilterCheckbox
+                    id="refused"
+                    name="refused"
+                    text="거절"
+                    checked
+                    onChange={onChangeCheckbox}
+                  />
+                  <FilterCheckbox
+                    id="registration"
+                    name="registration"
+                    text="등록"
+                    checked
+                    onChange={onChangeCheckbox}
+                  />
+                </div>
+                <div className="flex flex-col flex-nowrap flex-1 gap-2">
+                  <label htmlFor="trademarkName">
+                    <span className="text-sm font-medium tracking-tighter text-ellipsis text-[--color-text-normal]">
+                      상표명칭&nbsp;
+                    </span>
+                    <span className="text-sm font-normal tracking-tighter text-ellipsis text-[--color-text-assistive]">
+                      (TN)
+                    </span>
+                  </label>
+                  <input
+                    type="search"
+                    name="trademarkName"
+                    id="trademarkName"
+                    className="show-clear outline-none border border-[#E1E5EB] rounded !px-3 !py-1.5 w-full text-xs"
+                    defaultValue={filterOptions.trademarkName}
+                    placeholder="ex)상표명"
+                    onKeyDown={onBlockEnterKey}
+                  />
+                </div>
               </div>
             </div>
             {/** @section 분류정보 */}
@@ -414,7 +438,7 @@ export default function FilterContainer({
                       type="search"
                       name="classification"
                       id="classification"
-                      className="show-clear outline-none border border-[#E1E5EB] rounded !px-3 !py-1 w-full text-xs peer invalid:border-2 invalid:border-[#EF7070]"
+                      className="show-clear outline-none border border-[#E1E5EB] rounded !px-3 !py-1.5 w-full text-xs peer invalid:border-2 invalid:border-[#EF7070]"
                       defaultValue={filterOptions.classification}
                       placeholder="ex) 06+09+11"
                       pattern="\d+(\+\d+)*"
@@ -439,7 +463,7 @@ export default function FilterContainer({
                       type="search"
                       name="similarityCode"
                       id="similarityCode"
-                      className="show-clear outline-none border border-[#E1E5EB] rounded !px-3 !py-1 w-full text-xs peer invalid:border-2 invalid:border-[#EF7070]"
+                      className="show-clear outline-none border border-[#E1E5EB] rounded !px-3 !py-1.5 w-full text-xs peer invalid:border-2 invalid:border-[#EF7070]"
                       defaultValue={filterOptions.similarityCode}
                       placeholder="ex) G1004+G1103"
                       pattern="G\d+(\+G\d+)*"
@@ -464,7 +488,7 @@ export default function FilterContainer({
                       type="search"
                       name="asignProduct"
                       id="asignProduct"
-                      className="show-clear outline-none border border-[#E1E5EB] rounded !px-3 !py-1 w-full text-xs peer invalid:border-2 invalid:border-[#EF7070]"
+                      className="show-clear outline-none border border-[#E1E5EB] rounded !px-3 !py-1.5 w-full text-xs peer invalid:border-2 invalid:border-[#EF7070]"
                       defaultValue={filterOptions.asignProduct}
                       placeholder="ex)스마트폰+통신+식물*재배"
                       pattern="[가-힣+*]+"
@@ -495,7 +519,7 @@ export default function FilterContainer({
                       type="search"
                       name="applicationNumber"
                       id="applicationNumber"
-                      className="show-clear outline-none border border-[#E1E5EB] rounded !px-3 !py-1 w-full text-xs peer invalid:border-2 invalid:border-[#EF7070]"
+                      className="show-clear outline-none border border-[#E1E5EB] rounded !px-3 !py-1.5 w-full text-xs peer invalid:border-2 invalid:border-[#EF7070]"
                       defaultValue={filterOptions.applicationNumber}
                       placeholder="ex)40201200123456"
                       pattern="\d+"
@@ -520,7 +544,7 @@ export default function FilterContainer({
                       type="search"
                       name="internationalRegisterNumber"
                       id="internationalRegisterNumber"
-                      className="show-clear outline-none border border-[#E1E5EB] rounded !px-3 !py-1 w-full text-xs peer invalid:border-2 invalid:border-[#EF7070]"
+                      className="show-clear outline-none border border-[#E1E5EB] rounded !px-3 !py-1.5 w-full text-xs peer invalid:border-2 invalid:border-[#EF7070]"
                       defaultValue={filterOptions.internationalRegisterNumber}
                       placeholder="ex)12345607"
                       pattern="\d+"
@@ -545,7 +569,7 @@ export default function FilterContainer({
                       type="search"
                       name="registerNumber"
                       id="registerNumber"
-                      className="show-clear outline-none border border-[#E1E5EB] rounded !px-3 !py-1 w-full text-xs peer invalid:border-2 invalid:border-[#EF7070]"
+                      className="show-clear outline-none border border-[#E1E5EB] rounded !px-3 !py-1.5 w-full text-xs peer invalid:border-2 invalid:border-[#EF7070]"
                       defaultValue={filterOptions.registerNumber}
                       placeholder="ex)4012345670000"
                       pattern="\d+"
@@ -579,7 +603,7 @@ export default function FilterContainer({
                       name="applicationStartDate"
                       locale="ko"
                       dateFormat={"yyyy-MM-dd"}
-                      className="outline-none border border-[#E1E5EB] rounded !px-3 !py-1 w-full text-xs"
+                      className="outline-none border border-[#E1E5EB] rounded !px-3 !py-1.5 w-full text-xs"
                       disabledKeyboardNavigation
                       showIcon
                       icon={<DateSvg />}
@@ -618,7 +642,7 @@ export default function FilterContainer({
                       name="applicationEndDate"
                       locale="ko"
                       dateFormat={"yyyy-MM-dd"}
-                      className="outline-none border border-[#E1E5EB] rounded !px-3 !py-1 w-full text-xs"
+                      className="outline-none border border-[#E1E5EB] rounded !px-3 !py-1.5 w-full text-xs"
                       disabledKeyboardNavigation
                       showIcon
                       icon={<DateSvg />}
@@ -661,7 +685,7 @@ export default function FilterContainer({
                       name="registerStartDate"
                       locale="ko"
                       dateFormat={"yyyy-MM-dd"}
-                      className="outline-none border border-[#E1E5EB] rounded !px-3 !py-1 w-full text-xs"
+                      className="outline-none border border-[#E1E5EB] rounded !px-3 !py-1.5 w-full text-xs"
                       disabledKeyboardNavigation
                       showIcon
                       icon={<DateSvg />}
@@ -700,7 +724,7 @@ export default function FilterContainer({
                       name="registerEndDate"
                       locale="ko"
                       dateFormat={"yyyy-MM-dd"}
-                      className="outline-none border border-[#E1E5EB] rounded !px-3 !py-1 w-full text-xs"
+                      className="outline-none border border-[#E1E5EB] rounded !px-3 !py-1.5 w-full text-xs"
                       disabledKeyboardNavigation
                       showIcon
                       icon={<DateSvg />}
@@ -743,7 +767,7 @@ export default function FilterContainer({
                       name="internationalRegisterStartDate"
                       locale="ko"
                       dateFormat={"yyyy-MM-dd"}
-                      className="outline-none border border-[#E1E5EB] rounded !px-3 !py-1 w-full text-xs"
+                      className="outline-none border border-[#E1E5EB] rounded !px-3 !py-1.5 w-full text-xs"
                       disabledKeyboardNavigation
                       showIcon
                       icon={<DateSvg />}
@@ -782,7 +806,7 @@ export default function FilterContainer({
                       name="internationalRegisterEndDate"
                       locale="ko"
                       dateFormat={"yyyy-MM-dd"}
-                      className="outline-none border border-[#E1E5EB] rounded !px-3 !py-1 w-full text-xs"
+                      className="outline-none border border-[#E1E5EB] rounded !px-3 !py-1.5 w-full text-xs"
                       disabledKeyboardNavigation
                       showIcon
                       icon={<DateSvg />}
@@ -825,7 +849,7 @@ export default function FilterContainer({
                       type="search"
                       name="applicantName"
                       id="applicantName"
-                      className="show-clear outline-none border border-[#E1E5EB] rounded !px-3 !py-1 w-full text-xs"
+                      className="show-clear outline-none border border-[#E1E5EB] rounded !px-3 !py-1.5 w-full text-xs"
                       defaultValue={filterOptions.applicantName}
                       placeholder="ex)특허정보원"
                       onKeyDown={onBlockEnterKey}
@@ -846,7 +870,7 @@ export default function FilterContainer({
                       type="search"
                       name="regPrivilegeName"
                       id="regPrivilegeName"
-                      className="show-clear outline-none border border-[#E1E5EB] rounded !px-3 !py-1 w-full text-xs"
+                      className="show-clear outline-none border border-[#E1E5EB] rounded !px-3 !py-1.5 w-full text-xs"
                       defaultValue={filterOptions.regPrivilegeName}
                       placeholder="ex)특허청장"
                       onKeyDown={onBlockEnterKey}

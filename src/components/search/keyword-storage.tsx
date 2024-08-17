@@ -1,7 +1,11 @@
 "use client";
 
 import { keywordStr } from "@/app/search/type";
-import { searchKeywordState, searchLoadingState } from "@/recoil/search/search-atom";
+import {
+  filterOptionState,
+  searchKeywordState,
+  searchLoadingState,
+} from "@/recoil/search/search-atom";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
@@ -10,6 +14,7 @@ export default function KeywordStorage() {
   const [searchKeyword, setSearchKeyword] = useRecoilState(searchKeywordState);
   const router = useRouter();
   const setSearchLoading = useSetRecoilState(searchLoadingState);
+  const setFilterOptions = useSetRecoilState(filterOptionState);
 
   const onKeywordClick = useCallback(
     (text: string) => () => {
@@ -18,10 +23,16 @@ export default function KeywordStorage() {
         params.delete("s");
         params.delete("p");
         router.push(`/search?s=${text}${params.toString() && "&" + params.toString()}`);
+        setFilterOptions((prev) => ({
+          ...prev,
+          ...(/^\d{13}$/.test(text)
+            ? { applicationNumber: text, trademarkName: undefined }
+            : { trademarkName: text, applicationNumber: undefined }),
+        }));
         setSearchLoading(true);
       }
     },
-    [router, setSearchLoading]
+    [router, setSearchLoading, setFilterOptions]
   );
 
   const onDeleteKeyword = useCallback(
