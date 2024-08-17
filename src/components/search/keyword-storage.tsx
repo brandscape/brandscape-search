@@ -22,7 +22,7 @@ export default function KeywordStorage() {
       if (params.get("s") !== text) {
         params.delete("s");
         params.delete("p");
-        /^\d{13}$/.test(text) && params.delete("an");
+        isApplicationNumber(text) && params.delete("an");
 
         router.push(`/search?s=${text}${params.toString() && "&" + params.toString()}`);
 
@@ -31,7 +31,7 @@ export default function KeywordStorage() {
           const applicationNumberEl = document.getElementById(
             "applicationNumber"
           ) as HTMLInputElement;
-          if (/^\d{13}$/.test(text)) {
+          if (isApplicationNumber(text)) {
             trademarkNameEl.value = "";
             applicationNumberEl.value = text;
             return { ...prev, applicationNumber: text, trademarkName: undefined };

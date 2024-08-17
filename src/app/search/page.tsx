@@ -57,10 +57,10 @@ const getAllTrademarkData = async (params: URLSearchParams) => {
 
     if (search) {
       const params = {
-        ...(!/^\d{13}$/.test(search) && { trademarkName: search }),
+        ...(!isApplicationNumber(search) && { trademarkName: search }),
         ...(applicationNumber
           ? { applicationNumber }
-          : /^\d{13}$/.test(search) && { applicationNumber: search }),
+          : isApplicationNumber(search) && { applicationNumber: search }),
 
         ...(pageNo && { pageNo }),
         ServiceKey: process.env.KIPRIS_ACCESS_KEY || "",
@@ -120,7 +120,6 @@ const getAllTrademarkData = async (params: URLSearchParams) => {
 
       const queryString = new URLSearchParams(params).toString();
       const url = `https://plus.kipris.or.kr/kipo-api/kipi/trademarkInfoSearchService/getAdvancedSearch?${queryString}`;
-      // console.log("👉 4119770000335", /^\d{13}$/.test(search));
       // console.log("👉", queryString.split("&"));
 
       const response = await fetch(url);
@@ -148,7 +147,9 @@ const getValidTrademarkData = async (params: URLSearchParams) => {
     const [pageNo] = [params.get("p")];
     if (search) {
       const params = {
-        ...(/^\d{13}$/.test(search) ? { applicationNumber: search } : { trademarkName: search }),
+        ...(isApplicationNumber(search)
+          ? { applicationNumber: search }
+          : { trademarkName: search }),
         ...(pageNo && { pageNo }),
         ServiceKey: process.env.KIPRIS_ACCESS_KEY || "",
 

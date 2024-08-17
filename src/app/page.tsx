@@ -32,7 +32,7 @@ export default function Home() {
 
           setFilterOptions((prev) => ({
             ...prev,
-            ...(/^\d{13}$/.test(searchInput.value)
+            ...(isApplicationNumber(searchInput.value)
               ? { applicationNumber: searchInput.value, trademarkName: undefined }
               : { trademarkName: searchInput.value, applicationNumber: undefined }),
           }));
