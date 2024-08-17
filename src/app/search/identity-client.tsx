@@ -8,14 +8,15 @@ import { useState } from "react";
 import { useRecoilValue } from "recoil";
 import { RangeDateType } from "./type";
 import Loading from "@/components/loading";
+import FilterContainer from "@/components/search/filter-container";
 
 export default function IdentityClient() {
   /** @description [날짜 필터] 출원일자 */
-  const [, setTdDates] = useState<RangeDateType>();
+  const [tdDates, setTdDates] = useState<RangeDateType>();
   /** @description [날짜 필터] 등록일자 */
-  const [, setRdDates] = useState<RangeDateType>();
+  const [rdDates, setRdDates] = useState<RangeDateType>();
   /** @description [날짜 필터] 국제등록일자 */
-  const [, setMdDates] = useState<RangeDateType>();
+  const [mdDates, setMdDates] = useState<RangeDateType>();
 
   const isSearchLoading = useRecoilValue(searchLoadingState);
   return (
@@ -29,6 +30,11 @@ export default function IdentityClient() {
       ) : (
         <Loading />
       )}
+      <FilterContainer
+        tdDateState={[tdDates, setTdDates]}
+        rdDateState={[rdDates, setRdDates]}
+        mdDateState={[mdDates, setMdDates]}
+      />
     </main>
   );
 }

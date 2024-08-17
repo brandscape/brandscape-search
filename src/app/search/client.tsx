@@ -45,7 +45,10 @@ export default function Client({ allTrademarkData, validTrademarkData }: Props) 
           <section className="w-full p-5 border-t border-[#EDF0F4] xs:p-0">
             {+allTrademarkData.response.count.totalCount ? (
               <>
-                <InfoContainer count={allTrademarkData.response.count} />
+                <InfoContainer
+                  allTrademarkCount={allTrademarkData.response.count}
+                  validTrademark={validTrademarkData.response.count}
+                />
                 <TableContainer
                   allDataBody={allTrademarkData.response.body}
                   allDataCount={allTrademarkData.response.count}

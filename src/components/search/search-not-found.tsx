@@ -1,4 +1,5 @@
 import SearchNotFoundSvg from "@/icons/search-not-found-svg";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 
 export default function SearchNotFound() {
@@ -14,15 +15,13 @@ export default function SearchNotFound() {
           검색한 상표를 바로 출원하러 가볼까요?
         </p>
       </div>
-      <div>
-        <button
-          type="button"
-          className="px-5 py-2.5 border rounded-lg bg-[--color-primary-normal] text-[--color-text-inverse] text-base font-semibold tracking-tighter xs:text-sm"
-          onClick={() => alert("준비중입니다.")}
-        >
-          검색한 상표 출원 의뢰하기
-        </button>
-      </div>
+      <Link
+        href="https://brandscapeip.com/%EC%83%81%ED%91%9C%EC%B6%9C%EC%9B%90"
+        target="_blank"
+        className="px-5 py-3 border rounded-lg bg-[--color-primary-normal] text-[--color-text-inverse] text-base font-semibold tracking-tighter outline-none xs:text-sm"
+      >
+        검색한 상표 출원 의뢰하기
+      </Link>
     </div>
   );
 }

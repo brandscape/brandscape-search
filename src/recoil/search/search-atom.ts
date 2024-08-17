@@ -81,3 +81,8 @@ export const rdDateState = atom<RangeDateType>({
 export const mdDateState = atom<RangeDateType>({
   key: "mdDate",
 });
+
+export const activeTabState = atom<number>({
+  key: "activeTab",
+  default: 1,
+});

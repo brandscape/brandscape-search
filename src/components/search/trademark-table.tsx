@@ -60,7 +60,7 @@ export default function TrademarkTable({ body, count }: Props) {
       const brandData = pick(item, [
         "title",
         "applicationNumber",
-        "internationalRegisterNumber",
+        "registrationNumber",
         "applicantName",
         "regPrivilegeName",
         "applicationDate",
@@ -74,7 +74,7 @@ export default function TrademarkTable({ body, count }: Props) {
         pick(item, [
           "title",
           "applicationNumber",
-          "internationalRegisterNumber",
+          "registrationNumber",
           "applicantName",
           "regPrivilegeName",
           "applicationDate",

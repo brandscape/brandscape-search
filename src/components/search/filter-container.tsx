@@ -129,9 +129,12 @@ export default function FilterContainer({
         (internationalRegisterStartDateEl.value || internationalRegisterEndDateEl.value) &&
           (searchString += `&md=${internationalRegisterStartDateEl.value}~${internationalRegisterEndDateEl.value}`);
 
-        router.push(`/search?s=${searchParams.get("s")}${searchString}`);
-        setSearchLoading(true);
-        setFilterOptions((prev) => ({ ...prev, ...copyFilterOptions }));
+        const queryString = `?s=${searchParams.get("s")}${searchString}`;
+        if (decodeURIComponent(window.location.search) !== queryString) {
+          router.push(`/search?s=${searchParams.get("s")}${searchString}`);
+          setSearchLoading(true);
+          setFilterOptions((prev) => ({ ...prev, ...copyFilterOptions }));
+        }
         setIsFilterOpen(false);
       }
     },
@@ -272,570 +275,604 @@ export default function FilterContainer({
       role="dialog"
       className={`${
         isFilterOpen ? "block visible z-[1] opacity-100" : "hidden invisible -z-[1] opacity-0"
-      } absolute top-0 left-0 min-h-screen bg-current w-full h-full`}
+      } absolute top-0 left-0 min-h-screen bg-white w-full h-full`}
     >
-      <div className="py-28 text-[--color-text-strong] flex flex-col flex-nowrap gap-5 max-w-[45.5rem] m-auto xs:px-4">
-        <div className="title pb-[0.625rem]">
-          <h1 className="text-2xl font-bold tracking-tighter">상세 검색</h1>
-        </div>
-        <form id="filter-form" className="flex flex-col flex-nowrap gap-5" onSubmit={onSubmit}>
-          <div key="administration-state" className="flex flex-col flex-nowrap gap-4 pb-2.5">
-            <h1 className="text-lg font-semibold tracking-tighter">행정 상태</h1>
-            <div className="flex flex-row flex-nowrap gap-4 xs:grid xs:grid-cols-4 xs:gap-2">
-              <FilterCheckbox
-                id="all"
-                name="all"
-                text="전체"
-                checked
-                onChange={(e) => {
-                  if (e.target.form) {
-                    e.target.form["application"] instanceof HTMLInputElement &&
-                      (e.target.form["application"].checked = e.target.checked);
-                    e.target.form["publication"] instanceof HTMLInputElement &&
-                      (e.target.form["publication"].checked = e.target.checked);
-                    e.target.form["withdrawal"] instanceof HTMLInputElement &&
-                      (e.target.form["withdrawal"].checked = e.target.checked);
-                    e.target.form["expiration"] instanceof HTMLInputElement &&
-                      (e.target.form["expiration"].checked = e.target.checked);
-                    e.target.form["abandonment"] instanceof HTMLInputElement &&
-                      (e.target.form["abandonment"].checked = e.target.checked);
-                    e.target.form["cancel"] instanceof HTMLInputElement &&
-                      (e.target.form["cancel"].checked = e.target.checked);
-                    e.target.form["refused"] instanceof HTMLInputElement &&
-                      (e.target.form["refused"].checked = e.target.checked);
-                    e.target.form["registration"] instanceof HTMLInputElement &&
-                      (e.target.form["registration"].checked = e.target.checked);
-                  }
-                }}
-              />
-              <FilterCheckbox
-                id="application"
-                name="application"
-                text="출원"
-                checked
-                onChange={onChangeCheckbox}
-              />
-              <FilterCheckbox
-                id="publication"
-                name="publication"
-                text="공고"
-                checked
-                onChange={onChangeCheckbox}
-              />
-              <FilterCheckbox
-                id="withdrawal"
-                name="withdrawal"
-                text="취하"
-                checked
-                onChange={onChangeCheckbox}
-              />
-              <FilterCheckbox
-                id="expiration"
-                name="expiration"
-                text="소멸"
-                checked
-                onChange={onChangeCheckbox}
-              />
-              <FilterCheckbox
-                id="abandonment"
-                name="abandonment"
-                text="포기"
-                checked
-                onChange={onChangeCheckbox}
-              />
-              <FilterCheckbox
-                id="cancel"
-                name="cancel"
-                text="무효"
-                checked
-                onChange={onChangeCheckbox}
-              />
-              <FilterCheckbox
-                id="refused"
-                name="refused"
-                text="거절"
-                checked
-                onChange={onChangeCheckbox}
-              />
-              <FilterCheckbox
-                id="registration"
-                name="registration"
-                text="등록"
-                checked
-                onChange={onChangeCheckbox}
-              />
-            </div>
-          </div>
-          {/** @section 분류정보 */}
-          <div key="category" className="flex flex-col flex-nowrap gap-4 pb-2.5">
-            <h1 className="text-lg font-semibold tracking-tighter">분류정보</h1>
-            <div className="flex flex-row flex-nowrap gap-4 xs:grid xs:grid-cols-1">
-              <div className="flex flex-col flex-nowrap flex-1 gap-2">
-                <label htmlFor="classification">
-                  <span className="text-sm font-medium tracking-tighter text-ellipsis text-[--color-text-normal]">
-                    상품분류&nbsp;
-                  </span>
-                  <span className="text-sm font-normal tracking-tighter text-ellipsis text-[--color-text-assistive]">
-                    (TC)
-                  </span>
-                </label>
-                <div>
-                  <input
-                    type="search"
-                    name="classification"
-                    id="classification"
-                    className="show-clear outline-none border border-[#E1E5EB] rounded px-3 py-2 w-full text-sm peer invalid:border-2 invalid:border-[#EF7070]"
-                    defaultValue={filterOptions.classification}
-                    placeholder="ex) 06+09+11"
-                    pattern="\d+(\+\d+)*"
-                    onKeyDown={onBlockEnterKey}
-                  />
-                  <p className="invisible hidden mt-2 font-medium text-xs text-ellipsis text-[#EF7070] peer-invalid:visible peer-invalid:block">
-                    유효하지 않은 번호 입니다. 입력한 번호를 확인해 주세요.
-                  </p>
-                </div>
-              </div>
-              <div className="flex flex-col flex-nowrap flex-1 gap-2">
-                <label htmlFor="similarityCode">
-                  <span className="text-sm font-medium tracking-tighter text-ellipsis text-[--color-text-normal]">
-                    유사군&nbsp;
-                  </span>
-                  <span className="text-sm font-normal tracking-tighter text-ellipsis text-[--color-text-assistive]">
-                    (SC)
-                  </span>
-                </label>
-                <div>
-                  <input
-                    type="search"
-                    name="similarityCode"
-                    id="similarityCode"
-                    className="show-clear outline-none border border-[#E1E5EB] rounded px-3 py-2 w-full text-sm peer invalid:border-2 invalid:border-[#EF7070]"
-                    defaultValue={filterOptions.similarityCode}
-                    placeholder="ex) G1004+G1103"
-                    pattern="G\d+(\+G\d+)*"
-                    onKeyDown={onBlockEnterKey}
-                  />
-                  <p className="invisible hidden mt-2 font-medium text-xs text-ellipsis text-[#EF7070] peer-invalid:visible peer-invalid:block">
-                    유효하지 않은 번호 입니다. 입력한 번호를 확인해 주세요.
-                  </p>
-                </div>
-              </div>
-              <div className="flex flex-col flex-nowrap flex-1 gap-2">
-                <label htmlFor="asignProduct">
-                  <span className="text-sm font-medium tracking-tighter text-ellipsis text-[--color-text-normal]">
-                    지정상품&nbsp;
-                  </span>
-                  <span className="text-sm font-normal tracking-tighter text-ellipsis text-[--color-text-assistive]">
-                    (GD)
-                  </span>
-                </label>
-                <div>
-                  <input
-                    type="search"
-                    name="asignProduct"
-                    id="asignProduct"
-                    className="show-clear outline-none border border-[#E1E5EB] rounded px-3 py-2 w-full text-sm peer invalid:border-2 invalid:border-[#EF7070]"
-                    defaultValue={filterOptions.asignProduct}
-                    placeholder="ex)스마트폰+통신+식물*재배"
-                    pattern="[가-힣+*]+"
-                    onKeyDown={onBlockEnterKey}
-                  />
-                  <p className="invisible hidden mt-2 font-medium text-xs text-ellipsis text-[#EF7070] peer-invalid:visible peer-invalid:block">
-                    유효하지 않은 번호 입니다. 입력한 번호를 확인해 주세요.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-          {/** @section 번호정보 */}
-          <div key="number-infomation" className="flex flex-col flex-nowrap gap-4 pb-2.5">
-            <h1 className="text-lg font-semibold tracking-tighter">번호정보</h1>
-            <div className="flex flex-row flex-nowrap gap-4 xs:grid xs:grid-cols-1">
-              <div className="flex flex-col flex-nowrap flex-1 gap-2">
-                <label htmlFor="applicationNumber">
-                  <span className="text-sm font-medium tracking-tighter text-ellipsis text-[--color-text-normal]">
-                    출원번호&nbsp;
-                  </span>
-                  <span className="text-sm font-normal tracking-tighter text-ellipsis text-[--color-text-assistive]">
-                    (AN)
-                  </span>
-                </label>
-                <div>
-                  <input
-                    type="search"
-                    name="applicationNumber"
-                    id="applicationNumber"
-                    className="show-clear outline-none border border-[#E1E5EB] rounded px-3 py-2 w-full text-sm peer invalid:border-2 invalid:border-[#EF7070]"
-                    defaultValue={filterOptions.applicationNumber}
-                    placeholder="ex)40201200123456"
-                    pattern="\d+"
-                    onKeyDown={onBlockEnterKey}
-                  />
-                  <p className="invisible hidden mt-2 font-medium text-xs text-ellipsis text-[#EF7070] peer-invalid:visible peer-invalid:block">
-                    유효하지 않은 번호 입니다. 입력한 번호를 확인해 주세요.
-                  </p>
-                </div>
-              </div>
-              <div className="flex flex-col flex-nowrap flex-1 gap-2">
-                <label htmlFor="internationalRegisterNumber">
-                  <span className="text-sm font-medium tracking-tighter text-ellipsis text-[--color-text-normal]">
-                    국제 등록번호&nbsp;
-                  </span>
-                  <span className="text-sm font-normal tracking-tighter text-ellipsis text-[--color-text-assistive]">
-                    (MN)
-                  </span>
-                </label>
-                <div>
-                  <input
-                    type="search"
-                    name="internationalRegisterNumber"
-                    id="internationalRegisterNumber"
-                    className="show-clear outline-none border border-[#E1E5EB] rounded px-3 py-2 w-full text-sm peer invalid:border-2 invalid:border-[#EF7070]"
-                    defaultValue={filterOptions.internationalRegisterNumber}
-                    placeholder="ex)12345607"
-                    pattern="\d+"
-                    onKeyDown={onBlockEnterKey}
-                  />
-                  <p className="invisible hidden mt-2 font-medium text-xs text-ellipsis text-[#EF7070] peer-invalid:visible peer-invalid:block">
-                    유효하지 않은 번호 입니다. 입력한 번호를 확인해 주세요.
-                  </p>
-                </div>
-              </div>
-              <div className="flex flex-col flex-nowrap flex-1 gap-2">
-                <label htmlFor="registerNumber">
-                  <span className="text-sm font-medium tracking-tighter text-ellipsis text-[--color-text-normal]">
-                    등록번호&nbsp;
-                  </span>
-                  <span className="text-sm font-normal tracking-tighter text-ellipsis text-[--color-text-assistive]">
-                    (RN)
-                  </span>
-                </label>
-                <div>
-                  <input
-                    type="search"
-                    name="registerNumber"
-                    id="registerNumber"
-                    className="show-clear outline-none border border-[#E1E5EB] rounded px-3 py-2 w-full text-sm peer invalid:border-2 invalid:border-[#EF7070]"
-                    defaultValue={filterOptions.registerNumber}
-                    placeholder="ex)4012345670000"
-                    pattern="\d+"
-                    onKeyDown={onBlockEnterKey}
-                  />
-                  <p className="invisible hidden mt-2 font-medium text-xs text-ellipsis text-[#EF7070] peer-invalid:visible peer-invalid:block">
-                    유효하지 않은 번호 입니다. 입력한 번호를 확인해 주세요.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-          {/** @section 일자정보 */}
-          <div key="date-infomation" className="flex flex-col flex-nowrap gap-4 pb-2.5">
-            <h1 className="text-lg font-semibold tracking-tighter">일자정보</h1>
-            <div className="grid grid-cols-1 gap-2">
-              <div className="flex flex-col flex-nowrap gap-2">
-                <div>
-                  <span className="text-sm font-medium tracking-tighter text-ellipsis text-[--color-text-normal]">
-                    출원일자&nbsp;
-                  </span>
-                  <span className="text-sm font-normal tracking-tighter text-ellipsis text-[--color-text-assistive]">
-                    (TC)
-                  </span>
-                </div>
-              </div>
-              <div className="flex flex-row flex-nowrap gap-1 items-center">
-                <div className="w-full relative">
-                  <DatePicker
-                    id="applicationStartDate"
-                    name="applicationStartDate"
-                    locale="ko"
-                    dateFormat={"yyyy-MM-dd"}
-                    className="outline-none border border-[#E1E5EB] rounded px-3 py-2 w-full text-sm"
-                    disabledKeyboardNavigation
-                    showIcon
-                    icon={<DateSvg />}
-                    popperPlacement="top-end"
-                    selected={tdDates?.startDate}
-                    onChange={(date) =>
-                      date &&
-                      setTdDates((prev) => {
-                        if (prev && prev.endDate) {
-                          return date > prev.endDate
-                            ? {
-                                startDate: date,
-                                endDate: new Date(new Date().setDate(date.getDate() + 1)),
-                              }
-                            : { ...prev, startDate: date };
-                        }
-                        return { ...prev, startDate: date };
-                      })
-                    }
-                    selectsStart
-                    startDate={tdDates?.startDate}
-                    endDate={tdDates?.endDate}
-                  />
-                  {tdDates?.startDate && (
-                    <button
-                      type="button"
-                      className="clear-button"
-                      onClick={() => setTdDates((prev) => ({ ...prev, startDate: undefined }))}
-                    />
-                  )}
-                </div>
-                <span>~</span>
-                <div className="w-full relative">
-                  <DatePicker
-                    id="applicationEndDate"
-                    name="applicationEndDate"
-                    locale="ko"
-                    dateFormat={"yyyy-MM-dd"}
-                    className="outline-none border border-[#E1E5EB] rounded px-3 py-2 w-full text-sm"
-                    disabledKeyboardNavigation
-                    showIcon
-                    icon={<DateSvg />}
-                    popperPlacement="top-start"
-                    selected={tdDates?.endDate}
-                    onChange={(date) => date && setTdDates((prev) => ({ ...prev, endDate: date }))}
-                    selectsEnd
-                    startDate={tdDates?.startDate}
-                    endDate={tdDates?.endDate}
-                    minDate={tdDates?.startDate}
-                  />
-                  {tdDates?.endDate && (
-                    <button
-                      type="button"
-                      className="clear-button"
-                      onClick={() => setTdDates((prev) => ({ ...prev, endDate: undefined }))}
-                    />
-                  )}
-                </div>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 gap-2">
-              <div className="flex flex-col flex-nowrap gap-2">
-                <div>
-                  <span className="text-sm font-medium tracking-tighter text-ellipsis text-[--color-text-normal]">
-                    등록일자&nbsp;
-                  </span>
-                  <span className="text-sm font-normal tracking-tighter text-ellipsis text-[--color-text-assistive]">
-                    (RD)
-                  </span>
-                </div>
-              </div>
-              <div className="flex flex-row flex-nowrap gap-1 items-center">
-                <div className="w-full relative">
-                  <DatePicker
-                    id="registerStartDate"
-                    name="registerStartDate"
-                    locale="ko"
-                    dateFormat={"yyyy-MM-dd"}
-                    className="outline-none border border-[#E1E5EB] rounded px-3 py-2 w-full text-sm"
-                    disabledKeyboardNavigation
-                    showIcon
-                    icon={<DateSvg />}
-                    popperPlacement="top-end"
-                    selected={rdDates?.startDate}
-                    onChange={(date) =>
-                      date &&
-                      setRdDates((prev) => {
-                        if (prev && prev.endDate) {
-                          return date > prev.endDate
-                            ? {
-                                startDate: date,
-                                endDate: new Date(new Date().setDate(date.getDate() + 1)),
-                              }
-                            : { ...prev, startDate: date };
-                        }
-                        return { ...prev, startDate: date };
-                      })
-                    }
-                    selectsStart
-                    startDate={rdDates?.startDate}
-                    endDate={rdDates?.endDate}
-                  />
-                  {rdDates?.startDate && (
-                    <button
-                      type="button"
-                      className="clear-button"
-                      onClick={() => setRdDates((prev) => ({ ...prev, startDate: undefined }))}
-                    />
-                  )}
-                </div>
-                <span>~</span>
-                <div className="w-full relative">
-                  <DatePicker
-                    id="registerEndDate"
-                    name="registerEndDate"
-                    locale="ko"
-                    dateFormat={"yyyy-MM-dd"}
-                    className="outline-none border border-[#E1E5EB] rounded px-3 py-2 w-full text-sm"
-                    disabledKeyboardNavigation
-                    showIcon
-                    icon={<DateSvg />}
-                    popperPlacement="top-start"
-                    selected={rdDates?.endDate}
-                    onChange={(date) => date && setRdDates((prev) => ({ ...prev, endDate: date }))}
-                    selectsEnd
-                    startDate={rdDates?.startDate}
-                    endDate={rdDates?.endDate}
-                    minDate={rdDates?.startDate}
-                  />
-                  {rdDates?.endDate && (
-                    <button
-                      type="button"
-                      className="clear-button"
-                      onClick={() => setRdDates((prev) => ({ ...prev, endDate: undefined }))}
-                    />
-                  )}
-                </div>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 gap-2">
-              <div className="flex flex-col flex-nowrap gap-2">
-                <div>
-                  <span className="text-sm font-medium tracking-tighter text-ellipsis text-[--color-text-normal]">
-                    국제등록일자&nbsp;
-                  </span>
-                  <span className="text-sm font-normal tracking-tighter text-ellipsis text-[--color-text-assistive]">
-                    (MD)
-                  </span>
-                </div>
-              </div>
-              <div className="flex flex-row flex-nowrap gap-1 items-center">
-                <div className="w-full relative">
-                  <DatePicker
-                    id="internationalRegisterStartDate"
-                    name="internationalRegisterStartDate"
-                    locale="ko"
-                    dateFormat={"yyyy-MM-dd"}
-                    className="outline-none border border-[#E1E5EB] rounded px-3 py-2 w-full text-sm"
-                    disabledKeyboardNavigation
-                    showIcon
-                    icon={<DateSvg />}
-                    popperPlacement="top-end"
-                    selected={mdDates?.startDate}
-                    onChange={(date) =>
-                      date &&
-                      setMdDates((prev) => {
-                        if (prev && prev.endDate) {
-                          return date > prev.endDate
-                            ? {
-                                startDate: date,
-                                endDate: new Date(new Date().setDate(date.getDate() + 1)),
-                              }
-                            : { ...prev, startDate: date };
-                        }
-                        return { ...prev, startDate: date };
-                      })
-                    }
-                    selectsStart
-                    startDate={mdDates?.startDate}
-                    endDate={mdDates?.endDate}
-                  />
-                  {mdDates?.startDate && (
-                    <button
-                      type="button"
-                      className="clear-button"
-                      onClick={() => setMdDates((prev) => ({ ...prev, startDate: undefined }))}
-                    />
-                  )}
-                </div>
-                <span>~</span>
-                <div className="w-full relative">
-                  <DatePicker
-                    id="internationalRegisterEndDate"
-                    name="internationalRegisterEndDate"
-                    locale="ko"
-                    dateFormat={"yyyy-MM-dd"}
-                    className="outline-none border border-[#E1E5EB] rounded px-3 py-2 w-full text-sm"
-                    disabledKeyboardNavigation
-                    showIcon
-                    icon={<DateSvg />}
-                    popperPlacement="top-start"
-                    selected={mdDates?.endDate}
-                    onChange={(date) => date && setMdDates((prev) => ({ ...prev, endDate: date }))}
-                    selectsEnd
-                    startDate={mdDates?.startDate}
-                    endDate={mdDates?.endDate}
-                    minDate={mdDates?.startDate}
-                  />
-                  {mdDates?.endDate && (
-                    <button
-                      type="button"
-                      className="clear-button"
-                      onClick={() => setMdDates((prev) => ({ ...prev, endDate: undefined }))}
-                    />
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-          {/** @section 권리자 정보 */}
-          <div key="authorizer-infomation" className="flex flex-col flex-nowrap gap-4 pb-2.5">
-            <h1 className="text-lg font-semibold tracking-tighter">권리자 정보</h1>
-            <div className="flex flex-row flex-nowrap gap-4 xs:grid xs:grid-cols-1">
-              <div className="flex flex-col flex-nowrap flex-1 gap-2">
-                <label htmlFor="applicantName">
-                  <span className="text-sm font-medium tracking-tighter text-ellipsis text-[--color-text-normal]">
-                    출원인&nbsp;
-                  </span>
-                  <span className="text-sm font-normal tracking-tighter text-ellipsis text-[--color-text-assistive]">
-                    (AP)
-                  </span>
-                </label>
-                <div>
-                  <input
-                    type="search"
-                    name="applicantName"
-                    id="applicantName"
-                    className="show-clear outline-none border border-[#E1E5EB] rounded px-3 py-2 w-full text-sm"
-                    defaultValue={filterOptions.applicantName}
-                    placeholder="ex)특허정보원"
-                    onKeyDown={onBlockEnterKey}
-                  />
-                </div>
-              </div>
-              <div className="flex flex-col flex-nowrap flex-1 gap-2">
-                <label htmlFor="regPrivilegeName">
-                  <span className="text-sm font-medium tracking-tighter text-ellipsis text-[--color-text-normal]">
-                    등록권자&nbsp;
-                  </span>
-                  <span className="text-sm font-normal tracking-tighter text-ellipsis text-[--color-text-assistive]">
-                    (RG)
-                  </span>
-                </label>
-                <div>
-                  <input
-                    type="search"
-                    name="regPrivilegeName"
-                    id="regPrivilegeName"
-                    className="show-clear outline-none border border-[#E1E5EB] rounded px-3 py-2 w-full text-sm"
-                    defaultValue={filterOptions.regPrivilegeName}
-                    placeholder="ex)툭허청장"
-                    onKeyDown={onBlockEnterKey}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-          {/** @section  */}
-          <div className="button-group flex flex-row flex-nowrap gap-2">
-            <button
-              type="button"
-              className="flex-1 text-[--color-primary-normal] bg-[--color-primary-weak] py-[10px] px-5 text-base font-semibold tracking-tighter rounded-lg hover:text-[--color-primary-strong] hover:bg-[--color-primary-assistive] transition-colors"
+      <div className="pt-20 text-[--color-text-strong] flex flex-col flex-nowrap gap-5 bg-white xs:px-4 xs:pt-0 xs:pb-5">
+        <div className="max-w-[45.5rem] m-auto">
+          <div className="title pb-[0.625rem] xs:fixed xs:w-full xs:pb-0 xs:left-0 xs:mt-[3.5rem] xs:h-[3.5rem] xs:border-b xs:border-b-[#E1E5EB] xs:bg-white">
+            <div
+              className="absolute hidden cursor-pointer px-3.5 xs:h-full xs:inline-flex xs:items-center xs:justify-center"
               onClick={onClose}
             >
-              취소
-            </button>
-            <button
-              type="submit"
-              className="flex-1 text-[--color-text-inverse] bg-[--color-primary-normal] py-[10px] px-5 text-base font-semibold tracking-tighter rounded-lg hover:text-[#F6F7F9] hover:bg-[--color-primary-strong] transition-colors"
-            >
-              필터 적용
-            </button>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                fill="none"
+              >
+                <path
+                  fillRule="evenodd"
+                  clipRule="evenodd"
+                  d="M13.3332 2.15479L5.48803 9.99996L13.3332 17.8451L14.5117 16.6666L7.84505 9.99996L14.5117 3.3333L13.3332 2.15479Z"
+                  fill="#474A4E"
+                />
+              </svg>
+            </div>
+            <h1 className="text-2xl font-bold tracking-tighter xs:text-base xs:flex xs:items-center xs:justify-center xs:h-full">
+              상세 검색
+            </h1>
           </div>
-        </form>
+          <form
+            id="filter-form"
+            className="flex flex-col flex-nowrap gap-5 xs:pt-32"
+            onSubmit={onSubmit}
+          >
+            {/** @section 행정상태  */}
+            <div key="administration-state" className="flex flex-col flex-nowrap gap-4">
+              <h1 className="text-lg font-semibold tracking-tighter">행정 상태</h1>
+              <div className="flex flex-row flex-nowrap gap-4 xs:grid xs:grid-cols-4 xs:gap-2">
+                <FilterCheckbox
+                  id="all"
+                  name="all"
+                  text="전체"
+                  checked
+                  onChange={(e) => {
+                    if (e.target.form) {
+                      e.target.form["application"] instanceof HTMLInputElement &&
+                        (e.target.form["application"].checked = e.target.checked);
+                      e.target.form["publication"] instanceof HTMLInputElement &&
+                        (e.target.form["publication"].checked = e.target.checked);
+                      e.target.form["withdrawal"] instanceof HTMLInputElement &&
+                        (e.target.form["withdrawal"].checked = e.target.checked);
+                      e.target.form["expiration"] instanceof HTMLInputElement &&
+                        (e.target.form["expiration"].checked = e.target.checked);
+                      e.target.form["abandonment"] instanceof HTMLInputElement &&
+                        (e.target.form["abandonment"].checked = e.target.checked);
+                      e.target.form["cancel"] instanceof HTMLInputElement &&
+                        (e.target.form["cancel"].checked = e.target.checked);
+                      e.target.form["refused"] instanceof HTMLInputElement &&
+                        (e.target.form["refused"].checked = e.target.checked);
+                      e.target.form["registration"] instanceof HTMLInputElement &&
+                        (e.target.form["registration"].checked = e.target.checked);
+                    }
+                  }}
+                />
+                <FilterCheckbox
+                  id="application"
+                  name="application"
+                  text="출원"
+                  checked
+                  onChange={onChangeCheckbox}
+                />
+                <FilterCheckbox
+                  id="publication"
+                  name="publication"
+                  text="공고"
+                  checked
+                  onChange={onChangeCheckbox}
+                />
+                <FilterCheckbox
+                  id="withdrawal"
+                  name="withdrawal"
+                  text="취하"
+                  checked
+                  onChange={onChangeCheckbox}
+                />
+                <FilterCheckbox
+                  id="expiration"
+                  name="expiration"
+                  text="소멸"
+                  checked
+                  onChange={onChangeCheckbox}
+                />
+                <FilterCheckbox
+                  id="abandonment"
+                  name="abandonment"
+                  text="포기"
+                  checked
+                  onChange={onChangeCheckbox}
+                />
+                <FilterCheckbox
+                  id="cancel"
+                  name="cancel"
+                  text="무효"
+                  checked
+                  onChange={onChangeCheckbox}
+                />
+                <FilterCheckbox
+                  id="refused"
+                  name="refused"
+                  text="거절"
+                  checked
+                  onChange={onChangeCheckbox}
+                />
+                <FilterCheckbox
+                  id="registration"
+                  name="registration"
+                  text="등록"
+                  checked
+                  onChange={onChangeCheckbox}
+                />
+              </div>
+            </div>
+            {/** @section 분류정보 */}
+            <div key="category" className="flex flex-col flex-nowrap gap-4">
+              <h1 className="text-lg font-semibold tracking-tighter">분류정보</h1>
+              <div className="flex flex-row flex-nowrap gap-4 xs:grid xs:grid-cols-1">
+                <div className="flex flex-col flex-nowrap flex-1 gap-2">
+                  <label htmlFor="classification">
+                    <span className="text-sm font-medium tracking-tighter text-ellipsis text-[--color-text-normal]">
+                      상품분류&nbsp;
+                    </span>
+                    <span className="text-sm font-normal tracking-tighter text-ellipsis text-[--color-text-assistive]">
+                      (TC)
+                    </span>
+                  </label>
+                  <div>
+                    <input
+                      type="search"
+                      name="classification"
+                      id="classification"
+                      className="show-clear outline-none border border-[#E1E5EB] rounded !px-3 !py-1 w-full text-xs peer invalid:border-2 invalid:border-[#EF7070]"
+                      defaultValue={filterOptions.classification}
+                      placeholder="ex) 06+09+11"
+                      pattern="\d+(\+\d+)*"
+                      onKeyDown={onBlockEnterKey}
+                    />
+                    <p className="invisible hidden mt-2 font-medium text-xs text-ellipsis text-[#EF7070] peer-invalid:visible peer-invalid:block">
+                      유효하지 않은 번호 입니다. 입력한 번호를 확인해 주세요.
+                    </p>
+                  </div>
+                </div>
+                <div className="flex flex-col flex-nowrap flex-1 gap-2">
+                  <label htmlFor="similarityCode">
+                    <span className="text-sm font-medium tracking-tighter text-ellipsis text-[--color-text-normal]">
+                      유사군&nbsp;
+                    </span>
+                    <span className="text-sm font-normal tracking-tighter text-ellipsis text-[--color-text-assistive]">
+                      (SC)
+                    </span>
+                  </label>
+                  <div>
+                    <input
+                      type="search"
+                      name="similarityCode"
+                      id="similarityCode"
+                      className="show-clear outline-none border border-[#E1E5EB] rounded !px-3 !py-1 w-full text-xs peer invalid:border-2 invalid:border-[#EF7070]"
+                      defaultValue={filterOptions.similarityCode}
+                      placeholder="ex) G1004+G1103"
+                      pattern="G\d+(\+G\d+)*"
+                      onKeyDown={onBlockEnterKey}
+                    />
+                    <p className="invisible hidden mt-2 font-medium text-xs text-ellipsis text-[#EF7070] peer-invalid:visible peer-invalid:block">
+                      유효하지 않은 번호 입니다. 입력한 번호를 확인해 주세요.
+                    </p>
+                  </div>
+                </div>
+                <div className="flex flex-col flex-nowrap flex-1 gap-2">
+                  <label htmlFor="asignProduct">
+                    <span className="text-sm font-medium tracking-tighter text-ellipsis text-[--color-text-normal]">
+                      지정상품&nbsp;
+                    </span>
+                    <span className="text-sm font-normal tracking-tighter text-ellipsis text-[--color-text-assistive]">
+                      (GD)
+                    </span>
+                  </label>
+                  <div>
+                    <input
+                      type="search"
+                      name="asignProduct"
+                      id="asignProduct"
+                      className="show-clear outline-none border border-[#E1E5EB] rounded !px-3 !py-1 w-full text-xs peer invalid:border-2 invalid:border-[#EF7070]"
+                      defaultValue={filterOptions.asignProduct}
+                      placeholder="ex)스마트폰+통신+식물*재배"
+                      pattern="[가-힣+*]+"
+                      onKeyDown={onBlockEnterKey}
+                    />
+                    <p className="invisible hidden mt-2 font-medium text-xs text-ellipsis text-[#EF7070] peer-invalid:visible peer-invalid:block">
+                      유효하지 않은 번호 입니다. 입력한 번호를 확인해 주세요.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {/** @section 번호정보 */}
+            <div key="number-infomation" className="flex flex-col flex-nowrap gap-4">
+              <h1 className="text-lg font-semibold tracking-tighter">번호정보</h1>
+              <div className="flex flex-row flex-nowrap gap-4 xs:grid xs:grid-cols-1">
+                <div className="flex flex-col flex-nowrap flex-1 gap-2">
+                  <label htmlFor="applicationNumber">
+                    <span className="text-sm font-medium tracking-tighter text-ellipsis text-[--color-text-normal]">
+                      출원번호&nbsp;
+                    </span>
+                    <span className="text-sm font-normal tracking-tighter text-ellipsis text-[--color-text-assistive]">
+                      (AN)
+                    </span>
+                  </label>
+                  <div>
+                    <input
+                      type="search"
+                      name="applicationNumber"
+                      id="applicationNumber"
+                      className="show-clear outline-none border border-[#E1E5EB] rounded !px-3 !py-1 w-full text-xs peer invalid:border-2 invalid:border-[#EF7070]"
+                      defaultValue={filterOptions.applicationNumber}
+                      placeholder="ex)40201200123456"
+                      pattern="\d+"
+                      onKeyDown={onBlockEnterKey}
+                    />
+                    <p className="invisible hidden mt-2 font-medium text-xs text-ellipsis text-[#EF7070] peer-invalid:visible peer-invalid:block">
+                      유효하지 않은 번호 입니다. 입력한 번호를 확인해 주세요.
+                    </p>
+                  </div>
+                </div>
+                <div className="flex flex-col flex-nowrap flex-1 gap-2">
+                  <label htmlFor="internationalRegisterNumber">
+                    <span className="text-sm font-medium tracking-tighter text-ellipsis text-[--color-text-normal]">
+                      국제 등록번호&nbsp;
+                    </span>
+                    <span className="text-sm font-normal tracking-tighter text-ellipsis text-[--color-text-assistive]">
+                      (MN)
+                    </span>
+                  </label>
+                  <div>
+                    <input
+                      type="search"
+                      name="internationalRegisterNumber"
+                      id="internationalRegisterNumber"
+                      className="show-clear outline-none border border-[#E1E5EB] rounded !px-3 !py-1 w-full text-xs peer invalid:border-2 invalid:border-[#EF7070]"
+                      defaultValue={filterOptions.internationalRegisterNumber}
+                      placeholder="ex)12345607"
+                      pattern="\d+"
+                      onKeyDown={onBlockEnterKey}
+                    />
+                    <p className="invisible hidden mt-2 font-medium text-xs text-ellipsis text-[#EF7070] peer-invalid:visible peer-invalid:block">
+                      유효하지 않은 번호 입니다. 입력한 번호를 확인해 주세요.
+                    </p>
+                  </div>
+                </div>
+                <div className="flex flex-col flex-nowrap flex-1 gap-2">
+                  <label htmlFor="registerNumber">
+                    <span className="text-sm font-medium tracking-tighter text-ellipsis text-[--color-text-normal]">
+                      등록번호&nbsp;
+                    </span>
+                    <span className="text-sm font-normal tracking-tighter text-ellipsis text-[--color-text-assistive]">
+                      (RN)
+                    </span>
+                  </label>
+                  <div>
+                    <input
+                      type="search"
+                      name="registerNumber"
+                      id="registerNumber"
+                      className="show-clear outline-none border border-[#E1E5EB] rounded !px-3 !py-1 w-full text-xs peer invalid:border-2 invalid:border-[#EF7070]"
+                      defaultValue={filterOptions.registerNumber}
+                      placeholder="ex)4012345670000"
+                      pattern="\d+"
+                      onKeyDown={onBlockEnterKey}
+                    />
+                    <p className="invisible hidden mt-2 font-medium text-xs text-ellipsis text-[#EF7070] peer-invalid:visible peer-invalid:block">
+                      유효하지 않은 번호 입니다. 입력한 번호를 확인해 주세요.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {/** @section 일자정보 */}
+            <div key="date-infomation" className="flex flex-col flex-nowrap gap-4">
+              <h1 className="text-lg font-semibold tracking-tighter">일자정보</h1>
+              <div className="grid grid-cols-1 gap-2">
+                <div className="flex flex-col flex-nowrap gap-2">
+                  <div>
+                    <span className="text-sm font-medium tracking-tighter text-ellipsis text-[--color-text-normal]">
+                      출원일자&nbsp;
+                    </span>
+                    <span className="text-sm font-normal tracking-tighter text-ellipsis text-[--color-text-assistive]">
+                      (TC)
+                    </span>
+                  </div>
+                </div>
+                <div className="flex flex-row flex-nowrap gap-1 items-center">
+                  <div className="w-full relative">
+                    <DatePicker
+                      id="applicationStartDate"
+                      name="applicationStartDate"
+                      locale="ko"
+                      dateFormat={"yyyy-MM-dd"}
+                      className="outline-none border border-[#E1E5EB] rounded !px-3 !py-1 w-full text-xs"
+                      disabledKeyboardNavigation
+                      showIcon
+                      icon={<DateSvg />}
+                      popperPlacement="top-end"
+                      selected={tdDates?.startDate}
+                      onChange={(date) =>
+                        date &&
+                        setTdDates((prev) => {
+                          if (prev && prev.endDate) {
+                            return date > prev.endDate
+                              ? {
+                                  startDate: date,
+                                  endDate: new Date(new Date().setDate(date.getDate() + 1)),
+                                }
+                              : { ...prev, startDate: date };
+                          }
+                          return { ...prev, startDate: date };
+                        })
+                      }
+                      selectsStart
+                      startDate={tdDates?.startDate}
+                      endDate={tdDates?.endDate}
+                    />
+                    {tdDates?.startDate && (
+                      <button
+                        type="button"
+                        className="clear-button"
+                        onClick={() => setTdDates((prev) => ({ ...prev, startDate: undefined }))}
+                      />
+                    )}
+                  </div>
+                  <span>~</span>
+                  <div className="w-full relative">
+                    <DatePicker
+                      id="applicationEndDate"
+                      name="applicationEndDate"
+                      locale="ko"
+                      dateFormat={"yyyy-MM-dd"}
+                      className="outline-none border border-[#E1E5EB] rounded !px-3 !py-1 w-full text-xs"
+                      disabledKeyboardNavigation
+                      showIcon
+                      icon={<DateSvg />}
+                      popperPlacement="top-start"
+                      selected={tdDates?.endDate}
+                      onChange={(date) =>
+                        date && setTdDates((prev) => ({ ...prev, endDate: date }))
+                      }
+                      selectsEnd
+                      startDate={tdDates?.startDate}
+                      endDate={tdDates?.endDate}
+                      minDate={tdDates?.startDate}
+                    />
+                    {tdDates?.endDate && (
+                      <button
+                        type="button"
+                        className="clear-button"
+                        onClick={() => setTdDates((prev) => ({ ...prev, endDate: undefined }))}
+                      />
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 gap-2">
+                <div className="flex flex-col flex-nowrap gap-2">
+                  <div>
+                    <span className="text-sm font-medium tracking-tighter text-ellipsis text-[--color-text-normal]">
+                      등록일자&nbsp;
+                    </span>
+                    <span className="text-sm font-normal tracking-tighter text-ellipsis text-[--color-text-assistive]">
+                      (RD)
+                    </span>
+                  </div>
+                </div>
+                <div className="flex flex-row flex-nowrap gap-1 items-center">
+                  <div className="w-full relative">
+                    <DatePicker
+                      id="registerStartDate"
+                      name="registerStartDate"
+                      locale="ko"
+                      dateFormat={"yyyy-MM-dd"}
+                      className="outline-none border border-[#E1E5EB] rounded !px-3 !py-1 w-full text-xs"
+                      disabledKeyboardNavigation
+                      showIcon
+                      icon={<DateSvg />}
+                      popperPlacement="top-end"
+                      selected={rdDates?.startDate}
+                      onChange={(date) =>
+                        date &&
+                        setRdDates((prev) => {
+                          if (prev && prev.endDate) {
+                            return date > prev.endDate
+                              ? {
+                                  startDate: date,
+                                  endDate: new Date(new Date().setDate(date.getDate() + 1)),
+                                }
+                              : { ...prev, startDate: date };
+                          }
+                          return { ...prev, startDate: date };
+                        })
+                      }
+                      selectsStart
+                      startDate={rdDates?.startDate}
+                      endDate={rdDates?.endDate}
+                    />
+                    {rdDates?.startDate && (
+                      <button
+                        type="button"
+                        className="clear-button"
+                        onClick={() => setRdDates((prev) => ({ ...prev, startDate: undefined }))}
+                      />
+                    )}
+                  </div>
+                  <span>~</span>
+                  <div className="w-full relative">
+                    <DatePicker
+                      id="registerEndDate"
+                      name="registerEndDate"
+                      locale="ko"
+                      dateFormat={"yyyy-MM-dd"}
+                      className="outline-none border border-[#E1E5EB] rounded !px-3 !py-1 w-full text-xs"
+                      disabledKeyboardNavigation
+                      showIcon
+                      icon={<DateSvg />}
+                      popperPlacement="top-start"
+                      selected={rdDates?.endDate}
+                      onChange={(date) =>
+                        date && setRdDates((prev) => ({ ...prev, endDate: date }))
+                      }
+                      selectsEnd
+                      startDate={rdDates?.startDate}
+                      endDate={rdDates?.endDate}
+                      minDate={rdDates?.startDate}
+                    />
+                    {rdDates?.endDate && (
+                      <button
+                        type="button"
+                        className="clear-button"
+                        onClick={() => setRdDates((prev) => ({ ...prev, endDate: undefined }))}
+                      />
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 gap-2">
+                <div className="flex flex-col flex-nowrap gap-2">
+                  <div>
+                    <span className="text-sm font-medium tracking-tighter text-ellipsis text-[--color-text-normal]">
+                      국제등록일자&nbsp;
+                    </span>
+                    <span className="text-sm font-normal tracking-tighter text-ellipsis text-[--color-text-assistive]">
+                      (MD)
+                    </span>
+                  </div>
+                </div>
+                <div className="flex flex-row flex-nowrap gap-1 items-center">
+                  <div className="w-full relative">
+                    <DatePicker
+                      id="internationalRegisterStartDate"
+                      name="internationalRegisterStartDate"
+                      locale="ko"
+                      dateFormat={"yyyy-MM-dd"}
+                      className="outline-none border border-[#E1E5EB] rounded !px-3 !py-1 w-full text-xs"
+                      disabledKeyboardNavigation
+                      showIcon
+                      icon={<DateSvg />}
+                      popperPlacement="top-end"
+                      selected={mdDates?.startDate}
+                      onChange={(date) =>
+                        date &&
+                        setMdDates((prev) => {
+                          if (prev && prev.endDate) {
+                            return date > prev.endDate
+                              ? {
+                                  startDate: date,
+                                  endDate: new Date(new Date().setDate(date.getDate() + 1)),
+                                }
+                              : { ...prev, startDate: date };
+                          }
+                          return { ...prev, startDate: date };
+                        })
+                      }
+                      selectsStart
+                      startDate={mdDates?.startDate}
+                      endDate={mdDates?.endDate}
+                    />
+                    {mdDates?.startDate && (
+                      <button
+                        type="button"
+                        className="clear-button"
+                        onClick={() => setMdDates((prev) => ({ ...prev, startDate: undefined }))}
+                      />
+                    )}
+                  </div>
+                  <span>~</span>
+                  <div className="w-full relative">
+                    <DatePicker
+                      id="internationalRegisterEndDate"
+                      name="internationalRegisterEndDate"
+                      locale="ko"
+                      dateFormat={"yyyy-MM-dd"}
+                      className="outline-none border border-[#E1E5EB] rounded !px-3 !py-1 w-full text-xs"
+                      disabledKeyboardNavigation
+                      showIcon
+                      icon={<DateSvg />}
+                      popperPlacement="top-start"
+                      selected={mdDates?.endDate}
+                      onChange={(date) =>
+                        date && setMdDates((prev) => ({ ...prev, endDate: date }))
+                      }
+                      selectsEnd
+                      startDate={mdDates?.startDate}
+                      endDate={mdDates?.endDate}
+                      minDate={mdDates?.startDate}
+                    />
+                    {mdDates?.endDate && (
+                      <button
+                        type="button"
+                        className="clear-button"
+                        onClick={() => setMdDates((prev) => ({ ...prev, endDate: undefined }))}
+                      />
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+            {/** @section 권리자 정보 */}
+            <div key="authorizer-infomation" className="flex flex-col flex-nowrap gap-4">
+              <h1 className="text-lg font-semibold tracking-tighter">권리자 정보</h1>
+              <div className="flex flex-row flex-nowrap gap-4 xs:grid xs:grid-cols-1">
+                <div className="flex flex-col flex-nowrap flex-1 gap-2">
+                  <label htmlFor="applicantName">
+                    <span className="text-sm font-medium tracking-tighter text-ellipsis text-[--color-text-normal]">
+                      출원인&nbsp;
+                    </span>
+                    <span className="text-sm font-normal tracking-tighter text-ellipsis text-[--color-text-assistive]">
+                      (AP)
+                    </span>
+                  </label>
+                  <div>
+                    <input
+                      type="search"
+                      name="applicantName"
+                      id="applicantName"
+                      className="show-clear outline-none border border-[#E1E5EB] rounded !px-3 !py-1 w-full text-xs"
+                      defaultValue={filterOptions.applicantName}
+                      placeholder="ex)특허정보원"
+                      onKeyDown={onBlockEnterKey}
+                    />
+                  </div>
+                </div>
+                <div className="flex flex-col flex-nowrap flex-1 gap-2">
+                  <label htmlFor="regPrivilegeName">
+                    <span className="text-sm font-medium tracking-tighter text-ellipsis text-[--color-text-normal]">
+                      등록권자&nbsp;
+                    </span>
+                    <span className="text-sm font-normal tracking-tighter text-ellipsis text-[--color-text-assistive]">
+                      (RG)
+                    </span>
+                  </label>
+                  <div>
+                    <input
+                      type="search"
+                      name="regPrivilegeName"
+                      id="regPrivilegeName"
+                      className="show-clear outline-none border border-[#E1E5EB] rounded !px-3 !py-1 w-full text-xs"
+                      defaultValue={filterOptions.regPrivilegeName}
+                      placeholder="ex)특허청장"
+                      onKeyDown={onBlockEnterKey}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            {/** @section  */}
+            <div className="button-group flex flex-row flex-nowrap gap-2">
+              <button
+                type="button"
+                className="flex-1 text-[--color-primary-normal] bg-[--color-primary-weak] py-[10px] px-5 text-base font-semibold tracking-tighter rounded-lg hover:text-[--color-primary-strong] hover:bg-[--color-primary-assistive] transition-colors"
+                onClick={onClose}
+              >
+                취소
+              </button>
+              <button
+                type="submit"
+                className="flex-1 text-[--color-text-inverse] bg-[--color-primary-normal] py-[10px] px-5 text-base font-semibold tracking-tighter rounded-lg hover:text-[#F6F7F9] hover:bg-[--color-primary-strong] transition-colors"
+              >
+                검색하기
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </section>
   );

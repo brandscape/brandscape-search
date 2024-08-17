@@ -37,7 +37,7 @@ export type DetailSearchDataType = Partial<
     Brand,
     | "title"
     | "applicationNumber"
-    | "internationalRegisterNumber"
+    | "registrationNumber"
     | "applicantName"
     | "regPrivilegeName"
     | "applicationDate"

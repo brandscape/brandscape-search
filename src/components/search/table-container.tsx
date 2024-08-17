@@ -1,7 +1,9 @@
 import { Brand, SearchResponse } from "@/app/search/type";
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import TrademarkTable from "./trademark-table";
 import { usePathname, useRouter } from "next/navigation";
+import { useRecoilState } from "recoil";
+import { activeTabState } from "@/recoil/search/search-atom";
 
 type BodySet = Record<"allDataBody" | "validDataBody", SearchResponse<Brand>["response"]["body"]>;
 type CountSet = Record<
@@ -18,7 +20,7 @@ export default function TableContainer({
 }: TableProps) {
   const router = useRouter();
   const pathname = usePathname();
-  const [activeTab, setActiveTab] = useState<number>(1);
+  const [activeTab, setActiveTab] = useRecoilState(activeTabState);
 
   const onClickTab = useCallback(
     (activeIndex: number) => () => {
@@ -35,10 +37,10 @@ export default function TableContainer({
       {/** Tabs  */}
       <div className="tabs">
         <div className="flex justify-center">
-          <ul className="flex bg-gray-100 rounded-lg transition-all duration-300 p-0.5 overflow-hidden">
+          <ul className="flex bg-gray-100 rounded-lg transition-all duration-300 p-1 overflow-hidden">
             <li
               className={
-                "inline-block py-3 px-6 text-[--color-text-assistive] hover:text-[--color-text-normal] font-semibold text-base whitespace-nowrap cursor-pointer data-[active=true]:text-[--color-text-normal] data-[active=true]:bg-white data-[active=true]:rounded-lg data-[active=true]:shadow-tab-shadow"
+                "inline-block py-3 px-6 text-[--color-text-assistive] hover:text-[--color-text-normal] font-semibold text-base whitespace-nowrap cursor-pointer data-[active=true]:text-[--color-text-inverse] data-[active=true]:bg-[--color-primary-normal] data-[active=true]:rounded-lg data-[active=true]:shadow-tab-shadow"
               }
               data-tab={`tabs-1`}
               data-active={activeTab === 1}
@@ -48,7 +50,7 @@ export default function TableContainer({
               모든 상표
             </li>
             <li
-              className="inline-block py-3 px-6 text-[--color-text-assistive] hover:text-[--color-text-normal] font-semibold text-base whitespace-nowrap cursor-pointer data-[active=true]:text-[--color-text-normal] data-[active=true]:bg-white data-[active=true]:rounded-lg data-[active=true]:shadow-tab-shadow"
+              className="inline-block py-3 px-6 text-[--color-text-assistive] hover:text-[--color-text-normal] font-semibold text-base whitespace-nowrap cursor-pointer data-[active=true]:text-[--color-text-inverse] data-[active=true]:bg-[--color-primary-normal] data-[active=true]:rounded-lg data-[active=true]:shadow-tab-shadow"
               data-tab={`tabs-2`}
               data-active={activeTab === 2}
               role="tab"

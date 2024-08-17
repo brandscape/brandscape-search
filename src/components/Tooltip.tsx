@@ -1,14 +1,17 @@
 interface Props {
   text: string;
-  placement: "top" | "bottom";
+  placement: "top-left" | "bottom-left";
+  isOnlyShow?: boolean;
 }
 
-export default function Tooltip({ text, placement }: Props) {
+export default function Tooltip({ text, placement, isOnlyShow = false }: Props) {
   return (
     <div
-      className={`tooltip inline-flex justify-center p-2 rounded-md shadow-lg bg-black text-white text-xs font-bold whitespace-nowrap ${
-        placement === "bottom" ? "tooltip-bottom" : "tooltip-top"
-      }`}
+      className={`
+      tooltip inline-flex justify-center p-2 rounded-md shadow-lg bg-black text-white text-xs font-medium whitespace-nowrap 
+      pointer-events-none
+      ${placement === "bottom-left" ? "tooltip-bottom-left" : "tooltip-top-left"}`}
+      {...(isOnlyShow && { style: { visibility: "visible", opacity: 1 } })}
     >
       <span>{text}</span>
       <svg width="12" height="9" viewBox="0 0 12 9" fill="none" xmlns="http://www.w3.org/2000/svg">

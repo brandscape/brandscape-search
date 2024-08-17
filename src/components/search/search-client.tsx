@@ -104,7 +104,7 @@ export default function SearchClient({ allTrademarkData }: Props) {
           className="has-tooltip inline-flex justify-center items-center p-3 w-[3.125rem] h-[3.125rem] rounded-lg bg-[#EDF0F4]"
           onClick={onFilterClick}
         >
-          <Tooltip placement="bottom" text="클릭 시 상세 검색이 가능합니다." />
+          <Tooltip isOnlyShow placement="top-left" text="클릭 시 상세 검색이 가능합니다." />
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="18"
