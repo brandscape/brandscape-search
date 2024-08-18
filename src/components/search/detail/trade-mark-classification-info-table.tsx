@@ -25,29 +25,28 @@ export default function TradeMarkClassificationInfoTable({ body }: Props) {
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#F6F7F9] border-b border-b-[#F6F7F9]">
-                {body.items.tradeMarkClassificationInfo.map((item, index) => (
-                  <tr
-                    key={`trade-mark-classification-info-td-${index}`}
-                    className="table-row bg-white transition-all duration-300 hover:bg-[#F6F7F9] h-10 text-[--color-text-normal] xs:h-8"
-                  >
-                    <td className="px-1 py-2 text-xs font-normal -tracking-[0.04rem] text-center">
-                      {item.classOfGoodSerialNumber}
-                    </td>
-                    <td className="px-1 py-2 text-xs font-normal -tracking-[0.04rem] text-center">
-                      {item.goodsClassificationCode ? `${item.goodsClassificationCode}류` : "-"}
-                    </td>
-                    <td className="px-1 py-2 text-xs font-normal -tracking-[0.04rem] text-center">
-                      (준비중)
-                    </td>
-                    <td className="px-1 py-2 text-xs font-normal -tracking-[0.04rem] text-center">
-                      <div className="flex justify-center">
-                        <span className="block max-w-24 text-ellipsis break-keep whitespace-nowrap overflow-hidden">
-                          {item.classofgoodServiceName}
-                        </span>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                {typeof body.items !== "string" &&
+                  body.items.tradeMarkClassificationInfo.map((item, index) => (
+                    <tr
+                      key={`trade-mark-classification-info-td-${index}`}
+                      className="table-row bg-white transition-all duration-300 hover:bg-[#F6F7F9] h-10 text-[--color-text-normal] xs:h-8"
+                    >
+                      <td className="px-1 py-2 text-xs font-normal -tracking-[0.04rem] text-center">
+                        {item.classOfGoodSerialNumber}
+                      </td>
+                      <td className="px-1 py-2 text-xs font-normal -tracking-[0.04rem] text-center">
+                        {item.goodsClassificationCode ? `${item.goodsClassificationCode}류` : "-"}
+                      </td>
+                      <td className="px-1 py-2 text-xs font-normal -tracking-[0.04rem] text-center">
+                        (준비중)
+                      </td>
+                      <td className="px-1 py-2 text-xs font-normal -tracking-[0.04rem] text-center">
+                        <div className="flex justify-center min-w-80 xs:min-w-fit">
+                          <span className="block">{item.classofgoodServiceName}</span>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
           </div>

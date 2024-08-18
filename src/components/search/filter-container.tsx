@@ -131,7 +131,10 @@ export default function FilterContainer({
         (internationalRegisterStartDateEl.value || internationalRegisterEndDateEl.value) &&
           (searchString += `&md=${internationalRegisterStartDateEl.value}~${internationalRegisterEndDateEl.value}`);
 
-        const queryString = `?s=${searchText || searchParams.get("s")}${searchString}`;
+        const queryString = `?${
+          searchText ? `s=${searchText || searchParams.get("s")}` : ""
+        }${searchString}`;
+
         if (decodeURIComponent(window.location.search) !== queryString) {
           router.push(`/search${queryString}`);
           setSearchLoading(true);
@@ -277,9 +280,9 @@ export default function FilterContainer({
       role="dialog"
       className={`${
         isFilterOpen ? "block visible z-[1] opacity-100" : "hidden invisible -z-[1] opacity-0"
-      } absolute top-0 left-0 min-h-screen bg-white w-full h-full`}
+      } absolute top-0 left-0 min-h-[calc(100vh_+_300px)] bg-white w-full h-full`}
     >
-      <div className="pt-20 text-[--color-text-strong] flex flex-col flex-nowrap gap-5 bg-white xs:px-4 xs:pt-0 xs:pb-5">
+      <div className="pt-20 pb-8 text-[--color-text-strong] flex flex-col flex-nowrap gap-5 bg-white xs:px-4 xs:pt-0 xs:pb-5">
         <div className="max-w-[45.5rem] m-auto">
           <div className="title pb-[0.625rem] xs:fixed xs:w-full xs:pb-0 xs:left-0 xs:mt-[3.5rem] xs:h-[3.5rem] xs:border-b xs:border-b-[#E1E5EB] xs:bg-white">
             <div
@@ -612,14 +615,21 @@ export default function FilterContainer({
                         date &&
                         setTdDates((prev) => {
                           if (prev && prev.endDate) {
+                            const endData = new Date(date);
                             return date > prev.endDate
                               ? {
                                   startDate: date,
-                                  endDate: new Date(new Date().setDate(date.getDate() + 1)),
+                                  endDate: new Date(endData.setDate(date.getDate() + 1)),
                                 }
                               : { ...prev, startDate: date };
                           }
-                          return { ...prev, startDate: date };
+                          const endData = new Date(date);
+
+                          return {
+                            ...prev,
+                            startDate: date,
+                            endDate: new Date(endData.setMonth(endData.getMonth() + 1)),
+                          };
                         })
                       }
                       selectsStart
@@ -694,14 +704,21 @@ export default function FilterContainer({
                         date &&
                         setRdDates((prev) => {
                           if (prev && prev.endDate) {
+                            const endData = new Date(date);
                             return date > prev.endDate
                               ? {
                                   startDate: date,
-                                  endDate: new Date(new Date().setDate(date.getDate() + 1)),
+                                  endDate: new Date(endData.setDate(date.getDate() + 1)),
                                 }
                               : { ...prev, startDate: date };
                           }
-                          return { ...prev, startDate: date };
+                          const endData = new Date(date);
+
+                          return {
+                            ...prev,
+                            startDate: date,
+                            endDate: new Date(endData.setMonth(endData.getMonth() + 1)),
+                          };
                         })
                       }
                       selectsStart
@@ -776,14 +793,21 @@ export default function FilterContainer({
                         date &&
                         setMdDates((prev) => {
                           if (prev && prev.endDate) {
+                            const endData = new Date(date);
                             return date > prev.endDate
                               ? {
                                   startDate: date,
-                                  endDate: new Date(new Date().setDate(date.getDate() + 1)),
+                                  endDate: new Date(endData.setDate(date.getDate() + 1)),
                                 }
                               : { ...prev, startDate: date };
                           }
-                          return { ...prev, startDate: date };
+                          const endData = new Date(date);
+
+                          return {
+                            ...prev,
+                            startDate: date,
+                            endDate: new Date(endData.setMonth(endData.getMonth() + 1)),
+                          };
                         })
                       }
                       selectsStart

@@ -98,24 +98,33 @@ export default function TrademarkTable({ body, count }: Props) {
                 <tr className="bg-[#F6F7F9] border-b border-b-[#E1E5EB]">
                   {[
                     "출원정보",
-                    "출원인",
-                    "출원일/등록일",
+                    // "출원인",
+
                     "상태",
                     "견본",
                     "상호명",
                     "분류",
-                    "신청인",
+                    "출원인",
                     "출원일",
                     "등록일",
                     "출원번호",
                     "등록번호",
+                    "출원일/등록일",
                   ].map((text, index) =>
-                    ["출원정보", "출원인", "출원일/등록일"].includes(text) ? (
+                    ["출원정보", "출원일/등록일"].includes(text) ? (
                       // Mobile display
                       <th
                         key={`all-th-${index}`}
                         scope="col"
                         className={`px-3.5 py-3 text-center whitespace-nowrap text-sm leading-4 font-normal text-[--color-text-assistive] capitalize hidden xs:table-cell`}
+                      >
+                        {text}
+                      </th>
+                    ) : text === "출원인" ? (
+                      <th
+                        key={`all-th-${index}`}
+                        scope="col"
+                        className={`px-3.5 py-3 text-center whitespace-nowrap text-sm leading-4 font-normal text-[--color-text-assistive] capitalize`}
                       >
                         {text}
                       </th>

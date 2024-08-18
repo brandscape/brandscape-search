@@ -55,7 +55,7 @@ export default function KeywordStorage() {
       if (index !== -1) {
         copySearchKeyword = [
           ...copySearchKeyword.slice(0, index),
-          ...copySearchKeyword.slice(index),
+          ...copySearchKeyword.slice(index + 1),
         ];
         setSearchKeyword(copySearchKeyword);
         localStorage.setItem(keywordStr, copySearchKeyword.join(","));

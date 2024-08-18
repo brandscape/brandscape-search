@@ -27,7 +27,7 @@ export default function IdentityClient() {
       applicationNumber: undefined,
       trademarkName: undefined,
     }));
-  }, []);
+  }, [setFilterOptions]);
   return (
     <main className="flex min-h-screen py-24 m-auto max-w-[60rem] xs:px-4 relative">
       {!isSearchLoading ? (

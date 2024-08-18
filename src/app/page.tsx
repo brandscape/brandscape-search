@@ -41,8 +41,8 @@ export default function Home() {
           router.push(`/search?s=${searchInput.value}`);
         } else {
           toast.isActive(id)
-            ? toast.update(id, { render: "상호 또는 상표를 입력하세요" })
-            : toast.info("상호 또는 상표를 입력하세요", { toastId: id });
+            ? toast.update(id, { render: "키워드를 입력하세요" })
+            : toast.info("키워드를 입력하세요", { toastId: id });
         }
       }
     },

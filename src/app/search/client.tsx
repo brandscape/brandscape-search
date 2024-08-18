@@ -61,12 +61,12 @@ export default function Client({ allTrademarkData, validTrademarkData }: Props) 
             )}
           </section>
         )}
-        <FilterContainer
-          tdDateState={[tdDates, setTdDates]}
-          rdDateState={[rdDates, setRdDates]}
-          mdDateState={[mdDates, setMdDates]}
-        />
       </main>
+      <FilterContainer
+        tdDateState={[tdDates, setTdDates]}
+        rdDateState={[rdDates, setRdDates]}
+        mdDateState={[mdDates, setMdDates]}
+      />
     </>
   );
 }

@@ -2,6 +2,7 @@
 
 import TradeMarkClassificationInfoTable from "@/components/search/detail/trade-mark-classification-info-table";
 import { detailSearchDataState } from "@/recoil/search/search-atom";
+import { parse, format } from "date-fns";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useRecoilValue } from "recoil";
@@ -69,18 +70,30 @@ export default function Client({
           {/* {JSON.stringify(detailSearchData)} */}
           <div className="flex-1 grid grid-cols-[1fr_2.5fr] items-center text-sm font-normal tracking-tighter">
             <div className="h-full text-[--color-text-assistive] bg-[#F6F7F9] inline-flex items-center px-2 py-3">
-              출원번호
+              출원번호/출원일
             </div>
             <div className="h-full text-[--color-text-normal] bg-white inline-flex items-center px-2 py-3 border-b border-[#F6F7F9]">
-              {detailSearchData.applicationNumber || "-"}
+              {detailSearchData.applicationNumber || "-"}&nbsp;/&nbsp;
+              {detailSearchData.applicationDate
+                ? format(
+                    parse(detailSearchData.applicationDate, "yyyyMMdd", new Date()),
+                    "yyyy-MM-dd"
+                  )
+                : "-"}
             </div>
           </div>
           <div className="flex-1 grid grid-cols-[1fr_2.5fr] items-center text-sm font-normal tracking-tighter">
             <div className="h-full text-[--color-text-assistive] bg-[#F6F7F9] inline-flex items-center px-2 py-3">
-              등록번호
+              등록번호/등록일
             </div>
             <div className="h-full text-[--color-text-normal] bg-white inline-flex items-center px-2 py-3 border-b border-[#F6F7F9]">
-              {detailSearchData.registrationNumber || "-"}
+              {detailSearchData.registrationNumber || "-"}&nbsp;/&nbsp;
+              {detailSearchData.registrationDate
+                ? format(
+                    parse(detailSearchData.registrationDate, "yyyyMMdd", new Date()),
+                    "yyyy-MM-dd"
+                  )
+                : "-"}
             </div>
           </div>
           <div className="flex-1 grid grid-cols-[1fr_2.5fr] items-center text-sm font-normal tracking-tighter">

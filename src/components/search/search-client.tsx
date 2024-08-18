@@ -4,7 +4,7 @@ import { BaseSyntheticEvent, useCallback, useEffect, useId } from "react";
 import SearchInput from "../SearchInput";
 import { Brand, SearchResponse, keywordStr } from "@/app/search/type";
 import { useRouter } from "next/navigation";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import {
   filterOptionState,
   isFilterOpenState,
@@ -49,12 +49,25 @@ export default function SearchClient({ allTrademarkData }: Props) {
             localStorage.setItem(keywordStr, keywords.slice(0, 8).toString());
             setSearchKeyword(keywords);
 
-            setFilterOptions((prev) => ({
-              ...prev,
-              ...(isApplicationNumber(searchInput.value)
-                ? { applicationNumber: searchInput.value, trademarkName: undefined }
-                : { trademarkName: searchInput.value, applicationNumber: undefined }),
-            }));
+            setFilterOptions((prev) => {
+              const trademarkNameEl = document.getElementById("trademarkName") as HTMLInputElement;
+              const applicationNumberEl = document.getElementById(
+                "applicationNumber"
+              ) as HTMLInputElement;
+
+              console.log("prev", prev);
+              if (isApplicationNumber(searchInput.value)) {
+                trademarkNameEl.value = "";
+                applicationNumberEl.value = searchInput.value;
+                return { ...prev, applicationNumber: searchInput.value, trademarkName: undefined };
+                // return { ...prev, applicationNumber: searchInput.value };
+              } else {
+                applicationNumberEl.value = "";
+                trademarkNameEl.value = searchInput.value;
+                return { ...prev, trademarkName: searchInput.value, applicationNumber: undefined };
+                // return { ...prev, trademarkName: searchInput.value };
+              }
+            });
 
             params.delete("s");
             router.push(
@@ -65,8 +78,8 @@ export default function SearchClient({ allTrademarkData }: Props) {
           searchInput.value = "";
         } else {
           toast.isActive(id)
-            ? toast.update(id, { render: "상호 또는 상표를 입력하세요" })
-            : toast.info("상포 또는 상표를 입력하세요", { toastId: id });
+            ? toast.update(id, { render: "키워드를 입력하세요" })
+            : toast.info("키워드를 입력하세요", { toastId: id });
         }
       }
     },
@@ -112,7 +125,7 @@ export default function SearchClient({ allTrademarkData }: Props) {
           className="has-tooltip inline-flex justify-center items-center p-3 w-[3.125rem] h-[3.125rem] rounded-lg bg-[#EDF0F4]"
           onClick={onFilterClick}
         >
-          <Tooltip isOnlyShow placement="top-left" text="클릭 시 상세 검색이 가능합니다." />
+          <Tooltip isOnlyShow placement="bottom-left" text="클릭 시 상세 검색이 가능합니다." />
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="18"
