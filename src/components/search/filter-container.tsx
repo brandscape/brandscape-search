@@ -623,12 +623,11 @@ export default function FilterContainer({
                                 }
                               : { ...prev, startDate: date };
                           }
-                          const endData = new Date(date);
 
                           return {
                             ...prev,
                             startDate: date,
-                            endDate: new Date(endData.setMonth(endData.getMonth() + 1)),
+                            endDate: new Date(),
                           };
                         })
                       }
@@ -658,7 +657,12 @@ export default function FilterContainer({
                       popperPlacement="top-start"
                       selected={tdDates?.endDate}
                       onChange={(date) =>
-                        date && setTdDates((prev) => ({ ...prev, endDate: date }))
+                        date &&
+                        setTdDates((prev) =>
+                          !(prev && prev.startDate)
+                            ? { ...prev, startDate: new Date("1990-01-01"), endDate: date }
+                            : { ...prev, endDate: date }
+                        )
                       }
                       selectsEnd
                       startDate={tdDates?.startDate}
@@ -712,12 +716,11 @@ export default function FilterContainer({
                                 }
                               : { ...prev, startDate: date };
                           }
-                          const endData = new Date(date);
 
                           return {
                             ...prev,
                             startDate: date,
-                            endDate: new Date(endData.setMonth(endData.getMonth() + 1)),
+                            endDate: new Date(),
                           };
                         })
                       }
@@ -747,7 +750,12 @@ export default function FilterContainer({
                       popperPlacement="top-start"
                       selected={rdDates?.endDate}
                       onChange={(date) =>
-                        date && setRdDates((prev) => ({ ...prev, endDate: date }))
+                        date &&
+                        setRdDates((prev) =>
+                          !(prev && prev.startDate)
+                            ? { ...prev, startDate: new Date("1990-01-01"), endDate: date }
+                            : { ...prev, endDate: date }
+                        )
                       }
                       selectsEnd
                       startDate={rdDates?.startDate}
@@ -801,12 +809,11 @@ export default function FilterContainer({
                                 }
                               : { ...prev, startDate: date };
                           }
-                          const endData = new Date(date);
 
                           return {
                             ...prev,
                             startDate: date,
-                            endDate: new Date(endData.setMonth(endData.getMonth() + 1)),
+                            endDate: new Date(),
                           };
                         })
                       }
@@ -836,7 +843,12 @@ export default function FilterContainer({
                       popperPlacement="top-start"
                       selected={mdDates?.endDate}
                       onChange={(date) =>
-                        date && setMdDates((prev) => ({ ...prev, endDate: date }))
+                        date &&
+                        setMdDates((prev) =>
+                          !(prev && prev.startDate)
+                            ? { ...prev, startDate: new Date("1990-01-01"), endDate: date }
+                            : { ...prev, endDate: date }
+                        )
                       }
                       selectsEnd
                       startDate={mdDates?.startDate}
