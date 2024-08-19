@@ -167,7 +167,7 @@ export default function FilterContainer({
         setIsFilterOpen(false);
       }
     },
-    [filterOptions, setFilterOptions, setIsFilterOpen, setSearchLoading, router]
+    [filterOptions, setFilterOptions, setIsFilterOpen, setSearchLoading, router, id]
   );
 
   const onClose = useCallback(() => setIsFilterOpen(false), [setIsFilterOpen]);
