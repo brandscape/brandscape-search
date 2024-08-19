@@ -142,6 +142,9 @@ const getValidTrademarkData = async (params: URLSearchParams) => {
 
     const [
       pageNo,
+      classification,
+      similarityCode,
+      asignProduct,
       applicationDate,
       registerDate,
       internationalRegisterDate,
@@ -149,6 +152,9 @@ const getValidTrademarkData = async (params: URLSearchParams) => {
       regPrivilegeName,
     ] = [
       params.get("p"),
+      params.get("tc"),
+      params.get("sc"),
+      params.get("gd"),
       params.get("td"),
       params.get("rd"),
       params.get("md"),
@@ -163,6 +169,10 @@ const getValidTrademarkData = async (params: URLSearchParams) => {
         : {}),
       ...(pageNo && { pageNo }),
       ServiceKey: process.env.KIPRIS_ACCESS_KEY || "",
+
+      ...(classification && { classification: classification.replace(/ /g, "|") }),
+      ...(similarityCode && { similarityCode: similarityCode.replace(/ /g, "|") }),
+      ...(asignProduct && { asignProduct: asignProduct.replace(/ /g, "|") }),
 
       ...(applicationDate && { applicationDate: applicationDate.replace(/-/g, "") }),
       ...(registerDate && { registerDate: registerDate.replace(/-/g, "") }),
@@ -208,6 +218,7 @@ const getValidTrademarkData = async (params: URLSearchParams) => {
 
     const queryString = new URLSearchParams(queryParams).toString();
     const url = `https://plus.kipris.or.kr/kipo-api/kipi/trademarkInfoSearchService/getAdvancedSearch?${queryString}`;
+    // console.log("👉", decodeURIComponent(queryString).split("&"));
 
     const response = await fetch(url);
 

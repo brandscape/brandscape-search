@@ -168,10 +168,11 @@ input[type="search"].show-clear::-webkit-search-cancel-button {
   color: #000000ff;
   border-radius: 0.5rem;
   border: 1px solid var(--color-primary-normal);
+  gap: 0.5rem;
 
   min-height: 3rem;
   min-width: 21.875rem;
-  max-width: 21.875rem;
+  max-width: 31.875rem;
   margin-bottom: 0.5rem;
 }
 .Toastify .Toastify__toast .Toastify__toast-body {
@@ -188,6 +189,7 @@ input[type="search"].show-clear::-webkit-search-cancel-button {
   opacity: 1;
   align-self: center;
   font-size: 0.75rem;
+  white-space: nowrap;
 }
 .Toastify .Toastify__toast .Toastify__progress-bar--wrp {
   height: 3px;

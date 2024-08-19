@@ -5,7 +5,7 @@ import {
   isFilterOpenState,
   searchLoadingState,
 } from "@/recoil/search/search-atom";
-import { Dispatch, SetStateAction, useCallback, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useCallback, useEffect, useId, useState } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import FilterCheckbox from "./filter-checkbox";
 import { every, isNull } from "lodash";
@@ -15,6 +15,7 @@ import DatePicker, { registerLocale } from "react-datepicker";
 import { ko } from "date-fns/locale/ko";
 import DateSvg from "@/icons/date-svg";
 import { RangeDateType } from "@/app/search/type";
+import { toast } from "react-toastify";
 
 registerLocale("ko", ko);
 
@@ -28,6 +29,7 @@ export default function FilterContainer({
   rdDateState: [rdDates, setRdDates],
   mdDateState: [mdDates, setMdDates],
 }: Props) {
+  const id = useId();
   const router = useRouter();
 
   const [isFilterOpen, setIsFilterOpen] = useRecoilState(isFilterOpenState);
@@ -131,6 +133,28 @@ export default function FilterContainer({
         (internationalRegisterStartDateEl.value || internationalRegisterEndDateEl.value) &&
           (searchString += `&md=${internationalRegisterStartDateEl.value}~${internationalRegisterEndDateEl.value}`);
 
+        /**
+         * validation
+         */
+        if (
+          !(targetEl.elements.namedItem("trademarkName") as HTMLInputElement).value &&
+          !(targetEl.elements.namedItem("applicantName") as HTMLInputElement).value &&
+          !(targetEl.elements.namedItem("regPrivilegeName") as HTMLInputElement).value
+        ) {
+          return toast.isActive(id)
+            ? toast.update(id, {
+                render: "상표명칭, 출원인, 등록권자 중 하나의 키워드를 입력해주세요",
+              })
+            : toast.info(
+                <div className="whitespace-nowrap">
+                  상표명칭, 출원인, 등록권자 중 하나의 키워드를 입력해주세요
+                </div>,
+                {
+                  toastId: id,
+                }
+              );
+        }
+
         const queryString = `?${
           searchText ? `s=${searchText || searchParams.get("s")}` : ""
         }${searchString}`;
@@ -145,6 +169,7 @@ export default function FilterContainer({
     },
     [filterOptions, setFilterOptions, setIsFilterOpen, setSearchLoading, router]
   );
+
   const onClose = useCallback(() => setIsFilterOpen(false), [setIsFilterOpen]);
 
   useEffect(
@@ -504,7 +529,7 @@ export default function FilterContainer({
               </div>
             </div>
             {/** @section 번호정보 */}
-            <div key="number-infomation" className="flex flex-col flex-nowrap gap-4">
+            {/* <div key="number-infomation" className="flex flex-col flex-nowrap gap-4">
               <h1 className="text-lg font-semibold tracking-tighter">번호정보</h1>
               <div className="flex flex-row flex-nowrap gap-4 xs:grid xs:grid-cols-1">
                 <div className="flex flex-col flex-nowrap flex-1 gap-2">
@@ -583,7 +608,7 @@ export default function FilterContainer({
                   </div>
                 </div>
               </div>
-            </div>
+            </div> */}
             {/** @section 일자정보 */}
             <div key="date-infomation" className="flex flex-col flex-nowrap gap-4">
               <h1 className="text-lg font-semibold tracking-tighter">일자정보</h1>
