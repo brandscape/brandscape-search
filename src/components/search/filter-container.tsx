@@ -5,7 +5,7 @@ import {
   isFilterOpenState,
   searchLoadingState,
 } from "@/recoil/search/search-atom";
-import { Dispatch, SetStateAction, useCallback, useEffect, useId, useState } from "react";
+import { Dispatch, SetStateAction, useCallback, useEffect, useId } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import FilterCheckbox from "./filter-checkbox";
 import { every, isNull } from "lodash";
