@@ -6,9 +6,14 @@ import Image from "next/image";
 import Logo from "../../public/images/brandscape-main-logo.png";
 import LogoDark from "../../public/images/brandscape-main-logo-dark.png";
 import { usePathname } from "next/navigation";
+import { useSetRecoilState } from "recoil";
+import { isFilterOpenState } from "@/recoil/search/search-atom";
 
 export default function Header() {
   const pathname = usePathname();
+
+  const setIsFilterOpen = useSetRecoilState(isFilterOpenState);
+
   const onToggle = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
     const hamburger = document.querySelector(".hamburger");
@@ -25,19 +30,23 @@ export default function Header() {
     }
   }, []);
 
-  const onClearClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>) => {
-    const hamburger = document.querySelector(".hamburger");
-    const menu = document.querySelector(".nav-menu");
+  const onClearClick = useCallback(
+    (e: React.MouseEvent<HTMLAnchorElement>) => {
+      const hamburger = document.querySelector(".hamburger");
+      const menu = document.querySelector(".nav-menu");
 
-    if (
-      hamburger instanceof HTMLDivElement &&
-      menu instanceof HTMLDivElement &&
-      hamburger.classList.contains("is-opened")
-    ) {
-      hamburger.classList.remove("is-opened");
-      menu.classList.remove("show-menu");
-    }
-  }, []);
+      if (
+        hamburger instanceof HTMLDivElement &&
+        menu instanceof HTMLDivElement &&
+        hamburger.classList.contains("is-opened")
+      ) {
+        hamburger.classList.remove("is-opened");
+        menu.classList.remove("show-menu");
+      }
+      setIsFilterOpen(false);
+    },
+    [setIsFilterOpen]
+  );
 
   return (
     <header

@@ -40,7 +40,14 @@ export default function Client({ allTrademarkData, validTrademarkData }: Props) 
           )}
         </section>
         {isSearchLoading ? (
-          <Loading />
+          <Loading
+            label={
+              <>
+                <p>*특허청 정보와 매칭중입니다.</p>
+                <p>잠시만 기다려 주세요.</p>
+              </>
+            }
+          />
         ) : (
           <section className="w-full p-5 border-t border-[#EDF0F4] xs:p-0">
             {+allTrademarkData.response.count.totalCount ? (

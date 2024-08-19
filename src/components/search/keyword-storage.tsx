@@ -28,17 +28,16 @@ export default function KeywordStorage() {
         router.push(`/search?s=${text}${params.toString() && "&" + params.toString()}`);
 
         setFilterOptions((prev) => {
-          const trademarkNameEl = document.getElementById("trademarkName") as HTMLInputElement;
-          const applicationNumberEl = document.getElementById(
-            "applicationNumber"
-          ) as HTMLInputElement;
+          const trademarkNameEl = document.getElementById("trademarkName");
+          const applicationNumberEl = document.getElementById("applicationNumber");
+
           if (isApplicationNumber(text)) {
-            trademarkNameEl.value = "";
-            applicationNumberEl.value = text;
+            trademarkNameEl instanceof HTMLInputElement && (trademarkNameEl.value = "");
+            applicationNumberEl instanceof HTMLInputElement && (applicationNumberEl.value = text);
             return { ...prev, applicationNumber: text, trademarkName: undefined };
           } else {
-            trademarkNameEl.value = text;
-            applicationNumberEl.value = "";
+            trademarkNameEl instanceof HTMLInputElement && (trademarkNameEl.value = text);
+            applicationNumberEl instanceof HTMLInputElement && (applicationNumberEl.value = "");
             return { ...prev, trademarkName: text, applicationNumber: undefined };
           }
         });

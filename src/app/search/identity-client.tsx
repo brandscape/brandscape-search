@@ -37,7 +37,14 @@ export default function IdentityClient() {
           <FilterOptions setTdDates={setTdDates} setRdDates={setRdDates} setMdDates={setMdDates} />
         </section>
       ) : (
-        <Loading />
+        <Loading
+          label={
+            <>
+              <p>*특허청 정보와 매칭중입니다.</p>
+              <p>잠시만 기다려 주세요.</p>
+            </>
+          }
+        />
       )}
       <FilterContainer
         tdDateState={[tdDates, setTdDates]}
