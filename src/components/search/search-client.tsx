@@ -26,7 +26,7 @@ export default function SearchClient({ allTrademarkData }: Props) {
 
   const [filterOptions, setFilterOptions] = useRecoilState(filterOptionState);
   const setSearchLoading = useSetRecoilState(searchLoadingState);
-  const setIsFilterOpen = useSetRecoilState(isFilterOpenState);
+  const [isFilterOpen, setIsFilterOpen] = useRecoilState(isFilterOpenState);
   const setSearchKeyword = useSetRecoilState(searchKeywordState);
 
   /**
@@ -124,7 +124,11 @@ export default function SearchClient({ allTrademarkData }: Props) {
           className="has-tooltip inline-flex justify-center items-center p-3 w-[3.125rem] h-[3.125rem] rounded-lg bg-[#EDF0F4]"
           onClick={onFilterClick}
         >
-          <Tooltip isOnlyShow placement="bottom-left" text="클릭 시 상세 검색이 가능합니다." />
+          <Tooltip
+            isOnlyShow={!isFilterOpen}
+            placement="bottom-left"
+            text="클릭 시 상세 검색이 가능합니다."
+          />
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="18"

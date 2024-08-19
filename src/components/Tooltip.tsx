@@ -11,7 +11,11 @@ export default function Tooltip({ text, placement, isOnlyShow = false }: Props) 
       tooltip inline-flex justify-center p-2 rounded-md shadow-lg bg-black text-white text-xs font-medium whitespace-nowrap 
       pointer-events-none
       ${placement === "bottom-left" ? "tooltip-bottom-left" : "tooltip-top-left"}`}
-      {...(isOnlyShow && { style: { visibility: "visible", opacity: 1 } })}
+      {...{
+        style: isOnlyShow
+          ? { visibility: "visible", opacity: 1 }
+          : { visibility: "hidden", opacity: 0 },
+      }}
     >
       <span>{text}</span>
       <svg width="12" height="9" viewBox="0 0 12 9" fill="none" xmlns="http://www.w3.org/2000/svg">
