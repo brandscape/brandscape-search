@@ -7,6 +7,7 @@ import { Slide, ToastContainer } from "react-toastify";
 import type { ToastOptions } from "react-toastify";
 import InfoSvg from "@/icons/info-svg";
 import RecoilProvider from "./recoil-provider";
+import Script from "next/script";
 
 export default function RootProvider({ children }: React.PropsWithChildren) {
   const defaultToastOption: ToastOptions = {
@@ -24,6 +25,18 @@ export default function RootProvider({ children }: React.PropsWithChildren) {
   };
   return (
     <RecoilProvider>
+      <Script
+        src="https://wcs.naver.net/wcslog.js"
+        strategy="afterInteractive"
+        type="text/javascript"
+      />
+      <Script id="naver-analytics" strategy="afterInteractive">
+        {`
+          if(!wcs_add) var wcs_add = {};
+          wcs_add["wa"] = "b11a86fd040ce8";
+          if(window.wcs) { wcs_do(); }
+        `}
+      </Script>
       {children}
       <ToastContainer {...defaultToastOption} limit={3} />
     </RecoilProvider>
