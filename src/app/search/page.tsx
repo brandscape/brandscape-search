@@ -140,7 +140,21 @@ const getValidTrademarkData = async (params: URLSearchParams) => {
   try {
     const search = params.get("s");
 
-    const [pageNo] = [params.get("p")];
+    const [
+      pageNo,
+      applicationDate,
+      registerDate,
+      internationalRegisterDate,
+      applicantName,
+      regPrivilegeName,
+    ] = [
+      params.get("p"),
+      params.get("td"),
+      params.get("rd"),
+      params.get("md"),
+      params.get("ap"),
+      params.get("rg"),
+    ];
     const queryParams = {
       ...(search
         ? isApplicationNumber(search)
@@ -149,6 +163,14 @@ const getValidTrademarkData = async (params: URLSearchParams) => {
         : {}),
       ...(pageNo && { pageNo }),
       ServiceKey: process.env.KIPRIS_ACCESS_KEY || "",
+
+      ...(applicationDate && { applicationDate: applicationDate.replace(/-/g, "") }),
+      ...(registerDate && { registerDate: registerDate.replace(/-/g, "") }),
+      ...(internationalRegisterDate && {
+        internationalRegisterDate: internationalRegisterDate.replace(/-/g, ""),
+      }),
+      ...(applicantName && { applicantName }),
+      ...(regPrivilegeName && { regPrivilegeName }),
 
       application: "true", // 출원
       registration: "true", // 등록
