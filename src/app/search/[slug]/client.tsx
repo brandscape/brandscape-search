@@ -82,6 +82,22 @@ export default function Client({
                 : "-"}
             </div>
           </div>
+          {detailSearchData.internationalRegisterNumber && (
+            <div className="flex-1 grid grid-cols-[1fr_2.5fr] items-center text-sm font-normal tracking-tighter">
+              <div className="h-full text-[--color-text-assistive] bg-[#F6F7F9] inline-flex items-center px-2 py-3">
+                국제등록번호/국제등록일
+              </div>
+              <div className="h-full text-[--color-text-normal] bg-white inline-flex items-center px-2 py-3 border-b border-[#F6F7F9]">
+                {detailSearchData.internationalRegisterNumber || "-"}&nbsp;/&nbsp;
+                {detailSearchData.internationalRegisterDate
+                  ? format(
+                      parse(detailSearchData.internationalRegisterDate, "yyyyMMdd", new Date()),
+                      "yyyy-MM-dd"
+                    )
+                  : "-"}
+              </div>
+            </div>
+          )}
           <div className="flex-1 grid grid-cols-[1fr_2.5fr] items-center text-sm font-normal tracking-tighter">
             <div className="h-full text-[--color-text-assistive] bg-[#F6F7F9] inline-flex items-center px-2 py-3">
               등록번호/등록일

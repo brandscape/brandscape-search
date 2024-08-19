@@ -50,19 +50,19 @@ export default function SearchClient({ allTrademarkData }: Props) {
             setSearchKeyword(keywords);
 
             setFilterOptions((prev) => {
-              const trademarkNameEl = document.getElementById("trademarkName") as HTMLInputElement;
-              const applicationNumberEl = document.getElementById(
-                "applicationNumber"
-              ) as HTMLInputElement;
+              const trademarkNameEl = document.getElementById("trademarkName");
+              const applicationNumberEl = document.getElementById("applicationNumber");
 
               if (isApplicationNumber(searchInput.value)) {
-                trademarkNameEl.value = "";
-                applicationNumberEl.value = searchInput.value;
+                trademarkNameEl instanceof HTMLInputElement && (trademarkNameEl.value = "");
+                applicationNumberEl instanceof HTMLInputElement &&
+                  (applicationNumberEl.value = searchInput.value);
                 return { ...prev, applicationNumber: searchInput.value, trademarkName: undefined };
                 // return { ...prev, applicationNumber: searchInput.value };
               } else {
-                applicationNumberEl.value = "";
-                trademarkNameEl.value = searchInput.value;
+                trademarkNameEl instanceof HTMLInputElement &&
+                  (trademarkNameEl.value = searchInput.value);
+                applicationNumberEl instanceof HTMLInputElement && (applicationNumberEl.value = "");
                 return { ...prev, trademarkName: searchInput.value, applicationNumber: undefined };
                 // return { ...prev, trademarkName: searchInput.value };
               }

@@ -39,11 +39,13 @@ export type DetailSearchDataType = Partial<
     | "title"
     | "applicationNumber"
     | "registrationNumber"
+    | "internationalRegisterNumber"
     | "applicantName"
     | "regPrivilegeName"
     | "applicationDate"
     | "applicationStatus"
     | "registrationDate"
+    | "internationalRegisterDate"
     | "drawing"
   >
 >;

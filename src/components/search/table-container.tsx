@@ -33,7 +33,7 @@ export default function TableContainer({
     [pathname, router, setActiveTab]
   );
   return (
-    <div className="p-5 flex flex-col gap-5 xs:p-0">
+    <div className="p-5 flex flex-col gap-3 xs:p-0">
       {/** Tabs  */}
       <div className="tabs">
         <div className="flex justify-center">

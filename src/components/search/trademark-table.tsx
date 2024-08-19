@@ -61,11 +61,13 @@ export default function TrademarkTable({ body, count }: Props) {
         "title",
         "applicationNumber",
         "registrationNumber",
+        "internationalRegisterNumber",
         "applicantName",
         "regPrivilegeName",
         "applicationDate",
         "applicationStatus",
         "registrationDate",
+        "internationalRegisterDate",
         "drawing",
       ]);
 
@@ -75,11 +77,13 @@ export default function TrademarkTable({ body, count }: Props) {
           "title",
           "applicationNumber",
           "registrationNumber",
+          "internationalRegisterNumber",
           "applicantName",
           "regPrivilegeName",
           "applicationDate",
           "applicationStatus",
           "registrationDate",
+          "internationalRegisterDate",
           "drawing",
         ])
       );
