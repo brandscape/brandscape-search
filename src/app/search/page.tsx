@@ -120,7 +120,7 @@ const getAllTrademarkData = async (params: URLSearchParams) => {
 
     const queryString = new URLSearchParams(queryParams).toString();
     const url = `https://plus.kipris.or.kr/kipo-api/kipi/trademarkInfoSearchService/getAdvancedSearch?${queryString}`;
-    console.log("👉", decodeURIComponent(queryString).split("&"));
+    // console.log("👉", decodeURIComponent(queryString).split("&"));
 
     const response = await fetch(url);
 

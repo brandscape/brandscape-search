@@ -55,7 +55,6 @@ export default function SearchClient({ allTrademarkData }: Props) {
                 "applicationNumber"
               ) as HTMLInputElement;
 
-              console.log("prev", prev);
               if (isApplicationNumber(searchInput.value)) {
                 trademarkNameEl.value = "";
                 applicationNumberEl.value = searchInput.value;
