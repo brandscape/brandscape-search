@@ -1,4 +1,3 @@
-import { headers } from "next/headers";
 import Client from "./client";
 import xml2js from "xml2js";
 import { notFound } from "next/navigation";
