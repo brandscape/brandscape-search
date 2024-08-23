@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { useRecoilValue } from "recoil";
 import { TradeMarkClassificationInfo, InfoResponse, RelatedDocsonfileInfo } from "./type";
 import RelatedDocsonfileInfoTable from "@/components/search/detail/related-docsonfile-info-table";
+import Disclaimer from "@/components/Disclaimer";
 
 interface Props {
   slug: string;
@@ -161,6 +162,9 @@ export default function Client({
           <h2>통합 행정정보</h2>
         </div>
         <RelatedDocsonfileInfoTable body={relatedDocsonfileInfo.response.body} />
+      </section>
+      <section className="disclaimer-wrapper p-5 flex flex-col gap-4">
+        <Disclaimer />
       </section>
     </main>
   );
