@@ -25,6 +25,8 @@ export default function Client({ allTrademarkData, validTrademarkData }: Props) 
 
   const isSearchLoading = useRecoilValue(searchLoadingState);
 
+  console.log("test", allTrademarkData.response.body);
+
   return (
     <>
       <main className="min-h-screen py-24 m-auto max-w-[60rem] xs:px-4 relative">
@@ -49,24 +51,44 @@ export default function Client({ allTrademarkData, validTrademarkData }: Props) 
             }
           />
         ) : (
-          <section className="w-full p-5 border-t border-[#EDF0F4] xs:p-0">
-            {+allTrademarkData.response.count.totalCount ? (
-              <>
-                <InfoContainer
-                  allTrademarkCount={allTrademarkData.response.count}
-                  validTrademark={validTrademarkData.response.count}
-                />
-                <TableContainer
-                  allDataBody={allTrademarkData.response.body}
-                  allDataCount={allTrademarkData.response.count}
-                  validDataBody={validTrademarkData.response.body}
-                  validDataCount={validTrademarkData.response.count}
-                />
-              </>
-            ) : (
-              <SearchNotFound />
-            )}
-          </section>
+          <>
+            <section className="w-full p-5 border-t border-b border-[#EDF0F4] xs:p-0">
+              {+allTrademarkData.response.count.totalCount ? (
+                <>
+                  <InfoContainer
+                    allTrademarkCount={allTrademarkData.response.count}
+                    validTrademark={validTrademarkData.response.count}
+                  />
+                  <TableContainer
+                    allDataBody={allTrademarkData.response.body}
+                    allDataCount={allTrademarkData.response.count}
+                    validDataBody={validTrademarkData.response.body}
+                    validDataCount={validTrademarkData.response.count}
+                  />
+                </>
+              ) : (
+                <SearchNotFound />
+              )}
+            </section>
+            <section className="max-w-[45rem] m-auto py-5">
+              <div className="text-[--color-text-normal] flex flex-col gap-4 xs:gap-2">
+                <h1 className="text-lg font-semibold">고지사항</h1>
+                <div className="bg-gray-50 p-4">
+                  <ul className="with-dot">
+                    <li className="pl-3 text-sm font-light tracking-tight break-keep">
+                      특허청 데이터베이스 업데이트 주기에 따라 최근 출원 상표는 검색되지 않을 수
+                      있으며 (약2 주), 부분거절에 따른 지정상품 정보 등에 실제 상태와 일부 차이가
+                      발생할 수 있습니다.
+                    </li>
+                    <li className="pl-3 text-sm font-light tracking-tight break-keep">
+                      조약 우선권주장 등을 통하여 우선일이 출원일로 인정되는 선행상표가 추후에
+                      발생할 수 있 습니다.
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </section>
+          </>
         )}
       </main>
       <FilterContainer

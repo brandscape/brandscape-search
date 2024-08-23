@@ -20,11 +20,11 @@ export default function InfoContainer({ allTrademarkCount, validTrademark }: Pro
           {activeTab === 1 ? allTrademarkCount.totalCount : validTrademark.totalCount}개의 상표가
           검색되었어요
         </p>
-        <p className="text-[--color-text-assistive] text-sm font-medium text-center xs:text-xs">
-          * 특허청 KIPRIS 상표 데이터와 실시간 연동하여 검색한 결과입니다
+        <p className="text-[--color-text-assistive] text-sm font-medium text-center break-keep xs:text-xs">
+          * 특허청 상표 데이터와 실시간 연동하여 검색한 결과입니다.
         </p>
-        <p className="text-[--color-text-assistive] text-sm font-medium text-center xs:text-xs">
-          * 동일/유사한 상표가 있더라도 사용/등록가능한 경우가 있으니 출원의뢰 해보세요!
+        <p className="text-[--color-text-assistive] text-sm font-medium text-center break-keep xs:text-xs">
+          * 동일/유사한 상표가 있더라도 사용/등록가능한 경우가 있으니 출원상담 받아보세요!
         </p>
       </div>
       <Link
@@ -32,7 +32,7 @@ export default function InfoContainer({ allTrademarkCount, validTrademark }: Pro
         target="_blank"
         className="px-5 py-3 border rounded-lg bg-[--color-primary-normal] text-[--color-text-inverse] text-base font-semibold tracking-tighter outline-none xs:text-sm"
       >
-        검색한 상표 출원 의뢰하기
+        검색한 상표 출원 상담하기
       </Link>
     </div>
   );

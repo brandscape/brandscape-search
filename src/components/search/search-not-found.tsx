@@ -20,7 +20,7 @@ export default function SearchNotFound() {
         target="_blank"
         className="px-5 py-3 border rounded-lg bg-[--color-primary-normal] text-[--color-text-inverse] text-base font-semibold tracking-tighter outline-none xs:text-sm"
       >
-        검색한 상표 출원 의뢰하기
+        검색한 상표 출원 상담하기
       </Link>
     </div>
   );

@@ -142,6 +142,21 @@ input[type="search"].show-clear::-webkit-search-cancel-button {
   }
 }
 
+ul.with-dot li {
+  position: relative;
+  color: var(--color-text-assistive);
+}
+ul.with-dot li::before {
+  display: inline-block;
+  position: absolute;
+  left: 0;
+  top: 0.5125rem;
+  content: "";
+  width: 0.1875rem;
+  height: 0.1875rem;
+  border-radius: 50%;
+  background-color: var(--color-text-assistive);
+}
 .badge {
   padding: 0.25rem 0.5rem;
   display: inline-flex;
