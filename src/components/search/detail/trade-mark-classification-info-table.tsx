@@ -13,7 +13,7 @@ export default function TradeMarkClassificationInfoTable({ body }: Props) {
             <table className="w-full">
               <thead>
                 <tr className="bg-[#F6F7F9] border-b border-b-[#E1E5EB] h-10 xs:h-8">
-                  {["번호", "상품분류", "유사군 코드", "지정상품명"].map((text, index) => (
+                  {["번호", "상품분류", "지정상품명"].map((text, index) => (
                     <th
                       key={`trade-mark-classification-info-th-${index}`}
                       scope="col"
@@ -36,9 +36,6 @@ export default function TradeMarkClassificationInfoTable({ body }: Props) {
                       </td>
                       <td className="px-1 py-2 text-xs font-normal -tracking-[0.04rem] text-center">
                         {item.goodsClassificationCode ? `${item.goodsClassificationCode}류` : "-"}
-                      </td>
-                      <td className="px-1 py-2 text-xs font-normal -tracking-[0.04rem] text-center">
-                        (준비중)
                       </td>
                       <td className="px-1 py-2 text-xs font-normal -tracking-[0.04rem] text-center">
                         <div className="flex justify-center min-w-80 xs:min-w-fit">
