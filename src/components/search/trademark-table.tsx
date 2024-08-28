@@ -54,7 +54,7 @@ export default function TrademarkTable({ body, count }: Props) {
 
   const onClickRow = useCallback(
     (item: Brand) => () => {
-      const parsedNumber = Number(item.applicationNumber);
+      const parsedNumber = Number(item.applicationNumber || item.appReferenceNumber);
       if (isNaN(parsedNumber)) return;
 
       const brandData = pick(item, [
