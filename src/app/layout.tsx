@@ -8,6 +8,7 @@ import RootProvider from "@/lib";
 import { Suspense } from "react";
 import Footer from "@/components/Footer";
 import Loading from "./loading";
+import { Analytics } from "@vercel/analytics/react";
 
 const myFont = localFont({
   src: "../fonts/PretendardVariable.woff2",
@@ -51,6 +52,7 @@ export default function RootLayout({
             <Header />
             {children}
             <Footer />
+            <Analytics />
           </Suspense>
         </RootProvider>
       </body>
