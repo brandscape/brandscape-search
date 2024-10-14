@@ -16,11 +16,11 @@ export default function SearchNotFound() {
         </p>
       </div>
       <Link
-        href="https://brandscapeip.com/%EC%83%81%ED%91%9C%EC%B6%9C%EC%9B%90"
+        href="https://ip.brandscape.co.kr/%EC%83%81%ED%91%9C%EC%B6%9C%EC%9B%90"
         target="_blank"
         className="px-5 py-3 border rounded-lg bg-[--color-primary-normal] text-[--color-text-inverse] text-base font-semibold tracking-tighter outline-none xs:text-sm"
       >
-        검색한 상표 출원 상담하기
+        검색한 상표 출원하기
       </Link>
     </div>
   );

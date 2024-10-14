@@ -24,15 +24,15 @@ export default function InfoContainer({ allTrademarkCount, validTrademark }: Pro
           * 특허청 상표 데이터와 실시간 연동하여 검색한 결과입니다.
         </p>
         <p className="text-[--color-text-assistive] text-sm font-medium text-center break-keep xs:text-xs">
-          * 동일/유사한 상표가 있더라도 사용/등록가능한 경우가 있으니 출원상담 받아보세요!
+          * 동일/유사한 상표가 있더라도 사용/등록가능한 경우가 있으니 출원의뢰후 등록가능성 검토 받아보세요!
         </p>
       </div>
       <Link
-        href="https://brandscapeip.com/%EC%83%81%ED%91%9C%EC%B6%9C%EC%9B%90"
+        href="https://ip.brandscape.co.kr/%EC%83%81%ED%91%9C%EC%B6%9C%EC%9B%90"
         target="_blank"
         className="px-5 py-3 border rounded-lg bg-[--color-primary-normal] text-[--color-text-inverse] text-base font-semibold tracking-tighter outline-none xs:text-sm"
       >
-        검색한 상표 출원 상담하기
+        검색한 상표 출원하기
       </Link>
     </div>
   );
