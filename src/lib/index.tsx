@@ -56,7 +56,12 @@ export default function RootProvider({ children }: React.PropsWithChildren) {
           gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-S9CV369E65');
         `}
       </Script>
+      
+      {/* Google Adsense */}
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5364247339347012"
+     crossorigin="anonymous"></script>
 
+      {/* Naver Log Analitics */}
       <Script
         src="https://wcs.naver.net/wcslog.js"
         strategy="beforeInteractive"
