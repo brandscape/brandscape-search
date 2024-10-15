@@ -58,10 +58,13 @@ export default function RootProvider({ children }: React.PropsWithChildren) {
       </Script>
       
       {/* Google Adsense */}
-      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5364247339347012"
-     crossorigin="anonymous"></script>
+      <Script 
+        async 
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5364247339347012"
+        crossOrigin="anonymous"
+      ></Script>
 
-      {/* Naver Log Analitics */}
+      {/* Naver Analitics */}
       <Script
         src="https://wcs.naver.net/wcslog.js"
         strategy="beforeInteractive"
