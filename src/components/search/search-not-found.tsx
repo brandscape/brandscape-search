@@ -16,7 +16,7 @@ export default function SearchNotFound() {
         </p>
       </div>
       <Link
-        href="https://ip.brandscape.co.kr/%EC%83%81%ED%91%9C%EC%B6%9C%EC%9B%90"
+        href="https://ip.brandscape.co.kr/%EC%83%81%ED%91%9C%EB%93%B1%EB%A1%9D"
         target="_blank"
         className="px-5 py-3 border rounded-lg bg-[--color-primary-normal] text-[--color-text-inverse] text-base font-semibold tracking-tighter outline-none xs:text-sm"
       >
