@@ -81,7 +81,7 @@ export default function Header() {
             상표검색
           </Link>
           <Link
-            href="http://ip.brandscape.co.kr/%EC%83%81%ED%91%9C%EC%B6%9C%EC%9B%90"
+            href="https://ip.brandscape.co.kr/%EC%83%81%ED%91%9C%EB%93%B1%EB%A1%9D"
             className="px-3 xs:px-0 xs:py-3 py-[10px] rounded text-[15px] font-medium text-[--color-text-minor] xs:text-[--color-text-normal] leading-[1.125rem] tracking-tighter xs:hover:text-[--color-text-minor] hover:text-[--color-text-inverse] transition-[color] duration-300"
             onClick={onClearClick}
           >

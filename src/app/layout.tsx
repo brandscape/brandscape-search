@@ -17,12 +17,12 @@ const myFont = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "브랜드스케이프 | Brandscape",
-  description: "브랜드 지식재산권 전문 브랜드스케이프 ! 상표검색 상표 출원",
+  title: "상표검색 상표등록 브랜드스케이프 | Brandscape",
+  description: "브랜드 지식재산권 전문 브랜드스케이프 ! 대형로펌, 대기업 상표관리 담당 경력 상표전문 10년차 변리사와 함께 상표검색 상표등록",
 
   openGraph: {
     title: "브랜드스케이프 | Brandscape",
-    description: "브랜드 지식재산권 전문 브랜드스케이프 ! 상표검색 상표 출원",
+    description: "브랜드 지식재산권 전문 브랜드스케이프 ! 대형로펌, 대기업 상표관리 담당 경력 상표전문 10년차 변리사 상표검색 상표등록",
     url: "https://www.brandscape.co.kr/",
     images:
       "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FvUXra%2FbtsI8qgQsVI%2FpF92wkIo0tolZrSuc92Ko0%2Fimg.png",
