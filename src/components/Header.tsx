@@ -85,7 +85,7 @@ export default function Header() {
             className="px-3 xs:px-0 xs:py-3 py-[10px] rounded text-[15px] font-medium text-[--color-text-minor] xs:text-[--color-text-normal] leading-[1.125rem] tracking-tighter xs:hover:text-[--color-text-minor] hover:text-[--color-text-inverse] transition-[color] duration-300"
             onClick={onClearClick}
           >
-            상표출원
+            상표등록
           </Link>
           <Link
             href="https://ip.brandscape.co.kr/%EC%9D%BC%EB%B0%98%EB%AC%B8%EC%9D%98"
