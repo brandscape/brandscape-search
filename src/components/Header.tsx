@@ -95,11 +95,11 @@ export default function Header() {
             일반문의
           </Link>
           <Link
-            href="http://ip.brandscape.co.kr/%EB%B9%84%EC%9A%A9%EC%95%88%EB%82%B4"
+            href="https://ip.brandscape.co.kr/%EC%A0%88%EC%B0%A8%EC%95%88%EB%82%B4"
             className="px-3 xs:px-0 xs:py-3 py-[10px] rounded text-[15px] font-medium text-[--color-text-minor] xs:text-[--color-text-normal] leading-[1.125rem] tracking-tighter xs:hover:text-[--color-text-minor] hover:text-[--color-text-inverse] transition-[color] duration-300"
             onClick={onClearClick}
           >
-            비용안내
+            절차안내
           </Link>
           <Link
             href="http://ip.brandscape.co.kr/%ED%9A%8C%EC%82%AC%EC%86%8C%EA%B0%9C"
