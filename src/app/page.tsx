@@ -74,7 +74,7 @@ export default function Home() {
       </div>
       <Link href="https://ip.brandscape.co.kr/%EC%83%81%ED%91%9C%EB%93%B1%EB%A1%9D">
         <button className="fixed bottom-0 left-0 w-full px-6 py-4 text-lg font-bold text-white bg-[#1a4db6] sm:block hidden">
-          상표등록 문의하기
+          상표등록 알아보기
         </button>
       </Link>
     </main>
