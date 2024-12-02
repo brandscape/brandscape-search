@@ -467,7 +467,7 @@ export default function FilterContainer({
                       id="classification"
                       className="show-clear outline-none border border-[#E1E5EB] rounded !px-3 !py-1.5 w-full text-xs peer invalid:border-2 invalid:border-[#EF7070]"
                       defaultValue={filterOptions.classification}
-                      placeholder="ex) 06+09+11"
+                      placeholder="ex) 06"
                       pattern="\d+(\+\d+)*"
                       onKeyDown={onBlockEnterKey}
                     />
@@ -492,7 +492,7 @@ export default function FilterContainer({
                       id="similarityCode"
                       className="show-clear outline-none border border-[#E1E5EB] rounded !px-3 !py-1.5 w-full text-xs peer invalid:border-2 invalid:border-[#EF7070]"
                       defaultValue={filterOptions.similarityCode}
-                      placeholder="ex) G1004+G1103"
+                      placeholder="ex) G1004"
                       pattern="G\d+(\+G\d+)*"
                       onKeyDown={onBlockEnterKey}
                     />
