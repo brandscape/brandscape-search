@@ -441,7 +441,7 @@ export default function FilterContainer({
                     id="trademarkName"
                     className="show-clear outline-none border border-[#E1E5EB] rounded !px-3 !py-1.5 w-full text-xs"
                     defaultValue={filterOptions.trademarkName}
-                    placeholder="ex)상표명"
+                    placeholder="ex) 브랜드"
                     onKeyDown={onBlockEnterKey}
                   />
                 </div>
@@ -517,7 +517,7 @@ export default function FilterContainer({
                       id="asignProduct"
                       className="show-clear outline-none border border-[#E1E5EB] rounded !px-3 !py-1.5 w-full text-xs peer invalid:border-2 invalid:border-[#EF7070]"
                       defaultValue={filterOptions.asignProduct}
-                      placeholder="ex)스마트폰+통신+식물*재배"
+                      placeholder="ex) 스마트폰+통신+식물*재배"
                       pattern="[가-힣+*]+"
                       onKeyDown={onBlockEnterKey}
                     />
@@ -911,7 +911,7 @@ export default function FilterContainer({
                       id="applicantName"
                       className="show-clear outline-none border border-[#E1E5EB] rounded !px-3 !py-1.5 w-full text-xs"
                       defaultValue={filterOptions.applicantName}
-                      placeholder="ex)특허정보원"
+                      placeholder="ex) 특허정보원"
                       onKeyDown={onBlockEnterKey}
                     />
                   </div>
@@ -932,7 +932,7 @@ export default function FilterContainer({
                       id="regPrivilegeName"
                       className="show-clear outline-none border border-[#E1E5EB] rounded !px-3 !py-1.5 w-full text-xs"
                       defaultValue={filterOptions.regPrivilegeName}
-                      placeholder="ex)특허청장"
+                      placeholder="ex) 특허청장"
                       onKeyDown={onBlockEnterKey}
                     />
                   </div>
