@@ -81,6 +81,27 @@ export default function RootProvider({ children }: React.PropsWithChildren) {
         `}
       </Script>
 
+      
+      {/* Smartlog */}
+
+      <Script id="smartlog" strategy="afterInteractive">
+        {`
+          var hpt_info={'_account':'UHPT-28754', '_server': 'a28'};
+        `}
+      </Script>
+
+      <Script
+        src="https://cdn.smlog.co.kr/core/smart.js"
+        strategy="afterInteractive"
+        type="text/javascript"
+      />
+      <noscript>
+        <img
+          src="https://a28.smlog.co.kr/smart_bda.php?_account=28754"
+          style={{ display: "none", width: 0, height: 0, border: "none" }}
+        />
+      </noscript>
+
       {children}
       <ToastContainer {...defaultToastOption} limit={3} />
     </RecoilProvider>
