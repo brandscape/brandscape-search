@@ -7,11 +7,11 @@ export default function Footer() {
       <div className="max-w-[60rem] m-auto p-5 flex flex-col flex-nowrap gap-2">
         <Image className="mb-2" src={Logo} alt="logo-image" width={150} />
         <div className="font-medium">
-          <p>상호명 : 브랜드스케이프(Brandscape)</p>
-          <p>대표 : 김지현</p>
+          <p></p>
+          <p></p>
         </div>
         <div className="font-normal text-[--color-text-minor]">
-          <p>사업자등록번호 : 166-23-01860</p>
+          <p></p>
           <p>email : ip@brandscape.co.kr</p>
           <p></p>
         </div>
