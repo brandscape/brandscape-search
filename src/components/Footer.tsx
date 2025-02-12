@@ -13,7 +13,7 @@ export default function Footer() {
         <div className="font-normal text-[--color-text-minor]">
           <p>사업자등록번호 : 166-23-01860</p>
           <p>email : ip@brandscape.co.kr</p>
-          <p>주소 : 서울특별시 중구 을지로 264, 12층</p>
+          <p></p>
         </div>
         <div className="font-normal text-[--color-text-minor]">
           <p>Copyrights © 2024 by BRANDSCAPE. All Rights Reserved.</p>
